@@ -31,7 +31,7 @@ function App() {
                     <Stack direction="column" justifyContent="center">
                         <Typography variant="h5">
                             {army === null && "Select your army"}
-                            {army !== null && army.name}
+                            {army !== null && ''}
                         </Typography>
                     </Stack>
                     <div>

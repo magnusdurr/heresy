@@ -54,6 +54,11 @@ export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
 
     return (
         <Stack spacing={1}>
+            <Stack direction="row" spacing={3} alignItems="center">
+                <Typography variant="h4">{props.armySpec.name}</Typography>
+                <CategoryTypes cost={TestCategories.fromList([])} grants={props.armySpec.grants}/>
+            </Stack>
+
             <Stack direction="row" spacing={1}>
                 {Object.keys(TestCategory).map((key) => (TestCategory[key as keyof typeof TestCategory]))
                     .filter((category) => category !== TestCategory.CORE)

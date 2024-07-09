@@ -1,8 +1,8 @@
 import {v4 as uuidv4} from "uuid";
 
 export enum TestCategory {
-    FORMATION = "Formation",
-    UPGRADE = "Upgrade",
+    FORMATION = "Formations",
+    UPGRADE = "Upgrades",
     CORE = "Core",
     HEAVY_SUPPORT = "Heavy Support",
     FAST_ATTACK = "Fast Attack",
@@ -108,14 +108,12 @@ export class TestUpgradeSpec {
 }
 
 export class TestArmySpec {
-    points: number
-    upgrades: number
-    restrictions: Map<TestCategory, number>
+    name: string
+    grants: TestCategories
 
-    constructor(points: number, upgrades: number, restrictions: Map<TestCategory, number>) {
-        this.points = points;
-        this.upgrades = upgrades;
-        this.restrictions = restrictions;
+    constructor(name: string, grants: TestCategories) {
+        this.name = name;
+        this.grants = grants;
     }
 }
 
@@ -151,20 +149,16 @@ export class TestArmyAllocation {
 
         const allGrants = formations.filter(formation => formation.spec.grants)
             .map(formation => formation.spec.grants!)
-            .reduce((acc, grants) => acc.merge(grants), new TestCategories(new Map([
-                [TestCategory.FORMATION, army.points], [TestCategory.UPGRADE, army.upgrades]
-            ])));
+            .reduce((acc, grants) => acc.merge(grants), army.grants);
 
         return new TestArmyAllocation(totalCost, allGrants);
     }
 }
 
-export const legionesAstartes = new TestArmySpec(12, 4, new Map([
-    [TestCategory.HEAVY_SUPPORT, 5],
-    [TestCategory.FAST_ATTACK, 5],
-    [TestCategory.ELITE, 5],
-    [TestCategory.ALLIES, 5]
-]))
+export const legionesAstartes = new TestArmySpec("Legiones Astartes",
+    new TestCategories(new Map([
+        [TestCategory.FORMATION, 12], [TestCategory.UPGRADE, 4], [TestCategory.FAST_ATTACK, 1]
+    ])))
 
 export const testUpgrades = {
     rhinos: new TestUpgradeSpec("Rhinos", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.FAST_ATTACK])),
