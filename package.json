@@ -1,8 +1,8 @@
 {
-  "name": "ear-horus-herecy",
+  "name": "ear-horus-heresy",
   "version": "0.9",
   "private": true,
-  "homepage": "https://magnusdurr.github.io/herecy",
+  "homepage": "https://magnusdurr.github.io/heresy",
   "dependencies": {
     "@emotion/styled": "11.11.5",
     "@mui/icons-material": "5.15.20",
