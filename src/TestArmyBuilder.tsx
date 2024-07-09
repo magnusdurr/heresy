@@ -1,11 +1,11 @@
 import {
     TestArmyAllocation,
     TestArmySpec,
+    TestCategories,
     TestCategory,
     TestFormation,
     testFormationsBySections,
     TestFormationSpec,
-    TestGrants,
     TestUpgradeSpec
 } from "./ts/test";
 import {
@@ -33,42 +33,34 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
     const [armyFormations, setArmyFormations] = useState<TestFormation[]>([])
-    const [armyAllocation, setArmyAllocation] = useState<TestArmyAllocation>(TestArmyAllocation.fromFormations([]));
+    const [armyAllocation, setArmyAllocation] = useState<TestArmyAllocation>(TestArmyAllocation.fromFormations(props.armySpec, []));
 
     const handleAddFormation = (formation: TestFormationSpec) => {
         let updatedFormations = [...armyFormations, new TestFormation(formation, [])];
         setArmyFormations(updatedFormations);
-        setArmyAllocation(TestArmyAllocation.fromFormations(updatedFormations));
+        setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, updatedFormations));
     }
 
     const handleRemoveFormation = (id: string) => {
         let updatedFormations = armyFormations.filter(formation => formation.id !== id);
         setArmyFormations(updatedFormations);
-        setArmyAllocation(TestArmyAllocation.fromFormations(updatedFormations));
+        setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, updatedFormations));
     }
 
     const handleUpdateFormation = (id: string) => {
         setArmyFormations([...armyFormations])
-        setArmyAllocation(TestArmyAllocation.fromFormations(armyFormations));
+        setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, armyFormations));
     }
 
     return (
         <Stack spacing={1}>
             <Stack direction="row" spacing={1}>
-                <ArmyAllowanceComponent name="Formation Points"
-                                        used={armyAllocation.pointsSpent}
-                                        available={props.armySpec.points}/>
-
-                <ArmyAllowanceComponent name="Upgrade Points"
-                                        used={armyAllocation.upgradesSpent}
-                                        available={props.armySpec.upgrades}
-                                        extras={armyAllocation.extraUpgradesAvailable}/>
                 {Object.keys(TestCategory).map((key) => (TestCategory[key as keyof typeof TestCategory]))
                     .filter((category) => category !== TestCategory.CORE)
                     .map((category) => (
                         <ArmyAllowanceComponent name={category}
-                                                available={armyAllocation.allocationAvailable.get(category)}
-                                                used={armyAllocation.allocationUsed.get(category)}/>
+                                                available={armyAllocation.grants.getOrZero(category)}
+                                                used={armyAllocation.cost.getOrZero(category)}/>
                     ))}
             </Stack>
 
@@ -177,9 +169,9 @@ export function AddFormationComponent(props: {
                                                 <CardContent sx={{m: 0, p: 1}}>
                                                     <Stack direction="row" spacing={1} justifyContent="space-between">
                                                         <Typography variant="subtitle1">
-                                                            {formation.name} - {formation.cost} point
+                                                            {formation.name} - {formation.cost.getOrZero(TestCategory.FORMATION)} point
                                                         </Typography>
-                                                        <CategoryTypes categories={formation.mergeCategories()}
+                                                        <CategoryTypes cost={formation.cost}
                                                                        grants={formation.grants}/>
                                                     </Stack>
                                                 </CardContent>
@@ -196,23 +188,18 @@ export function AddFormationComponent(props: {
     )
 }
 
-export function CategoryTypes(props: { categories: { category: string, count: number }[], grants?: TestGrants }) {
+export function CategoryTypes(props: { cost: TestCategories, grants?: TestCategories }) {
     return (
         <Stack direction="row" spacing={1}>
-            {props.grants?.upgrades !== undefined && props.grants?.upgrades > 0 && <Chip label={
-                '+' + props.grants?.upgrades + ' upgrades'
-            } color="success" size="small"/>}
-
-            {props.grants?.categories !== undefined && Array.from(props.grants?.categories).map((category) => (
+            {props.grants !== undefined && props.grants.toList().map((categoryCount) => (
                 <Chip label={
-                    category[1] + 'x ' +
-                    category[0]
-                }
-                      color="success"
-                      size="small"/>
+                    categoryCount.count + 'x ' +
+                    categoryCount.category
+                } color="success" size="small"/>
             ))}
 
-            {props.categories.filter((item) => item.category !== TestCategory.CORE)
+            {props.cost.toList()
+                .filter((item) => item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
                 .map((item, value) => (
                     <Chip label={
                         (item.count > 1 ? item.count + 'x ' : '') +
@@ -260,7 +247,7 @@ export function FormationComponent(props: Readonly<{
             <Paper key={props.formation.id}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography variant="h6">{props.formation.spec.name}</Typography>
-                    <CategoryTypes categories={props.formation.mergeCategories()} grants={props.formation.spec.grants}/>
+                    <CategoryTypes cost={props.formation.constWithUpgrades()} grants={props.formation.spec.grants}/>
                     <div>
                         <Tooltip title='Upgrade'>
                             <IconButton onClick={() => setUpgradeDialogOpen(true)}>
@@ -303,9 +290,9 @@ export function FormationComponent(props: Readonly<{
                                     <CardContent sx={{m: 0, p: 1}}>
                                         <Stack direction="row" spacing={1} justifyContent="space-between">
                                             <Typography variant="subtitle1">
-                                                {upgrade.name} - {upgrade.cost} point
+                                                {upgrade.name} - {upgrade.cost.getOrZero(TestCategory.UPGRADE)} point
                                             </Typography>
-                                            <CategoryTypes categories={upgrade.mergeCategories()}/>
+                                            <CategoryTypes cost={upgrade.cost}/>
                                         </Stack>
                                     </CardContent>
                                 </CardActionArea>
