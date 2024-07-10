@@ -7,7 +7,6 @@ import {
     testFormationsBySections,
     TestFormationSpec,
     TestUpgradeSpec,
-    ValidationResult
 } from "./ts/test";
 import {
     Accordion,
@@ -34,6 +33,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import ErrorIcon from '@mui/icons-material/Error';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import {ValidationResult} from "./ts/restrictions";
 
 export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
     const [armyFormations, setArmyFormations] = useState<TestFormation[]>([])

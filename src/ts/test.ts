@@ -136,6 +136,7 @@ export class TestArmySpec {
         this.restrictions = restrictions;
     }
 
+    // TODO: How to call this from the UI?
     canAddFormation(existing: TestFormation[], toBeAdded: TestFormationSpec): ValidationResult {
         return this.restrictions.map(restriction => restriction.isLegal([...existing.map((formation => formation.spec)), toBeAdded]))
             .find(result => !result.success) || ValidationResult.success
