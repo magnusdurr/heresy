@@ -6,12 +6,14 @@ import {
     TestFormation,
     testFormationsBySections,
     TestFormationSpec,
-    TestUpgradeSpec
+    TestUpgradeSpec,
+    ValidationResult
 } from "./ts/test";
 import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Badge,
     Box,
     Button,
     Card,
@@ -24,12 +26,14 @@ import {
     Paper,
     Stack,
     Tooltip,
-    Typography
+    Typography,
+    useTheme
 } from "@mui/material";
 import React, {useState} from "react"
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import ErrorIcon from '@mui/icons-material/Error';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
     const [armyFormations, setArmyFormations] = useState<TestFormation[]>([])
@@ -156,15 +160,15 @@ export function AddFormationComponent(props: {
                 open={addFormationOpen}
                 onClose={closeAddFormation}
             >
-                <Box sx={{...style, width: 600}}>
+                <Box sx={{...style, width: 600, m: 0, p: 2}}>
                     <Stack spacing={1}>
                         <h2 id="parent-modal-title">Select formation</h2>
                         {Array.from(testFormationsBySections.entries()).map((entry) => (
                             <Accordion expanded={expanded === entry[0]} onChange={handleChange(entry[0])}>
                                 <AccordionSummary>
-                                    <Typography>{entry[0]}</Typography>
+                                    <Typography variant="body1">{entry[0]}</Typography>
                                 </AccordionSummary>
-                                <AccordionDetails>
+                                <AccordionDetails sx={{p: 1, m: 0}}>
                                     {entry[1].map((formation) => (
                                         <Card variant="outlined">
                                             <CardActionArea onClick={() => {
@@ -173,9 +177,14 @@ export function AddFormationComponent(props: {
                                             }}>
                                                 <CardContent sx={{m: 0, p: 1}}>
                                                     <Stack direction="row" spacing={1} justifyContent="space-between">
-                                                        <Typography variant="subtitle1">
-                                                            {formation.name} - {formation.cost.getOrZero(TestCategory.FORMATION)} point
-                                                        </Typography>
+                                                        <Stack direction="row" spacing={2} alignItems="center">
+                                                            <Badge
+                                                                badgeContent={formation.cost.getOrZero(TestCategory.FORMATION)}
+                                                                color="primary" showZero>
+                                                                <AttachMoneyIcon/>
+                                                            </Badge>
+                                                            <Typography variant="body2">{formation.name}</Typography>
+                                                        </Stack>
                                                         <CategoryTypes cost={formation.cost}
                                                                        grants={formation.grants}/>
                                                     </Stack>
@@ -207,7 +216,7 @@ export function CategoryTypes(props: { cost: TestCategories, grants?: TestCatego
                 .filter((item) => item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
                 .map((item, value) => (
                     <Chip label={
-                        (item.count > 1 ? item.count + 'x ' : '') +
+                        (item.count != 1 ? item.count + 'x ' : '') +
                         item.category
                     }
                           color="primary"
@@ -247,18 +256,20 @@ export function FormationComponent(props: Readonly<{
         setUpgradeDialogOpen(false)
     }
 
+    const validationErrors = props.formation.checkValidationErrors()
+
     return (
         <>
             <Paper key={props.formation.id}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography variant="h6">{props.formation.spec.name}</Typography>
-                    <CategoryTypes cost={props.formation.constWithUpgrades()} grants={props.formation.spec.grants}/>
+                    <CategoryTypes cost={props.formation.costWithUpgrades()} grants={props.formation.spec.grants}/>
                     <div>
-                        <Tooltip title='Upgrade'>
+                        {props.formation.spec.availableUpgrades.length > 0 && <Tooltip title='Upgrade'>
                             <IconButton onClick={() => setUpgradeDialogOpen(true)}>
                                 <UpgradeIcon/>
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip>}
                         <Tooltip title='Delete'>
                             <IconButton onClick={() => {
                                 props.deleteFunction(props.formation.id)
@@ -268,6 +279,10 @@ export function FormationComponent(props: Readonly<{
                         </Tooltip>
                     </div>
                 </Stack>
+                {validationErrors.map((error) => (
+                    <Typography variant="caption" color="error">{error.message}</Typography>
+                ))}
+
                 {props.formation.upgrades.map((upgrade) => (
                     <Stack direction="row" justifyContent="space-between">
                         <Typography variant="body1"> - {upgrade.name}</Typography>
@@ -288,24 +303,59 @@ export function FormationComponent(props: Readonly<{
                     <h2 id="parent-modal-title">Select Upgrade</h2>
                     <Stack spacing={1}>
                         {props.formation != null && props.formation.spec.availableUpgrades.map((upgrade) => (
-                            <Card>
-                                <CardActionArea onClick={() => {
-                                    addUpgrade(upgrade)
-                                }}>
-                                    <CardContent sx={{m: 0, p: 1}}>
-                                        <Stack direction="row" spacing={1} justifyContent="space-between">
-                                            <Typography variant="subtitle1">
-                                                {upgrade.name} - {upgrade.cost.getOrZero(TestCategory.UPGRADE)} point
-                                            </Typography>
-                                            <CategoryTypes cost={upgrade.cost}/>
-                                        </Stack>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
+                            <FormationUpgradeComponent formation={props.formation} upgrade={upgrade}
+                                                       addUpgrade={addUpgrade}/>
                         ))}
                     </Stack>
                 </Box>
             </Modal>
         </>
+    )
+}
+
+export function FormationUpgradeComponent(props: {
+    formation: TestFormation,
+    upgrade: TestUpgradeSpec,
+    addUpgrade: (upgrade: TestUpgradeSpec) => void
+}) {
+    const canApplyUpgrade = props.formation.canApplyUpgrade(props.upgrade)
+    const theme = useTheme()
+
+    function showAsEnabled(result: ValidationResult): Boolean {
+        return result.success || (!result.success && !result.blocking)
+    }
+
+    return (
+        <Card>
+            <CardActionArea disabled={!showAsEnabled(canApplyUpgrade)} onClick={() => {
+                props.addUpgrade(props.upgrade)
+            }}>
+                <CardContent sx={{m: 0, p: 1}}>
+                    <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
+                        {showAsEnabled(canApplyUpgrade) && <>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                                <Badge badgeContent={props.upgrade.cost.getOrZero(TestCategory.UPGRADE)} color="primary"
+                                       showZero>
+                                    <AttachMoneyIcon/>
+                                </Badge>
+                                <Typography variant="body2">
+                                    {props.upgrade.name}
+                                </Typography>
+                            </Stack>
+                            <CategoryTypes cost={props.upgrade.cost}/>
+                        </>}
+
+                        {!showAsEnabled(canApplyUpgrade) && <>
+                            <Typography variant="body2" sx={{color: theme.palette.text.disabled}} noWrap>
+                                {props.upgrade.name} - {props.upgrade.cost.getOrZero(TestCategory.UPGRADE)} point
+                            </Typography>
+                            <ErrorIcon color="disabled"/>
+                            <Typography variant="caption"
+                                        sx={{color: theme.palette.text.disabled}}>{canApplyUpgrade.message}</Typography>
+                        </>}
+                    </Stack>
+                </CardContent>
+            </CardActionArea>
+        </Card>
     )
 }
