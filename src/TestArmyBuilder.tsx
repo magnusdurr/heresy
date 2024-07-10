@@ -216,7 +216,7 @@ export function CategoryTypes(props: { cost: TestCategories, grants?: TestCatego
                 .filter((item) => item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
                 .map((item, value) => (
                     <Chip label={
-                        (item.count != 1 ? item.count + 'x ' : '') +
+                        (item.count !== 1 ? item.count + 'x ' : '') +
                         item.category
                     }
                           color="primary"
