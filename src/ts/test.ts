@@ -217,7 +217,7 @@ export const testFormations = [
             new TestCategories(new Map([
                 [TestCategory.FAST_ATTACK, 2],
                 [TestCategory.HEAVY_SUPPORT, 2],
-                [TestCategory.ELITE, 1.5],
+                [TestCategory.ELITE, 1],
                 [TestCategory.ALLIES, 1]
             ])))
         .withUpgrades(testUpgrades.rhinos, testUpgrades.supreme, testUpgrades.plasma, testUpgrades.dreadnoughts, testUpgrades.commander)
