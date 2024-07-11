@@ -13,15 +13,14 @@ import {
     AccordionDetails,
     AccordionSummary,
     Badge,
-    Box,
     Button,
     Card,
     CardActionArea,
     CardContent,
     Chip,
+    Dialog,
     Divider,
     IconButton,
-    Modal,
     Paper,
     Stack,
     Tooltip,
@@ -56,6 +55,10 @@ export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
         setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, armyFormations));
     }
 
+    const canAddFormation = (toBeAdded: TestFormationSpec) => {
+        return props.armySpec.canAddFormation(armyFormations, toBeAdded)
+    }
+
     return (
         <Stack spacing={1}>
             <Stack direction="row" spacing={3} alignItems="center">
@@ -84,7 +87,7 @@ export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
                                     updateFunction={handleUpdateFormation}/>
             ))}
 
-            <AddFormationComponent addFunction={handleAddFormation}/>
+            <AddFormationComponent addFunction={handleAddFormation} checkValidityFunction={canAddFormation}/>
         </Stack>
     )
 }
@@ -127,20 +130,9 @@ export function AllowanceValue(props: { used?: number, available?: number, extra
 }
 
 export function AddFormationComponent(props: {
-    addFunction: (formation: TestFormationSpec) => void
+    addFunction: (formation: TestFormationSpec) => void,
+    checkValidityFunction: (formation: TestFormationSpec) => ValidationResult
 }) {
-
-    const style = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
 
     const [addFormationOpen, setAddFormationOpen] = React.useState(false);
     const openAddFormation = () => setAddFormationOpen(true);
@@ -156,49 +148,68 @@ export function AddFormationComponent(props: {
     return (
         <>
             <Button onClick={openAddFormation}>Add formation</Button>
-            <Modal
-                open={addFormationOpen}
-                onClose={closeAddFormation}
+            <Dialog maxWidth="sm"
+                    fullWidth
+                    open={addFormationOpen}
+                    onClose={closeAddFormation}
             >
-                <Box sx={{...style, width: 600, m: 0, p: 2}}>
-                    <Stack spacing={1}>
-                        <h2 id="parent-modal-title">Select formation</h2>
-                        {Array.from(testFormationsBySections.entries()).map((entry) => (
-                            <Accordion expanded={expanded === entry[0]} onChange={handleChange(entry[0])}>
-                                <AccordionSummary>
-                                    <Typography variant="body1">{entry[0]}</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails sx={{p: 1, m: 0}}>
-                                    {entry[1].map((formation) => (
-                                        <Card variant="outlined">
-                                            <CardActionArea onClick={() => {
-                                                props.addFunction(formation)
-                                                closeAddFormation()
-                                            }}>
-                                                <CardContent sx={{m: 0, p: 1}}>
-                                                    <Stack direction="row" spacing={1} justifyContent="space-between">
-                                                        <Stack direction="row" spacing={2} alignItems="center">
-                                                            <Badge
-                                                                badgeContent={formation.cost.getOrZero(TestCategory.FORMATION)}
-                                                                color="primary" showZero>
-                                                                <AttachMoneyIcon/>
-                                                            </Badge>
-                                                            <Typography variant="body2">{formation.name}</Typography>
-                                                        </Stack>
-                                                        <CategoryTypes cost={formation.cost}
-                                                                       grants={formation.grants}/>
-                                                    </Stack>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Card>
-                                    ))}
-                                </AccordionDetails>
-                            </Accordion>
-                        ))}
-                    </Stack>
-                </Box>
-            </Modal>
+                <Stack spacing={1} sx={{m: 2}}>
+                    <h2 id="parent-modal-title">Select formation</h2>
+                    {Array.from(testFormationsBySections.entries()).map((entry) => (
+                        <Accordion expanded={expanded === entry[0]} onChange={handleChange(entry[0])}>
+                            <AccordionSummary>
+                                <Typography variant="body1">{entry[0]}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                {entry[1].map((formation) => (
+                                    <FormationToAddComponent formation={formation}
+                                                             closePopupFunction={closeAddFormation}
+                                                             addFunction={props.addFunction}
+                                                             validation={props.checkValidityFunction(formation)}/>
+                                ))}
+                            </AccordionDetails>
+                        </Accordion>
+                    ))}
+                </Stack>
+            </Dialog>
         </>
+    )
+}
+
+export function FormationToAddComponent(props: {
+    formation: TestFormationSpec,
+    addFunction: (formation: TestFormationSpec) => void,
+    validation: ValidationResult
+    closePopupFunction: () => void
+}) {
+    return (
+        <Card variant="outlined">
+            <CardActionArea disabled={!props.validation.success} onClick={() => {
+                props.addFunction(props.formation)
+                props.closePopupFunction()
+            }}>
+                <CardContent sx={{m: 0, p: 1}}>
+                    <Stack direction="row" spacing={1} justifyContent="space-between">
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <CostComponent cost={props.formation.cost.getOrZero(TestCategory.FORMATION)}/>
+                            <Typography variant="body2">{props.formation.name}</Typography>
+                            {!props.validation.success &&
+                                <Typography variant="caption" color="disabled">{props.validation.message}</Typography>}
+                        </Stack>
+                        <CategoryTypes cost={props.formation.cost}
+                                       grants={props.formation.grants}/>
+                    </Stack>
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    )
+}
+
+export function CostComponent(props: { cost: number }) {
+    return (
+        <Badge badgeContent={props.cost} color="primary" showZero>
+            <AttachMoneyIcon/>
+        </Badge>
     )
 }
 
@@ -232,18 +243,6 @@ export function FormationComponent(props: Readonly<{
     updateFunction: (id: string) => void
 }>) {
     const [upgradeDialogOpen, setUpgradeDialogOpen] = React.useState(false);
-
-    const style = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
 
     const removeUpgrade = (upgrade: TestUpgradeSpec) => {
         props.formation.upgrades = props.formation.upgrades.filter(item => item !== upgrade)
@@ -295,20 +294,19 @@ export function FormationComponent(props: Readonly<{
                 ))}
             </Paper>
 
-            <Modal
-                open={upgradeDialogOpen}
-                onClose={() => setUpgradeDialogOpen(false)}
+            <Dialog fullWidth
+                    maxWidth="sm"
+                    open={upgradeDialogOpen}
+                    onClose={() => setUpgradeDialogOpen(false)}
             >
-                <Box sx={{...style, width: 600}}>
+                <Stack spacing={1} sx={{m: 2}}>
                     <h2 id="parent-modal-title">Select Upgrade</h2>
-                    <Stack spacing={1}>
-                        {props.formation != null && props.formation.spec.availableUpgrades.map((upgrade) => (
-                            <FormationUpgradeComponent formation={props.formation} upgrade={upgrade}
-                                                       addUpgrade={addUpgrade}/>
-                        ))}
-                    </Stack>
-                </Box>
-            </Modal>
+                    {props.formation != null && props.formation.spec.availableUpgrades.map((upgrade) => (
+                        <FormationUpgradeComponent formation={props.formation} upgrade={upgrade}
+                                                   addUpgrade={addUpgrade}/>
+                    ))}
+                </Stack>
+            </Dialog>
         </>
     )
 }
@@ -334,10 +332,7 @@ export function FormationUpgradeComponent(props: {
                     <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
                         {showAsEnabled(canApplyUpgrade) && <>
                             <Stack direction="row" spacing={2} alignItems="center">
-                                <Badge badgeContent={props.upgrade.cost.getOrZero(TestCategory.UPGRADE)} color="primary"
-                                       showZero>
-                                    <AttachMoneyIcon/>
-                                </Badge>
+                                <CostComponent cost={props.upgrade.cost.getOrZero(TestCategory.UPGRADE)}/>
                                 <Typography variant="body2">
                                     {props.upgrade.name}
                                 </Typography>
