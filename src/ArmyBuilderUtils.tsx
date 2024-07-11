@@ -4,15 +4,28 @@ import {Badge, Chip, Grid, Stack, Typography, useTheme} from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-export function CategoryChips(props: Readonly<{ items: TestCategoryCount[], color: string }>) {
+export function CategoryChips(props: Readonly<{ items: TestCategoryCount[], color: string, forceText?: boolean }>) {
     return (
         <React.Fragment>
             {props.items.map((categoryCount) => (
                 <Grid item key={categoryCount.category}>
-                    <Chip label={categoryCount.count + 'x ' + categoryCount.category} color={props.color} size="small"/>
+                    <CategoryChip categoryCount={categoryCount} color={props.color}/>
                 </Grid>
             ))}
         </React.Fragment>
+    )
+}
+
+export function CategoryChip(props: Readonly<{
+    categoryCount: TestCategoryCount,
+    color: string,
+    forceText?: boolean
+}>) {
+    return (
+        <Chip label={props.categoryCount.count + ' ' + props.categoryCount.category}
+              color={props.color}
+              sx={{fontSize: 12}}
+              size="small"/>
     )
 }
 

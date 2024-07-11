@@ -1,7 +1,6 @@
 import {
     TestArmyAllocation,
     TestArmySpec,
-    TestCategories,
     TestCategory,
     TestFormation,
     testFormationsBySections,
@@ -16,7 +15,6 @@ import {
     Card,
     CardActionArea,
     CardContent,
-    Chip,
     Dialog,
     Divider,
     Grid,
@@ -27,7 +25,7 @@ import React, {useState} from "react"
 import {ValidationResult} from "./ts/restrictions";
 import {ArmyAllocationPanel} from "./ArmyBuilderAllocation";
 import {DisplayFormationPanel, FormationUpgradeDialog} from "./ArmyBuilderFormation";
-import {CostComponent} from "./ArmyBuilderUtils";
+import {CategoryChips, CostComponent} from "./ArmyBuilderUtils";
 
 export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
     const [armyFormations, setArmyFormations] = useState<TestFormation[]>([])
@@ -60,9 +58,7 @@ export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
                 <Grid item>
                     <Typography variant="h4">{props.armySpec.name}</Typography>
                 </Grid>
-                <Grid item>
-                    <CategoryTypes cost={TestCategories.fromList([])} grants={props.armySpec.grants}/>
-                </Grid>
+                <CategoryChips items={props.armySpec.grants.toList()} color="success"/>
             </Grid>
 
             <Divider/>
@@ -111,9 +107,10 @@ export function AddFormationComponent(props: {
                     onClose={closeAddFormation}
             >
                 <Stack spacing={1} sx={{m: 2}}>
-                    <h2 id="parent-modal-title">Select formation</h2>
+                    <Typography variant="h6">Select Formation</Typography>
                     {Array.from(testFormationsBySections.entries()).map((entry) => (
-                        <Accordion expanded={expanded === entry[0]} onChange={handleChange(entry[0])}>
+                        <Accordion expanded={expanded === entry[0]} onChange={handleChange(entry[0])}
+                                   disableGutters="true">
                             <AccordionSummary>
                                 <Typography variant="body1">{entry[0]}</Typography>
                             </AccordionSummary>
@@ -133,12 +130,15 @@ export function AddFormationComponent(props: {
     )
 }
 
-export function FormationToAddComponent(props: {
+export function FormationToAddComponent(props: Readonly<{
     formation: TestFormationSpec,
     addFunction: (formation: TestFormationSpec) => void,
     validation: ValidationResult
     closePopupFunction: () => void
-}) {
+}>) {
+    const costToDisplay = props.formation.cost.toList().filter(
+        (item) => item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
+
     return (
         <Card variant="outlined">
             <CardActionArea disabled={!props.validation.success} onClick={() => {
@@ -146,43 +146,19 @@ export function FormationToAddComponent(props: {
                 props.closePopupFunction()
             }}>
                 <CardContent sx={{m: 0, p: 1}}>
-                    <Stack direction="row" spacing={1} justifyContent="space-between">
-                        <Stack direction="row" spacing={2} alignItems="center">
-                            <CostComponent cost={props.formation.cost.getOrZero(TestCategory.FORMATION)}/>
-                            <Typography variant="body2">{props.formation.name}</Typography>
-                            {!props.validation.success &&
-                                <Typography variant="caption" color="disabled">{props.validation.message}</Typography>}
-                        </Stack>
-                        <CategoryTypes cost={props.formation.cost}
-                                       grants={props.formation.grants}/>
-                    </Stack>
+                    <Grid item container direction="row" spacing={1} alignItems="center">
+                        <Grid item>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                                <CostComponent cost={props.formation.cost.getOrZero(TestCategory.FORMATION)}/>
+                                <Typography noWrap variant="body2">{props.formation.name}</Typography>
+                            </Stack>
+                        </Grid>
+                        <CategoryChips items={props.formation.grants.toList()} color="success"/>
+                        <CategoryChips items={costToDisplay} color="primary"/>
+                    </Grid>
                 </CardContent>
             </CardActionArea>
         </Card>
-    )
-}
-
-export function CategoryTypes(props: { cost: TestCategories, grants?: TestCategories }) {
-    return (
-        <Stack direction="row" spacing={1}>
-            {props.grants !== undefined && props.grants.toList().map((categoryCount) => (
-                <Chip label={
-                    categoryCount.count + 'x ' +
-                    categoryCount.category
-                } color="success" size="small"/>
-            ))}
-
-            {props.cost.toList()
-                .filter((item) => item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
-                .map((item, value) => (
-                    <Chip label={
-                        (item.count !== 1 ? item.count + 'x ' : '') +
-                        item.category
-                    }
-                          color="primary"
-                          size="small"/>
-                ))}
-        </Stack>
     )
 }
 

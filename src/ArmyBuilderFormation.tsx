@@ -153,20 +153,21 @@ export function FormationUpgradeComponent(props: Readonly<{
     const showAsEnabled = canApplyUpgrade.success || (!canApplyUpgrade.success && !canApplyUpgrade.blocking)
 
     const textColor = showAsEnabled ? theme.palette.text.primary : theme.palette.text.disabled
-    const nameWidth = showAsEnabled ? 'auto' : 3
+    const nameWidth = showAsEnabled ? 'auto' : 4
 
     return (
         <Card>
             <CardActionArea disabled={!showAsEnabled} onClick={() => {
                 props.addUpgrade(props.upgrade)
             }}>
-                <CardContent>
+                <CardContent sx={{m: 0, p: 1}}>
                     <Grid item container direction="row" spacing={1} alignItems="center">
-                        <Grid item pr={1} xs={1}>
-                            <CostComponent cost={props.upgrade.cost.getOrZero(TestCategory.UPGRADE)}/>
-                        </Grid>
                         <Grid item xs={nameWidth}>
-                            <Typography noWrap variant="body2" sx={{color: textColor}}>{props.upgrade.name}</Typography>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                                <CostComponent cost={props.upgrade.cost.getOrZero(TestCategory.FORMATION)}/>
+                                <Typography noWrap variant="body2"
+                                            sx={{color: textColor}}>{props.upgrade.name}</Typography>
+                            </Stack>
                         </Grid>
                         {showAsEnabled &&
                             <CategoryChips items={props.upgrade.cost.toList()} color="primary"/>}
