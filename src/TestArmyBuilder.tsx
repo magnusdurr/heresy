@@ -12,7 +12,6 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
-    Badge,
     Button,
     Card,
     CardActionArea,
@@ -20,19 +19,15 @@ import {
     Chip,
     Dialog,
     Divider,
-    IconButton,
-    Paper,
+    Grid,
     Stack,
-    Tooltip,
-    Typography,
-    useTheme
+    Typography
 } from "@mui/material";
 import React, {useState} from "react"
-import DeleteIcon from '@mui/icons-material/Delete';
-import UpgradeIcon from '@mui/icons-material/Upgrade';
-import ErrorIcon from '@mui/icons-material/Error';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import {ValidationResult} from "./ts/restrictions";
+import {ArmyAllocationPanel} from "./ArmyBuilderAllocation";
+import {DisplayFormationPanel, FormationUpgradeDialog} from "./ArmyBuilderFormation";
+import {CostComponent} from "./ArmyBuilderUtils";
 
 export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
     const [armyFormations, setArmyFormations] = useState<TestFormation[]>([])
@@ -61,20 +56,18 @@ export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
 
     return (
         <Stack spacing={1}>
-            <Stack direction="row" spacing={3} alignItems="center">
-                <Typography variant="h4">{props.armySpec.name}</Typography>
-                <CategoryTypes cost={TestCategories.fromList([])} grants={props.armySpec.grants}/>
-            </Stack>
+            <Grid container spacing={1} alignItems="center">
+                <Grid item>
+                    <Typography variant="h4">{props.armySpec.name}</Typography>
+                </Grid>
+                <Grid item>
+                    <CategoryTypes cost={TestCategories.fromList([])} grants={props.armySpec.grants}/>
+                </Grid>
+            </Grid>
 
-            <Stack direction="row" spacing={1}>
-                {Object.keys(TestCategory).map((key) => (TestCategory[key as keyof typeof TestCategory]))
-                    .filter((category) => category !== TestCategory.CORE)
-                    .map((category) => (
-                        <ArmyAllowanceComponent name={category}
-                                                available={armyAllocation.grants.getOrZero(category)}
-                                                used={armyAllocation.cost.getOrZero(category)}/>
-                    ))}
-            </Stack>
+            <Divider/>
+
+            <ArmyAllocationPanel armyAllocation={armyAllocation}/>
 
             <Divider/>
 
@@ -92,42 +85,6 @@ export function TestArmyBuilder(props: { armySpec: TestArmySpec }) {
     )
 }
 
-export function ArmyAllowanceComponent(props: { name: string, available?: number, used?: number, extras?: number }) {
-    return (
-        <>
-            {(props.available ?? 0) + (props.used ?? 0) > 0 && <Card>
-                <CardContent>
-                    <Stack direction="column" alignItems="center">
-                        <Typography variant="caption">{props.name}</Typography>
-                        <AllowanceValue used={props.used}
-                                        available={Math.floor(props.available ?? 0)}
-                                        extras={props.extras}/>
-                    </Stack>
-                </CardContent>
-            </Card>}
-        </>
-    )
-}
-
-export function AllowanceValue(props: { used?: number, available?: number, extras?: number }) {
-    const used = props.used ?? 0
-    const available = props.available ?? 0
-    const extras = props.extras ?? 0
-
-    const isOverAllowance = () => {
-        return used > available + extras
-    }
-
-    return (
-        <Stack direction="row" spacing={1}>
-            <Typography>
-                {props.used}/{props.available}
-                {props.extras !== undefined && '+' + props.extras}
-            </Typography>
-            {isOverAllowance() && <ErrorIcon color="error"/>}
-        </Stack>
-    )
-}
 
 export function AddFormationComponent(props: {
     addFunction: (formation: TestFormationSpec) => void,
@@ -205,14 +162,6 @@ export function FormationToAddComponent(props: {
     )
 }
 
-export function CostComponent(props: { cost: number }) {
-    return (
-        <Badge badgeContent={props.cost} color="primary" showZero>
-            <AttachMoneyIcon/>
-        </Badge>
-    )
-}
-
 export function CategoryTypes(props: { cost: TestCategories, grants?: TestCategories }) {
     return (
         <Stack direction="row" spacing={1}>
@@ -255,102 +204,20 @@ export function FormationComponent(props: Readonly<{
         setUpgradeDialogOpen(false)
     }
 
-    const validationErrors = props.formation.checkValidationErrors()
-
     return (
         <>
-            <Paper key={props.formation.id}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h6">{props.formation.spec.name}</Typography>
-                    <CategoryTypes cost={props.formation.costWithUpgrades()} grants={props.formation.spec.grants}/>
-                    <div>
-                        {props.formation.spec.availableUpgrades.length > 0 && <Tooltip title='Upgrade'>
-                            <IconButton onClick={() => setUpgradeDialogOpen(true)}>
-                                <UpgradeIcon/>
-                            </IconButton>
-                        </Tooltip>}
-                        <Tooltip title='Delete'>
-                            <IconButton onClick={() => {
-                                props.deleteFunction(props.formation.id)
-                            }}>
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    </div>
-                </Stack>
-                {validationErrors.map((error) => (
-                    <Typography variant="caption" color="error">{error.message}</Typography>
-                ))}
+            <DisplayFormationPanel formation={props.formation}
+                                   deleteFunction={props.deleteFunction}
+                                   updateFunction={props.updateFunction}
+                                   removeUpdateFunction={removeUpgrade}
+                                   showUpdatesFunction={() => setUpgradeDialogOpen(true)}/>
 
-                {props.formation.upgrades.map((upgrade) => (
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="body1"> - {upgrade.name}</Typography>
-                        <Tooltip title='Delete Upgrade'>
-                            <IconButton onClick={() => removeUpgrade(upgrade)}>
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    </Stack>
-                ))}
-            </Paper>
-
-            <Dialog fullWidth
-                    maxWidth="sm"
-                    open={upgradeDialogOpen}
-                    onClose={() => setUpgradeDialogOpen(false)}
-            >
-                <Stack spacing={1} sx={{m: 2}}>
-                    <h2 id="parent-modal-title">Select Upgrade</h2>
-                    {props.formation != null && props.formation.spec.availableUpgrades.map((upgrade) => (
-                        <FormationUpgradeComponent formation={props.formation} upgrade={upgrade}
-                                                   addUpgrade={addUpgrade}/>
-                    ))}
-                </Stack>
-            </Dialog>
+            <FormationUpgradeDialog formation={props.formation}
+                                    upgradeDialogOpen={upgradeDialogOpen}
+                                    addUpgradeFunction={addUpgrade}
+                                    closeDialogFunction={() => setUpgradeDialogOpen(false)}/>
         </>
     )
 }
 
-export function FormationUpgradeComponent(props: {
-    formation: TestFormation,
-    upgrade: TestUpgradeSpec,
-    addUpgrade: (upgrade: TestUpgradeSpec) => void
-}) {
-    const canApplyUpgrade = props.formation.canApplyUpgrade(props.upgrade)
-    const theme = useTheme()
 
-    function showAsEnabled(result: ValidationResult): Boolean {
-        return result.success || (!result.success && !result.blocking)
-    }
-
-    return (
-        <Card>
-            <CardActionArea disabled={!showAsEnabled(canApplyUpgrade)} onClick={() => {
-                props.addUpgrade(props.upgrade)
-            }}>
-                <CardContent sx={{m: 0, p: 1}}>
-                    <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
-                        {showAsEnabled(canApplyUpgrade) && <>
-                            <Stack direction="row" spacing={2} alignItems="center">
-                                <CostComponent cost={props.upgrade.cost.getOrZero(TestCategory.UPGRADE)}/>
-                                <Typography variant="body2">
-                                    {props.upgrade.name}
-                                </Typography>
-                            </Stack>
-                            <CategoryTypes cost={props.upgrade.cost}/>
-                        </>}
-
-                        {!showAsEnabled(canApplyUpgrade) && <>
-                            <Typography variant="body2" sx={{color: theme.palette.text.disabled}} noWrap>
-                                {props.upgrade.name} - {props.upgrade.cost.getOrZero(TestCategory.UPGRADE)} point
-                            </Typography>
-                            <ErrorIcon color="disabled"/>
-                            <Typography variant="caption"
-                                        sx={{color: theme.palette.text.disabled}}>{canApplyUpgrade.message}</Typography>
-                        </>}
-                    </Stack>
-                </CardContent>
-            </CardActionArea>
-        </Card>
-    )
-}
