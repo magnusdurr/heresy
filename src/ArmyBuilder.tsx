@@ -39,23 +39,22 @@ export function ArmyBuilder(props: { armySpec: ArmySpec }) {
     return (
         <ArmyContext.Provider value={props.armySpec}>
             <Stack spacing={1}>
-                <Grid container spacing={1} alignItems="center">
-                    <Grid item>
+                <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                    <Grid item xs="auto">
                         <Typography variant="h4">{props.armySpec.name}</Typography>
                     </Grid>
-                    <CategoryChips items={props.armySpec.grants.toList()} color="success"/>
+                    <Grid item container sm={6} columnSpacing={1}>
+                        <CategoryChips items={props.armySpec.grants.toList()} color="success"/>
+                    </Grid>
                 </Grid>
 
                 <Divider/>
-
                 <ArmyAllocationPanel armyAllocation={armyAllocation}/>
-
                 {validationErrors.map((error) => (
                     <ValidationError message={error.message!}/>
                 ))}
 
                 <Divider/>
-
                 <Typography variant="h5">Formations</Typography>
 
                 {armyFormations.map((formation) => (

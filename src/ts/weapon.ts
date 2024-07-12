@@ -1,7 +1,7 @@
 import {SpecialRule} from "./unit";
 
 export enum WeaponType {
-    AP = "AP", AT = "AT", AA = "AA", ASSAULT = "Assault Weapon", FIRE_FIGHT = "Small Arms"
+    AP = "AP", AT = "AT", AA = "AA", ASSAULT = "Assault", FIRE_FIGHT = "Small Arms"
 }
 
 export class Weapon {

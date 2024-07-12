@@ -1,4 +1,4 @@
-import {TestCategories, TestCategory, TestCategoryCount, TestFormation, testUpgrades, TestUpgradeSpec} from "./test";
+import {TestCategories, TestCategory, TestCategoryCount, TestFormation, TestUpgradeSpec} from "./test";
 import {
     BuildRestriction,
     MandatoryUpgradesRestriction,
@@ -86,6 +86,31 @@ export class ArmySpec {
 
         return [...formationErrors, ...globalUpgradeErrors]
     }
+}
+
+export const testUpgrades = {
+    rhinos: new TestUpgradeSpec.Builder("Rhinos",
+        "Add enough Rhinos to transport all units in the formation",
+        TestCategories.fromList([TestCategory.UPGRADE, TestCategory.FAST_ATTACK]))
+        .withUnitToAdd(units.rhino, 1)
+        .build(),
+
+    supreme: new TestUpgradeSpec.Builder("Supreme Commander",
+        "Add a supreme commander to the formation",
+        TestCategories.fromList([TestCategory.CORE]))
+        .withUnitToAdd(units.supremeCommander, 1)
+        .build(),
+
+    plasma: new TestUpgradeSpec.Builder("Plasma Gun Legionaries", "", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.CORE])).build(),
+    dreadnoughts: new TestUpgradeSpec.Builder("Dreadnoughts", "", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT])).build(),
+    commander: new TestUpgradeSpec.Builder("Commander", "", new TestCategories(new Map([
+        [TestCategory.UPGRADE, 1], [TestCategory.ELITE, 0.5]
+    ]))).build(),
+    warhoundPair: new TestUpgradeSpec.Builder("Warhound Titan Pair", "", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.UPGRADE, TestCategory.FAST_ATTACK, TestCategory.ELITE])).build(),
+    st_vulcanMegaBolter: new TestUpgradeSpec.Builder("Vulcan Mega-Bolter", "", TestCategories.fromList([TestCategory.CORE])).build(),
+    st_infernoGun: new TestUpgradeSpec.Builder("Inferno Gun", "", TestCategories.fromList([TestCategory.CORE])).build(),
+    st_scoutTLD: new TestUpgradeSpec.Builder("Scout Turbo-Laser Destructor", "", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT])).build(),
+    st_plasmaBlastgun: new TestUpgradeSpec.Builder("Plasma Blastgun", "", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT])).build()
 }
 
 export const lsArmySpec = new ArmySpec.Builder("Legiones Astartes")

@@ -43,7 +43,7 @@ export function FormationComponent(props: Readonly<{
     const addUpgrade = (upgrade: TestUpgradeSpec) => {
         props.formation.upgrades.push(upgrade)
         props.updateFunction(props.formation.id)
-        setFormationDetailsOpen(false)
+        setUpgradeDialogOpen(false)
     }
 
     return (
@@ -57,11 +57,11 @@ export function FormationComponent(props: Readonly<{
             />
 
             <FormationUpgradeDialog formation={props.formation}
-                                    upgradeDialogOpen={formationDetailsOpen}
+                                    upgradeDialogOpen={upgradeDialogOpen}
                                     addUpgradeFunction={addUpgrade}
-                                    closeDialogFunction={() => setFormationDetailsOpen(false)}/>
+                                    closeDialogFunction={() => setUpgradeDialogOpen(false)}/>
 
-            <DisplayUnitsDialog formation={props.formation.spec}
+            <DisplayUnitsDialog formation={props.formation}
                                 upgradeDialogOpen={formationDetailsOpen}
                                 closeDialogFunction={() => setFormationDetailsOpen(false)}/>
         </>

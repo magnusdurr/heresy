@@ -1,11 +1,11 @@
-import {Card, CardContent, Dialog, Typography} from "@mui/material";
+import {Dialog, Grid, Stack, Typography} from "@mui/material";
 import React from "react";
 import {UnitComponent} from "./UnitComponent";
-import {TestFormationSpec} from "./ts/testFormationSpec";
+import {TestFormation} from "./ts/test";
 
 
 export function DisplayUnitsDialog(props: {
-    formation: TestFormationSpec,
+    formation: TestFormation,
     upgradeDialogOpen: boolean,
     closeDialogFunction: () => void
 }) {
@@ -14,18 +14,28 @@ export function DisplayUnitsDialog(props: {
         <Dialog fullWidth
                 maxWidth="sm"
                 open={props.upgradeDialogOpen}
-                onClose={props.closeDialogFunction}
-        >
-            <Card>
-                <CardContent>
-                    <Typography variant="h5">
-                        {props.formation.name}
-                    </Typography>
-                    {Array.from(props.formation.units.entries()).map((entry, formationIndex) => (
-                        <UnitComponent key={formationIndex} unit={entry[0]} count={entry[1]}/>
-                    ))}
-                </CardContent>
-            </Card>
+                onClose={props.closeDialogFunction}>
+
+            <Stack spacing={1} sx={{m: 2}}>
+                <Grid container direction="row" alignItems="center" columnSpacing={2}>
+                    <Grid item>
+                        <Typography variant="h5">
+                            {props.formation.spec.name}
+                        </Typography>
+                    </Grid>
+
+                    {props.formation.upgrades.length > 0 &&
+                        <Grid item>
+                            <Typography variant="subtitle1">
+                                ({props.formation.upgrades.map(upgrade => upgrade.name).join(', ')})
+                            </Typography>
+                        </Grid>
+                    }
+                </Grid>
+                {props.formation.unitsInFormation().map((entry, formationIndex) => (
+                    <UnitComponent key={formationIndex} unit={entry.unit} count={entry.count}/>
+                ))}
+            </Stack>
         </Dialog>
     );
 }

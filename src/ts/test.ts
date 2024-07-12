@@ -3,6 +3,7 @@ import {ValidationResult} from "./restrictions";
 
 import {ArmySpec} from "./armySpec";
 import {TestFormationSpec} from "./testFormationSpec";
+import {Unit} from "./unit";
 
 export enum TestCategory {
     FORMATION = "Formations",
@@ -60,11 +61,45 @@ export interface TestCategoryCount {
 
 export class TestUpgradeSpec {
     name: string
+    description: string
     cost: TestCategories
+    unitsToReplace: Map<Unit, number> // unit id -> number of units
+    unitsToAdd: Map<Unit, number> // unit id -> number of units
 
-    constructor(name: string, cost: TestCategories) {
+    constructor(name: string, description: string, cost: TestCategories, unitsToReplace: Map<Unit, number>, unitsToAdd: Map<Unit, number>) {
         this.name = name;
+        this.description = description;
         this.cost = cost;
+        this.unitsToReplace = unitsToReplace;
+        this.unitsToAdd = unitsToAdd;
+    }
+
+    static Builder = class {
+        private readonly name: string
+        private readonly description: string
+        private readonly cost: TestCategories
+        private readonly unitsToReplace: Map<Unit, number> = new Map()
+        private readonly unitsToAdd: Map<Unit, number> = new Map()
+
+        constructor(name: string, description: string, cost: TestCategories) {
+            this.name = name;
+            this.description = description
+            this.cost = cost;
+        }
+
+        withUnitToReplace(unit: Unit, number: number) {
+            this.unitsToReplace.set(unit, number);
+            return this;
+        }
+
+        withUnitToAdd(unit: Unit, number: number) {
+            this.unitsToAdd.set(unit, number);
+            return this;
+        }
+
+        build() {
+            return new TestUpgradeSpec(this.name, this.description, this.cost, this.unitsToReplace, this.unitsToAdd);
+        }
     }
 }
 
@@ -94,6 +129,39 @@ export class TestFormation {
             this.upgrades.reduce((acc, upgrade) => acc.merge(upgrade.cost), new TestCategories(new Map()))
         );
     }
+
+    unitsInFormation(): UnitCount[] {
+        const result = new Map(this.spec.units);
+
+        this.upgrades.forEach(upgrade => {
+            upgrade.unitsToAdd.forEach((count, unit) => {
+                result.set(unit, (result.get(unit) || 0) + count);
+            });
+        })
+        this.upgrades.forEach(upgrade => {
+            upgrade.unitsToReplace.forEach((count, unit) => {
+                if (result.has(unit)) {
+                    result.set(unit, result.get(unit)! - count);
+                }
+            });
+        })
+
+        return this.mapToUnitCount(result)
+    }
+
+    mapToUnitCount(values: Map<Unit, number>) {
+        return Array.from(values.entries()).map(([unit, count]) => new UnitCount(unit, count));
+    }
+}
+
+export class UnitCount {
+    readonly unit: Unit
+    readonly count: number
+
+    constructor(unit: Unit, count: number) {
+        this.unit = unit;
+        this.count = count;
+    }
 }
 
 export class TestArmyAllocation {
@@ -115,19 +183,4 @@ export class TestArmyAllocation {
 
         return new TestArmyAllocation(totalCost, allGrants);
     }
-}
-
-export const testUpgrades = {
-    rhinos: new TestUpgradeSpec("Rhinos", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.FAST_ATTACK])),
-    supreme: new TestUpgradeSpec("Supreme Commander", TestCategories.fromList([TestCategory.CORE])),
-    plasma: new TestUpgradeSpec("Plasma Gun Legionaries", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.CORE])),
-    dreadnoughts: new TestUpgradeSpec("Dreadnoughts", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT])),
-    commander: new TestUpgradeSpec("Commander", new TestCategories(new Map([
-        [TestCategory.UPGRADE, 1], [TestCategory.ELITE, 0.5]
-    ]))),
-    warhoundPair: new TestUpgradeSpec("Warhound Titan Pair", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.UPGRADE, TestCategory.FAST_ATTACK, TestCategory.ELITE])),
-    st_vulcanMegaBolter: new TestUpgradeSpec("Vulcan Mega-Bolter", TestCategories.fromList([TestCategory.CORE])),
-    st_infernoGun: new TestUpgradeSpec("Inferno Gun", TestCategories.fromList([TestCategory.CORE])),
-    st_scoutTLD: new TestUpgradeSpec("Scout Turbo-Laser Destructor", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT])),
-    st_plasmaBlastgun: new TestUpgradeSpec("Plasma Blastgun", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT]))
 }
