@@ -28,7 +28,7 @@ export function DisplayUnitsDialog(props: {
                     {props.formation.upgrades.length > 0 &&
                         <Grid item>
                             <Typography variant="subtitle1">
-                                ({props.formation.upgrades.map(upgrade => upgrade.name).join(', ')})
+                                ({props.formation.upgrades.map(upgrade => upgrade.spec.name).join(', ')})
                             </Typography>
                         </Grid>
                     }

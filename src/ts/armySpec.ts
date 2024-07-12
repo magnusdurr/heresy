@@ -70,7 +70,7 @@ export class ArmySpec {
     }
 
     canAddUpgrade(existing: Formation[], toBeAdded: UpgradeSpec): ValidationResult {
-        return this.upgradeRestriction.map(restriction => restriction.isLegal([...existing.map((formation => formation.upgrades)).flat(), toBeAdded]))
+        return this.upgradeRestriction.map(restriction => restriction.isLegal([...existing.map((formation => formation.upgrades.map(u => u.spec))).flat(), toBeAdded]))
             .find(result => !result.success) || ValidationResult.success
     }
 
@@ -78,7 +78,7 @@ export class ArmySpec {
         const formationErrors = this.formationRestrictions.map(restriction => restriction.isLegal([...armyFormations.map((formation => formation.spec))]))
             .filter(result => !result.success)
 
-        const globalUpgradeErrors = this.upgradeRestriction.map(restriction => restriction.isLegal(armyFormations.map((formation => formation.upgrades)).flat()))
+        const globalUpgradeErrors = this.upgradeRestriction.map(restriction => restriction.isLegal(armyFormations.map((formation => formation.upgrades.map(u => u.spec))).flat()))
             .filter(result => !result.success)
 
         return [...formationErrors, ...globalUpgradeErrors]

@@ -28,6 +28,7 @@ import {ArmyContext} from "./ArmyBuilder";
 import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
 import {UpgradeSpec} from "./ts/upgradeSpec";
 import {Formation} from "./ts/formation";
+import {Upgrade} from "./ts/upgrade";
 
 export function FormationComponent(props: Readonly<{
     formation: Formation,
@@ -37,13 +38,13 @@ export function FormationComponent(props: Readonly<{
     const [upgradeDialogOpen, setUpgradeDialogOpen] = React.useState(false);
     const [formationDetailsOpen, setFormationDetailsOpen] = React.useState(false);
 
-    const removeUpgrade = (upgrade: UpgradeSpec) => {
-        props.formation.upgrades = props.formation.upgrades.filter(item => item !== upgrade)
+    const removeUpgrade = (id: string) => {
+        props.formation.upgrades = props.formation.upgrades.filter(item => item.id !== id)
         props.updateFunction(props.formation.id)
     }
 
     const addUpgrade = (upgrade: UpgradeSpec) => {
-        props.formation.upgrades.push(upgrade)
+        props.formation.upgrades.push(new Upgrade(upgrade))
         props.updateFunction(props.formation.id)
         setUpgradeDialogOpen(false)
     }
@@ -74,7 +75,7 @@ export function DisplayFormationPanel(props: Readonly<{
     formation: Formation,
     deleteFunction: (id: string) => void
     updateFunction: (id: string) => void
-    removeUpdateFunction: (update: UpgradeSpec) => void
+    removeUpdateFunction: (id: string) => void
     showUpdatesFunction: () => void
     showUnitsFunction: () => void
 }>) {
@@ -149,14 +150,14 @@ export function DisplayFormationPanel(props: Readonly<{
 }
 
 export function DisplayUpgradePanel(props: Readonly<{
-    upgrade: UpgradeSpec,
-    removeUpdateFunction: (update: UpgradeSpec) => void
+    upgrade: Upgrade,
+    removeUpdateFunction: (id: string) => void
 }>) {
     return (
         <Stack direction="row" alignItems="center" ml={1}>
-            <Typography variant="body1">{props.upgrade.name}</Typography>
+            <Typography variant="body1">{props.upgrade.spec.name}</Typography>
             <Tooltip title='Delete Upgrade'>
-                <IconButton size="small" onClick={() => props.removeUpdateFunction(props.upgrade)}>
+                <IconButton size="small" onClick={() => props.removeUpdateFunction(props.upgrade.id)}>
                     <DeleteIcon fontSize="inherit"/>
                 </IconButton>
             </Tooltip>

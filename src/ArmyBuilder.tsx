@@ -15,7 +15,7 @@ export function ArmyBuilder(props: { armySpec: ArmySpec }) {
     const [armyAllocation, setArmyAllocation] = useState<TestArmyAllocation>(TestArmyAllocation.fromFormations(props.armySpec, []));
 
     const handleAddFormation = (formation: FormationSpec) => {
-        let updatedFormations = [...armyFormations, new Formation(formation, [])];
+        let updatedFormations = [...armyFormations, new Formation(formation)];
         setArmyFormations(updatedFormations);
         setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, updatedFormations));
     }

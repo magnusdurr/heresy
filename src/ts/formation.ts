@@ -4,30 +4,30 @@ import {ValidationResult} from "./restrictions";
 import {Unit} from "./unit";
 import {TestCategories, UnitCount} from "./test";
 import {v4 as uuidv4} from 'uuid';
+import {Upgrade} from "./upgrade";
 
 export class Formation {
     id: string = uuidv4();
     spec: FormationSpec
-    upgrades: UpgradeSpec[]
+    upgrades: Upgrade[] = []
 
-    constructor(spec: FormationSpec, upgrades: UpgradeSpec[]) {
+    constructor(spec: FormationSpec) {
         this.spec = spec
-        this.upgrades = upgrades
     }
 
     canApplyUpgrade(upgrade: UpgradeSpec): ValidationResult {
-        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal([...this.upgrades, upgrade]))
+        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal([...this.upgrades.map(u => u.spec), upgrade]))
             .find(result => !result.success) || ValidationResult.success
     }
 
     checkUpgradeValidationErrors(): ValidationResult[] {
-        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal(this.upgrades))
+        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal(this.upgrades.map(u => u.spec)))
             .filter(result => !result.success)
     }
 
     costWithUpgrades() {
         return this.spec.cost.merge(
-            this.upgrades.reduce((acc, upgrade) => acc.merge(upgrade.cost), new TestCategories(new Map()))
+            this.upgrades.reduce((acc, upgrade) => acc.merge(upgrade.spec.cost), new TestCategories(new Map()))
         );
     }
 
@@ -35,12 +35,12 @@ export class Formation {
         const result = new Map(this.spec.units);
 
         this.upgrades.forEach(upgrade => {
-            upgrade.unitsToAdd.forEach((count, unit) => {
+            upgrade.spec.unitsToAdd.forEach((count, unit) => {
                 result.set(unit, (result.get(unit) || 0) + count);
             });
         })
         this.upgrades.forEach(upgrade => {
-            upgrade.unitsToReplace.forEach((count, unit) => {
+            upgrade.spec.unitsToReplace.forEach((count, unit) => {
                 if (result.has(unit)) {
                     result.set(unit, result.get(unit)! - count);
                 }
