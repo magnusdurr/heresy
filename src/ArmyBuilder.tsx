@@ -1,4 +1,3 @@
-import {TestArmyAllocation,} from "./ts/test";
 import {Divider, Grid, Stack, Typography} from "@mui/material";
 import React, {createContext, useState} from "react"
 import {ArmyAllocationPanel} from "./ArmyBuilderAllocation";
@@ -7,28 +6,29 @@ import {CategoryChips, ValidationError} from "./ArmyBuilderUtils";
 import {ArmySpec} from "./ts/armySpec";
 import {FormationSpec} from "./ts/formationSpec";
 import {Formation} from "./ts/formation";
+import {ArmyAllocation} from "./ts/armyAllocation";
 
 export const ArmyContext = createContext<ArmySpec | null>(null);
 
 export function ArmyBuilder(props: { armySpec: ArmySpec }) {
     const [armyFormations, setArmyFormations] = useState<Formation[]>([])
-    const [armyAllocation, setArmyAllocation] = useState<TestArmyAllocation>(TestArmyAllocation.fromFormations(props.armySpec, []));
+    const [armyAllocation, setArmyAllocation] = useState<ArmyAllocation>(ArmyAllocation.fromFormations(props.armySpec, []));
 
     const handleAddFormation = (formation: FormationSpec) => {
         let updatedFormations = [...armyFormations, new Formation(formation)];
         setArmyFormations(updatedFormations);
-        setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, updatedFormations));
+        setArmyAllocation(ArmyAllocation.fromFormations(props.armySpec, updatedFormations));
     }
 
     const handleRemoveFormation = (id: string) => {
         let updatedFormations = armyFormations.filter(formation => formation.id !== id);
         setArmyFormations(updatedFormations);
-        setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, updatedFormations));
+        setArmyAllocation(ArmyAllocation.fromFormations(props.armySpec, updatedFormations));
     }
 
     const handleUpdateFormation = (id: string) => {
         setArmyFormations([...armyFormations])
-        setArmyAllocation(TestArmyAllocation.fromFormations(props.armySpec, armyFormations));
+        setArmyAllocation(ArmyAllocation.fromFormations(props.armySpec, armyFormations));
     }
 
     const canAddFormation = (toBeAdded: FormationSpec) => {

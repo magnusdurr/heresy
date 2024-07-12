@@ -1,10 +1,10 @@
-import {TestCategoryCount} from "./ts/test";
+import {ItemCostEntry} from "./ts/itemCost";
 import React from "react";
 import {Badge, Chip, Grid, Stack, Typography, useTheme} from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-export function CategoryChips(props: Readonly<{ items: TestCategoryCount[], color: string, forceText?: boolean }>) {
+export function CategoryChips(props: Readonly<{ items: ItemCostEntry[], color: string, forceText?: boolean }>) {
     return (
         <React.Fragment>
             {props.items.map((categoryCount) => (
@@ -17,7 +17,7 @@ export function CategoryChips(props: Readonly<{ items: TestCategoryCount[], colo
 }
 
 export function CategoryChip(props: Readonly<{
-    categoryCount: TestCategoryCount,
+    categoryCount: ItemCostEntry,
     color: string,
     forceText?: boolean
 }>) {

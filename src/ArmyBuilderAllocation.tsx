@@ -1,13 +1,14 @@
-import {TestArmyAllocation, TestCategory} from "./ts/test";
 import {Card, CardContent, Grid, Stack, Typography} from "@mui/material";
 import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
+import {ArmyAllocation} from "./ts/armyAllocation";
+import {ItemCategory} from "./ts/itemCategory";
 
-export function ArmyAllocationPanel(props: Readonly<{ armyAllocation: TestArmyAllocation }>) {
+export function ArmyAllocationPanel(props: Readonly<{ armyAllocation: ArmyAllocation }>) {
     return (
         <Grid container spacing={1}>
-            {Object.keys(TestCategory).map((key) => (TestCategory[key as keyof typeof TestCategory]))
-                .filter((category) => category !== TestCategory.CORE)
+            {Object.keys(ItemCategory).map((key) => (ItemCategory[key as keyof typeof ItemCategory]))
+                .filter((category) => category !== ItemCategory.CORE)
                 .map((category) => (
                     <Grid item key={category}>
                         <ArmyAllowanceComponent name={category}

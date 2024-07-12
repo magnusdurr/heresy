@@ -2,7 +2,7 @@ import {FormationSpec} from "./formationSpec";
 import {UpgradeSpec} from "./upgradeSpec";
 import {ValidationResult} from "./restrictions";
 import {Unit} from "./unit";
-import {TestCategories, UnitCount} from "./test";
+import {ItemCost} from "./itemCost";
 import {v4 as uuidv4} from 'uuid';
 import {Upgrade} from "./upgrade";
 
@@ -27,7 +27,7 @@ export class Formation {
 
     costWithUpgrades() {
         return this.spec.cost.merge(
-            this.upgrades.reduce((acc, upgrade) => acc.merge(upgrade.spec.cost), new TestCategories(new Map()))
+            this.upgrades.reduce((acc, upgrade) => acc.merge(upgrade.spec.cost), new ItemCost(new Map()))
         );
     }
 
@@ -50,7 +50,17 @@ export class Formation {
         return this.mapToUnitCount(result)
     }
 
-    mapToUnitCount(values: Map<Unit, number>) {
+    mapToUnitCount(values: Map<Unit, number>): UnitCount[] {
         return Array.from(values.entries()).map(([unit, count]) => new UnitCount(unit, count));
+    }
+}
+
+export class UnitCount {
+    readonly unit: Unit
+    readonly count: number
+
+    constructor(unit: Unit, count: number) {
+        this.unit = unit;
+        this.count = count;
     }
 }

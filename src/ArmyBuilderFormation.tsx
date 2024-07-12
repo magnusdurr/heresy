@@ -19,7 +19,6 @@ import {
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, {useContext} from "react";
-import {TestCategory} from "./ts/test";
 import InfoIcon from '@mui/icons-material/Info';
 import {CategoryChips, CostComponent, ValidationError, ValidationWarning} from "./ArmyBuilderUtils";
 import {ValidationResult} from "./ts/restrictions";
@@ -29,6 +28,7 @@ import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
 import {UpgradeSpec} from "./ts/upgradeSpec";
 import {Formation} from "./ts/formation";
 import {Upgrade} from "./ts/upgrade";
+import {ItemCategory} from "./ts/itemCategory";
 
 export function FormationComponent(props: Readonly<{
     formation: Formation,
@@ -83,7 +83,7 @@ export function DisplayFormationPanel(props: Readonly<{
 
     function costToDisplay() {
         return props.formation.costWithUpgrades().toList().filter((item) =>
-            item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
+            item.category !== ItemCategory.CORE && item.category !== ItemCategory.FORMATION && item.category !== ItemCategory.UPGRADE)
     }
 
     return (
@@ -217,7 +217,7 @@ export function DisplayUpgradeSpec(props: Readonly<{
                     <Grid item container direction="row" spacing={1} alignItems="center">
                         <Grid item xs={nameWidth}>
                             <Stack direction="row" spacing={2} alignItems="center">
-                                <CostComponent cost={props.upgrade.cost.getOrZero(TestCategory.FORMATION)}/>
+                                <CostComponent cost={props.upgrade.cost.getOrZero(ItemCategory.FORMATION)}/>
                                 <Typography noWrap variant="body2"
                                             sx={{color: textColor}}>{props.upgrade.name}</Typography>
                             </Stack>
@@ -297,7 +297,7 @@ export function DisplayFormationSpecToAdd(props: Readonly<{
     closePopupFunction: () => void
 }>) {
     const costToDisplay = props.formation.cost.toList().filter(
-        (item) => item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
+        (item) => item.category !== ItemCategory.CORE && item.category !== ItemCategory.FORMATION && item.category !== ItemCategory.UPGRADE)
 
     const nameWidth = props.validation.success ? 'auto' : 4
 
@@ -311,7 +311,7 @@ export function DisplayFormationSpecToAdd(props: Readonly<{
                     <Grid container direction="row" spacing={1} alignItems="center">
                         <Grid item xs={nameWidth}>
                             <Stack direction="row" spacing={2} alignItems="center">
-                                <CostComponent cost={props.formation.cost.getOrZero(TestCategory.FORMATION)}/>
+                                <CostComponent cost={props.formation.cost.getOrZero(ItemCategory.FORMATION)}/>
                                 <Typography noWrap variant="body2">{props.formation.name}</Typography>
                             </Stack>
                         </Grid>

@@ -1,4 +1,4 @@
-import {TestCategories, TestCategoryCount} from "./test";
+import {ItemCost, ItemCostEntry} from "./itemCost";
 import {BuildRestriction, ValidationResult} from "./restrictions";
 import {ArmySection} from "./armySection";
 import {FormationSpec} from "./formationSpec";
@@ -8,12 +8,12 @@ import {Formation} from "./formation";
 export class ArmySpec {
     name: string
     imgUrl: string
-    grants: TestCategories
+    grants: ItemCost
     formationRestrictions: BuildRestriction<FormationSpec>[]
     upgradeRestriction: BuildRestriction<UpgradeSpec>[]
     armySections: ArmySection[]
 
-    constructor(name: string, imgUrl: string, grants: TestCategories, formationRestrictions: BuildRestriction<FormationSpec>[], upgradeRestriction: BuildRestriction<UpgradeSpec>[], armySections: ArmySection[]) {
+    constructor(name: string, imgUrl: string, grants: ItemCost, formationRestrictions: BuildRestriction<FormationSpec>[], upgradeRestriction: BuildRestriction<UpgradeSpec>[], armySections: ArmySection[]) {
         this.name = name;
         this.imgUrl = imgUrl;
         this.grants = grants;
@@ -25,7 +25,7 @@ export class ArmySpec {
     static Builder = class {
         name: string
         imgUrl: string
-        grants: TestCategories
+        grants: ItemCost
         formationRestrictions: BuildRestriction<FormationSpec>[]
         upgradeRestriction: BuildRestriction<UpgradeSpec>[]
         armySections: ArmySection[]
@@ -33,14 +33,14 @@ export class ArmySpec {
         constructor(name: string, imgUrl: string) {
             this.name = name
             this.imgUrl = imgUrl
-            this.grants = TestCategories.fromList([])
+            this.grants = ItemCost.fromList([])
             this.formationRestrictions = []
             this.upgradeRestriction = []
             this.armySections = []
         }
 
-        withGrant(grants: TestCategoryCount[]) {
-            this.grants = TestCategories.fromCounts(grants)
+        withGrant(grants: ItemCostEntry[]) {
+            this.grants = ItemCost.fromCounts(grants)
             return this
         }
 

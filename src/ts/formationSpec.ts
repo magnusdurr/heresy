@@ -1,18 +1,18 @@
 import {BuildRestriction} from "./restrictions";
-import {TestCategories} from "./test";
+import {ItemCost} from "./itemCost";
 import {Unit} from "./unit";
 import {UpgradeSpec} from "./upgradeSpec";
 
 export class FormationSpec {
     name: string
-    cost: TestCategories
+    cost: ItemCost
     units: Map<Unit, number>
     availableUpgrades: UpgradeSpec[]
     section: string // TODO: Section should be removed
-    grants: TestCategories
+    grants: ItemCost
     upgradeRestrictions: BuildRestriction<UpgradeSpec>[]
 
-    constructor(name: string, cost: TestCategories, units: Map<Unit, number>, availableUpgrades: UpgradeSpec[], section: string, grants: TestCategories, upgradeRestrictions: BuildRestriction<UpgradeSpec>[]) {
+    constructor(name: string, cost: ItemCost, units: Map<Unit, number>, availableUpgrades: UpgradeSpec[], section: string, grants: ItemCost, upgradeRestrictions: BuildRestriction<UpgradeSpec>[]) {
         this.name = name;
         this.cost = cost;
         this.units = units;
@@ -24,14 +24,14 @@ export class FormationSpec {
 
     static Builder = class {
         private readonly name: string
-        private readonly cost: TestCategories
+        private readonly cost: ItemCost
         private units: Map<Unit, number> = new Map()
-        private grants: TestCategories = new TestCategories(new Map())
+        private grants: ItemCost = new ItemCost(new Map())
         private section: string = "Core"
         private readonly availableUpgrades: UpgradeSpec[] = []
         private readonly upgradeRestrictions: BuildRestriction<UpgradeSpec>[] = [];
 
-        constructor(name: string, cost: TestCategories) {
+        constructor(name: string, cost: ItemCost) {
             this.name = name;
             this.cost = cost;
         }
@@ -46,7 +46,7 @@ export class FormationSpec {
             return this;
         }
 
-        withGrant(grants: TestCategories) {
+        withGrant(grants: ItemCost) {
             this.grants = grants;
             return this;
         }
