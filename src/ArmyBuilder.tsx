@@ -3,7 +3,7 @@ import {Divider, Grid, Stack, Typography} from "@mui/material";
 import React, {createContext, useState} from "react"
 import {ArmyAllocationPanel} from "./ArmyBuilderAllocation";
 import {AddFormationComponent, FormationComponent} from "./ArmyBuilderFormation";
-import {CategoryChips} from "./ArmyBuilderUtils";
+import {CategoryChips, ValidationError} from "./ArmyBuilderUtils";
 
 const ArmyContext = createContext<TestArmySpec | null>(null);
 
@@ -32,6 +32,8 @@ export function ArmyBuilder(props: { armySpec: TestArmySpec }) {
         return props.armySpec.canAddFormation(armyFormations, toBeAdded)
     }
 
+    const validationErrors = props.armySpec.validate(armyFormations)
+
     return (
         <ArmyContext.Provider value={props.armySpec}>
             <Stack spacing={1}>
@@ -45,6 +47,10 @@ export function ArmyBuilder(props: { armySpec: TestArmySpec }) {
                 <Divider/>
 
                 <ArmyAllocationPanel armyAllocation={armyAllocation}/>
+
+                {validationErrors.map((error) => (
+                    <ValidationError message={error.message!}/>
+                ))}
 
                 <Divider/>
 

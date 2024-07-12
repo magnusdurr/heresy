@@ -2,6 +2,7 @@ import {v4 as uuidv4} from "uuid";
 import {
     BuildRestriction,
     MandatoryUpgradesRestriction,
+    OncePerArmyRestriction,
     OncePerFormationRestriction,
     OneFromGroupRestriction,
     SingleAllyTypeRestriction,
@@ -150,6 +151,16 @@ export class TestArmySpec {
         return this.upgradeRestriction.map(restriction => restriction.isLegal([...existing.map((formation => formation.upgrades)).flat(), toBeAdded]))
             .find(result => !result.success) || ValidationResult.success
     }
+
+    validate(armyFormations: TestFormation[]) {
+        const formationErrors = this.formationRestrictions.map(restriction => restriction.isLegal([...armyFormations.map((formation => formation.spec))]))
+            .filter(result => !result.success)
+
+        const globalUpgradeErrors = this.upgradeRestriction.map(restriction => restriction.isLegal(armyFormations.map((formation => formation.upgrades)).flat()))
+            .filter(result => !result.success)
+
+        return [...formationErrors, ...globalUpgradeErrors]
+    }
 }
 
 export class TestFormation {
@@ -167,7 +178,7 @@ export class TestFormation {
             .find(result => !result.success) || ValidationResult.success
     }
 
-    checkValidationErrors(): ValidationResult[] {
+    checkUpgradeValidationErrors(): ValidationResult[] {
         return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal(this.upgrades))
             .filter(result => !result.success)
     }
@@ -199,11 +210,6 @@ export class TestArmyAllocation {
         return new TestArmyAllocation(totalCost, allGrants);
     }
 }
-
-export const legionesAstartes = new TestArmySpec("Legiones Astartes",
-    new TestCategories(new Map([
-        [TestCategory.FORMATION, 12], [TestCategory.UPGRADE, 4], [TestCategory.FAST_ATTACK, 1]
-    ])), [new SingleAllyTypeRestriction("Allies - Solar Auxilia", "Allies - Knight World")])
 
 export const testUpgrades = {
     rhinos: new TestUpgradeSpec("Rhinos", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.FAST_ATTACK])),
@@ -271,7 +277,7 @@ export const testFormations = [
     new TestFormationSpec.Builder("Warhound Titan", TestCategories.fromList([TestCategory.FORMATION, TestCategory.FAST_ATTACK, TestCategory.FAST_ATTACK]))
         .withUpgrades(testUpgrades.warhoundPair, testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD)
         .withUpgradeRestrictions(
-            new MandatoryUpgradesRestriction(2, 2, [testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD]),
+            new MandatoryUpgradesRestriction(2, 2, [testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD], "weapon upgrades"),
             new OncePerFormationRestriction(testUpgrades.warhoundPair),
             new OncePerFormationRestriction(testUpgrades.st_vulcanMegaBolter),
             new OncePerFormationRestriction(testUpgrades.st_plasmaBlastgun),
@@ -333,6 +339,14 @@ export const testFormations = [
         .inSection("Titans")
         .build()
 ]
+
+export const legionesAstartes = new TestArmySpec("Legiones Astartes",
+    new TestCategories(new Map([
+        [TestCategory.FORMATION, 12], [TestCategory.UPGRADE, 4], [TestCategory.FAST_ATTACK, 1]
+    ])),
+    [new SingleAllyTypeRestriction("Allies - Solar Auxilia", "Allies - Knight World")],
+    [new OncePerArmyRestriction(testUpgrades.supreme)]
+)
 
 function testFormationsBySection(): Map<string, TestFormationSpec[]> {
     const result: Map<string, TestFormationSpec[]> = new Map()

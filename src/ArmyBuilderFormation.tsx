@@ -65,7 +65,7 @@ export function DisplayFormationPanel(props: Readonly<{
     removeUpdateFunction: (update: TestUpgradeSpec) => void
     showUpdatesFunction: () => void
 }>) {
-    const validationErrors = props.formation.checkValidationErrors()
+    const validationErrors = props.formation.checkUpgradeValidationErrors()
 
     function costToDisplay() {
         return props.formation.costWithUpgrades().toList().filter((item) =>

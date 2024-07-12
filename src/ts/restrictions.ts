@@ -45,32 +45,52 @@ export class SingleAllyTypeRestriction implements BuildRestriction<TestFormation
     }
 }
 
-export class OncePerFormationRestriction implements BuildRestriction<TestUpgradeSpec> {
+export class OncePerThingRestriction implements BuildRestriction<TestUpgradeSpec> {
     private upgrade: TestUpgradeSpec;
+    private thing: string;
 
-    constructor(upgrade: TestUpgradeSpec) {
+    constructor(upgrade: TestUpgradeSpec, thing: string) {
         this.upgrade = upgrade;
+        this.thing = thing;
     }
 
     isLegal(upgrades: TestUpgradeSpec[]): ValidationResult {
         if (upgrades.filter(u => u === this.upgrade).length > 1) {
-            return ValidationResult.failure(`${this.upgrade.name} can only be taken once per formation and some more very long text to handle line breaks...`)
+            return ValidationResult.failure(`${this.upgrade.name} can only be taken once per ${this.thing}`)
         } else {
             return ValidationResult.success
         }
     }
 }
 
+export class OncePerArmyRestriction extends OncePerThingRestriction {
+    constructor(upgrade: TestUpgradeSpec) {
+        super(upgrade, "army");
+    }
+}
+
+export class OncePerFormationRestriction extends OncePerThingRestriction {
+    constructor(upgrade: TestUpgradeSpec) {
+        super(upgrade, "formation");
+    }
+}
+
 export class OneFromGroupRestriction implements BuildRestriction<TestUpgradeSpec> {
     private upgradesInGroup: TestUpgradeSpec[];
+    private groupName?: string;
 
-    constructor(...upgrade: TestUpgradeSpec[]) {
+    constructor(groupName?: string, ...upgrade: TestUpgradeSpec[]) {
         this.upgradesInGroup = upgrade;
+        this.groupName = groupName;
     }
 
     isLegal(upgrades: TestUpgradeSpec[]): ValidationResult {
         if (upgrades.filter(u => this.upgradesInGroup.includes(u)).length > 1) {
-            return ValidationResult.failure(`Formation can only have one out of [${this.upgradesInGroup.map(u => u.name).join(", ")}]`)
+            return ValidationResult.failure(
+                this.groupName ?
+                    `Formation can only have one ${this.groupName}` :
+                    `Formation can only have one from [${this.upgradesInGroup.map(u => u.name).join(", ")}]`
+            )
         } else {
             return ValidationResult.success
         }
@@ -81,19 +101,29 @@ export class MandatoryUpgradesRestriction implements BuildRestriction<TestUpgrad
     private readonly min: number
     private readonly max: number
     private from: TestUpgradeSpec[]
+    private groupName?: string;
 
-    constructor(min: number, max: number, from: TestUpgradeSpec[]) {
+    constructor(min: number, max: number, from: TestUpgradeSpec[], groupName?: string) {
         this.min = min;
         this.max = max;
         this.from = from;
+        this.groupName = groupName;
     }
 
     isLegal(upgrades: TestUpgradeSpec[]): ValidationResult {
         let matches = upgrades.filter(upgrade => this.from.includes(upgrade));
         if (matches.length < this.min) {
-            return ValidationResult.nonBlockingFailure(`Formation must have at least ${this.min} upgrades from [${this.from.map(u => u.name).join(", ")}]`)
+            return ValidationResult.nonBlockingFailure(
+                this.groupName ?
+                    `Formation must have at least ${this.min} ${this.groupName}` :
+                    `Formation must have at least ${this.min} upgrades from [${this.from.map(u => u.name).join(", ")}]`
+            )
         } else if (matches.length > this.max) {
-            return ValidationResult.failure(`Formation can have at most ${this.max} upgrades from [${this.from.map(u => u.name).join(", ")}]`)
+            return ValidationResult.failure(
+                this.groupName ?
+                    `Formation can have at most ${this.max} ${this.groupName}` :
+                    `Formation can have at most ${this.max} upgrades from [${this.from.map(u => u.name).join(", ")}]`
+            )
         } else {
             return ValidationResult.success
         }
