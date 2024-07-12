@@ -18,11 +18,14 @@ import {
 } from "@mui/material";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React from "react";
-import {TestCategory, TestFormation, testFormationsBySections, TestFormationSpec, TestUpgradeSpec} from "./ts/test";
+import React, {useContext} from "react";
+import {TestCategory, TestFormation, TestUpgradeSpec} from "./ts/test";
 import InfoIcon from '@mui/icons-material/Info';
 import {CategoryChips, CostComponent, ValidationError, ValidationWarning} from "./ArmyBuilderUtils";
 import {ValidationResult} from "./ts/restrictions";
+import {TestFormationSpec} from "./ts/testFormationSpec";
+import {ArmyContext} from "./ArmyBuilder";
+import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
 
 export function FormationComponent(props: Readonly<{
     formation: TestFormation,
@@ -30,6 +33,7 @@ export function FormationComponent(props: Readonly<{
     updateFunction: (id: string) => void
 }>) {
     const [upgradeDialogOpen, setUpgradeDialogOpen] = React.useState(false);
+    const [formationDetailsOpen, setFormationDetailsOpen] = React.useState(false);
 
     const removeUpgrade = (upgrade: TestUpgradeSpec) => {
         props.formation.upgrades = props.formation.upgrades.filter(item => item !== upgrade)
@@ -39,7 +43,7 @@ export function FormationComponent(props: Readonly<{
     const addUpgrade = (upgrade: TestUpgradeSpec) => {
         props.formation.upgrades.push(upgrade)
         props.updateFunction(props.formation.id)
-        setUpgradeDialogOpen(false)
+        setFormationDetailsOpen(false)
     }
 
     return (
@@ -48,12 +52,18 @@ export function FormationComponent(props: Readonly<{
                                    deleteFunction={props.deleteFunction}
                                    updateFunction={props.updateFunction}
                                    removeUpdateFunction={removeUpgrade}
-                                   showUpdatesFunction={() => setUpgradeDialogOpen(true)}/>
+                                   showUpdatesFunction={() => setUpgradeDialogOpen(true)}
+                                   showUnitsFunction={() => setFormationDetailsOpen(true)}
+            />
 
             <FormationUpgradeDialog formation={props.formation}
-                                    upgradeDialogOpen={upgradeDialogOpen}
+                                    upgradeDialogOpen={formationDetailsOpen}
                                     addUpgradeFunction={addUpgrade}
-                                    closeDialogFunction={() => setUpgradeDialogOpen(false)}/>
+                                    closeDialogFunction={() => setFormationDetailsOpen(false)}/>
+
+            <DisplayUnitsDialog formation={props.formation.spec}
+                                upgradeDialogOpen={formationDetailsOpen}
+                                closeDialogFunction={() => setFormationDetailsOpen(false)}/>
         </>
     )
 }
@@ -64,6 +74,7 @@ export function DisplayFormationPanel(props: Readonly<{
     updateFunction: (id: string) => void
     removeUpdateFunction: (update: TestUpgradeSpec) => void
     showUpdatesFunction: () => void
+    showUnitsFunction: () => void
 }>) {
     const validationErrors = props.formation.checkUpgradeValidationErrors()
 
@@ -108,7 +119,7 @@ export function DisplayFormationPanel(props: Readonly<{
                 <Grid item xs={2}>
                     <Tooltip title="Formation Details">
                         <IconButton size="small" onClick={() => {
-                            alert("TODO")
+                            props.showUnitsFunction()
                         }}>
                             <InfoIcon/>
                         </IconButton>
@@ -232,6 +243,8 @@ export function AddFormationComponent(props: {
     const openAddFormation = () => setAddFormationOpen(true);
     const closeAddFormation = () => setAddFormationOpen(false);
 
+    const armySpec = useContext(ArmyContext)!
+
     const [expanded, setExpanded] = React.useState<string | false>('panel1');
 
     const handleChange =
@@ -250,15 +263,16 @@ export function AddFormationComponent(props: {
             >
                 <Stack spacing={1} sx={{m: 2}}>
                     <Typography variant="h6">Select Formation</Typography>
-                    {Array.from(testFormationsBySections.entries()).map((entry) => (
-                        <Accordion expanded={expanded === entry[0]}
-                                   onChange={handleChange(entry[0])}
+                    {armySpec.armySections.map((section) => (
+
+                        <Accordion expanded={expanded === section.name}
+                                   onChange={handleChange(section.name)}
                                    disableGutters="true">
                             <AccordionSummary>
-                                <Typography variant="body1">{entry[0]}</Typography>
+                                <Typography variant="body1">{section.name}</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                {entry[1].map((formation) => (
+                                {section.formations.map((formation) => (
                                     <DisplayFormationSpecToAdd formation={formation}
                                                                closePopupFunction={closeAddFormation}
                                                                addFunction={props.addFunction}

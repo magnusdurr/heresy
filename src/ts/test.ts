@@ -1,13 +1,8 @@
 import {v4 as uuidv4} from "uuid";
-import {
-    BuildRestriction,
-    MandatoryUpgradesRestriction,
-    OncePerArmyRestriction,
-    OncePerFormationRestriction,
-    OneFromGroupRestriction,
-    SingleAllyTypeRestriction,
-    ValidationResult
-} from "./restrictions";
+import {ValidationResult} from "./restrictions";
+
+import {ArmySpec} from "./armySpec";
+import {TestFormationSpec} from "./testFormationSpec";
 
 export enum TestCategory {
     FORMATION = "Formations",
@@ -52,67 +47,15 @@ export class TestCategories {
             return acc;
         }, new Map()));
     }
+
+    static fromCounts(list: TestCategoryCount[]) {
+        return new TestCategories(new Map(list.map(it => [it.category, it.count])))
+    }
 }
 
 export interface TestCategoryCount {
     category: TestCategory
     count: number
-}
-
-export class TestFormationSpec {
-    name: string
-    cost: TestCategories
-    availableUpgrades: TestUpgradeSpec[]
-    section: string
-    grants: TestCategories
-    upgradeRestrictions: BuildRestriction<TestUpgradeSpec>[]
-
-    constructor(name: string, cost: TestCategories, availableUpgrades: TestUpgradeSpec[], section: string, grants: TestCategories, upgradeRestrictions: BuildRestriction<TestUpgradeSpec>[]) {
-        this.name = name;
-        this.cost = cost;
-        this.availableUpgrades = availableUpgrades;
-        this.section = section;
-        this.grants = grants;
-        this.upgradeRestrictions = upgradeRestrictions;
-    }
-
-    static Builder = class {
-        private readonly name: string
-        private readonly cost: TestCategories
-        private grants: TestCategories = new TestCategories(new Map())
-        private section: string = "Core"
-        private readonly availableUpgrades: TestUpgradeSpec[] = []
-        private readonly upgradeRestrictions: BuildRestriction<TestUpgradeSpec>[] = [];
-
-        constructor(name: string, cost: TestCategories) {
-            this.name = name;
-            this.cost = cost;
-        }
-
-        withUpgrades(...upgrades: TestUpgradeSpec[]) {
-            upgrades.forEach(upgrade => this.availableUpgrades.push(upgrade));
-            return this;
-        }
-
-        withGrant(grants: TestCategories) {
-            this.grants = grants;
-            return this;
-        }
-
-        withUpgradeRestrictions(...restrictions: BuildRestriction<TestUpgradeSpec>[]) {
-            restrictions.forEach(restriction => this.upgradeRestrictions.push(restriction));
-            return this;
-        }
-
-        inSection(section: string) {
-            this.section = section;
-            return this;
-        }
-
-        build() {
-            return new TestFormationSpec(this.name, this.cost, this.availableUpgrades, this.section, this.grants, this.upgradeRestrictions);
-        }
-    }
 }
 
 export class TestUpgradeSpec {
@@ -125,43 +68,6 @@ export class TestUpgradeSpec {
     }
 }
 
-
-export class TestArmySpec {
-    name: string
-    grants: TestCategories
-    formationRestrictions: BuildRestriction<TestFormationSpec>[]
-    upgradeRestriction: BuildRestriction<TestUpgradeSpec>[]
-
-    constructor(name: string,
-                grants: TestCategories,
-                formationRestrictions: BuildRestriction<TestFormationSpec>[],
-                upgradeRestriction: BuildRestriction<TestUpgradeSpec>[]) {
-        this.name = name;
-        this.grants = grants;
-        this.formationRestrictions = formationRestrictions;
-        this.upgradeRestriction = upgradeRestriction;
-    }
-
-    canAddFormation(existing: TestFormation[], toBeAdded: TestFormationSpec): ValidationResult {
-        return this.formationRestrictions.map(restriction => restriction.isLegal([...existing.map((formation => formation.spec)), toBeAdded]))
-            .find(result => !result.success) || ValidationResult.success
-    }
-
-    canAddUpgrade(existing: TestFormation[], toBeAdded: TestUpgradeSpec): ValidationResult {
-        return this.upgradeRestriction.map(restriction => restriction.isLegal([...existing.map((formation => formation.upgrades)).flat(), toBeAdded]))
-            .find(result => !result.success) || ValidationResult.success
-    }
-
-    validate(armyFormations: TestFormation[]) {
-        const formationErrors = this.formationRestrictions.map(restriction => restriction.isLegal([...armyFormations.map((formation => formation.spec))]))
-            .filter(result => !result.success)
-
-        const globalUpgradeErrors = this.upgradeRestriction.map(restriction => restriction.isLegal(armyFormations.map((formation => formation.upgrades)).flat()))
-            .filter(result => !result.success)
-
-        return [...formationErrors, ...globalUpgradeErrors]
-    }
-}
 
 export class TestFormation {
     id: string = uuidv4();
@@ -199,7 +105,7 @@ export class TestArmyAllocation {
         this.grants = grants;
     }
 
-    static fromFormations(army: TestArmySpec, formations: TestFormation[]): TestArmyAllocation {
+    static fromFormations(army: ArmySpec, formations: TestFormation[]): TestArmyAllocation {
         const totalCost = formations.map(formation => formation.costWithUpgrades())
             .reduce((acc, formation) => acc.merge(formation), new TestCategories(new Map()));
 
@@ -225,143 +131,3 @@ export const testUpgrades = {
     st_scoutTLD: new TestUpgradeSpec("Scout Turbo-Laser Destructor", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT])),
     st_plasmaBlastgun: new TestUpgradeSpec("Plasma Blastgun", TestCategories.fromList([TestCategory.UPGRADE, TestCategory.HEAVY_SUPPORT]))
 }
-
-export const testFormations = [
-    new TestFormationSpec.Builder("Tactical Detachment", TestCategories.fromList([TestCategory.FORMATION, TestCategory.CORE]))
-        .withGrant(
-            new TestCategories(new Map([
-                [TestCategory.FAST_ATTACK, 2],
-                [TestCategory.HEAVY_SUPPORT, 2],
-                [TestCategory.ELITE, 1],
-                [TestCategory.ALLIES, 1]
-            ])))
-        .withUpgrades(testUpgrades.rhinos, testUpgrades.supreme, testUpgrades.plasma, testUpgrades.dreadnoughts, testUpgrades.commander)
-        .withUpgradeRestrictions(
-            new OncePerFormationRestriction(testUpgrades.rhinos),
-            new OneFromGroupRestriction(testUpgrades.supreme, testUpgrades.commander)
-        )
-        .build(),
-
-    new TestFormationSpec.Builder("Heavy Support Detachment", TestCategories.fromList([TestCategory.FORMATION, TestCategory.HEAVY_SUPPORT]))
-        .withUpgrades(testUpgrades.dreadnoughts, testUpgrades.commander)
-        .inSection("Heavy Support")
-        .build(),
-
-    new TestFormationSpec.Builder("Sicarian Detachment", TestCategories.fromList([TestCategory.FORMATION, TestCategory.HEAVY_SUPPORT]))
-        .withGrant(TestCategories.fromList([TestCategory.UPGRADE]))
-        .inSection("Heavy Support")
-        .build(),
-
-    new TestFormationSpec.Builder("Predator Detachment", TestCategories.fromList([TestCategory.FORMATION, TestCategory.HEAVY_SUPPORT]))
-        .inSection("Heavy Support")
-        .build(),
-
-    new TestFormationSpec.Builder("Assault Marine Detachment", TestCategories.fromList([TestCategory.FORMATION, TestCategory.FAST_ATTACK]))
-        .withUpgrades(testUpgrades.commander)
-        .inSection("Fast Attack")
-        .build(),
-
-    new TestFormationSpec.Builder("Thunderhawk", TestCategories.fromList([TestCategory.FORMATION, TestCategory.FAST_ATTACK, TestCategory.FAST_ATTACK]))
-        .inSection("Fast Attack")
-        .build(),
-
-    new TestFormationSpec.Builder("Storm Eagle", TestCategories.fromList([TestCategory.FORMATION, TestCategory.FAST_ATTACK]))
-        .inSection("Fast Attack")
-        .build(),
-
-    new TestFormationSpec.Builder("Xiphon Fighters", TestCategories.fromList([TestCategory.FORMATION, TestCategory.FAST_ATTACK]))
-        .withGrant(TestCategories.fromList([TestCategory.UPGRADE]))
-        .inSection("Fast Attack")
-        .build(),
-
-    new TestFormationSpec.Builder("Warhound Titan", TestCategories.fromList([TestCategory.FORMATION, TestCategory.FAST_ATTACK, TestCategory.FAST_ATTACK]))
-        .withUpgrades(testUpgrades.warhoundPair, testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD)
-        .withUpgradeRestrictions(
-            new MandatoryUpgradesRestriction(2, 2, [testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD], "weapon upgrades"),
-            new OncePerFormationRestriction(testUpgrades.warhoundPair),
-            new OncePerFormationRestriction(testUpgrades.st_vulcanMegaBolter),
-            new OncePerFormationRestriction(testUpgrades.st_plasmaBlastgun),
-            new OncePerFormationRestriction(testUpgrades.st_infernoGun),
-            new OncePerFormationRestriction(testUpgrades.st_scoutTLD),
-        )
-        .inSection("Fast Attack")
-        .build(),
-
-    new TestFormationSpec.Builder("Terminators", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ELITE]))
-        .inSection("Elite")
-        .withUpgrades(testUpgrades.commander)
-        .build(),
-
-    new TestFormationSpec.Builder("Dreadnought Detachment", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ELITE]))
-        .inSection("Elite")
-        .build(),
-
-    new TestFormationSpec.Builder("Auxilia Lasrifle Tercio", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ALLIES]))
-        .inSection("Allies - Solar Auxilia")
-        .withGrant(TestCategories.fromList([TestCategory.ALLIES_SA_SUPPORT]))
-        .build(),
-
-    new TestFormationSpec.Builder("Aethon Heavy Sentinel Patrol", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ALLIES, TestCategory.ALLIES_SA_SUPPORT]))
-        .inSection("Allies - Solar Auxilia")
-        .build(),
-
-    new TestFormationSpec.Builder("Leman Russ Squadron", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ALLIES, TestCategory.ALLIES_SA_SUPPORT, TestCategory.HEAVY_SUPPORT]))
-        .inSection("Allies - Solar Auxilia")
-        .build(),
-
-    new TestFormationSpec.Builder("Malcador Tank Squadron", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ALLIES, TestCategory.ALLIES_SA_SUPPORT, TestCategory.HEAVY_SUPPORT]))
-        .inSection("Allies - Solar Auxilia")
-        .build(),
-
-    new TestFormationSpec.Builder("Questoris Knights", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ALLIES]))
-        .inSection("Allies - Knight World")
-        .withGrant(TestCategories.fromList([TestCategory.ALLIES_KN_SUPPORT]))
-        .build(),
-
-    new TestFormationSpec.Builder("Armiger Knights", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ALLIES]))
-        .inSection("Allies - Knight World")
-        .withGrant(TestCategories.fromList([TestCategory.UPGRADE]))
-        .build(),
-
-    new TestFormationSpec.Builder("Acastus Knights", TestCategories.fromList([TestCategory.FORMATION, TestCategory.ALLIES, TestCategory.ALLIES_KN_SUPPORT]))
-        .inSection("Allies - Knight World")
-        .build(),
-
-    new TestFormationSpec.Builder("Reaver Titan", new TestCategories(new Map([
-        [TestCategory.FORMATION, 2], [TestCategory.HEAVY_SUPPORT, 1], [TestCategory.ELITE, 2]
-    ])))
-        .inSection("Titans")
-        .build(),
-
-    new TestFormationSpec.Builder("Warlord Titan", new TestCategories(new Map([
-        [TestCategory.FORMATION, 2], [TestCategory.HEAVY_SUPPORT, 2], [TestCategory.ELITE, 2]
-    ])))
-        .inSection("Titans")
-        .build()
-]
-
-export const legionesAstartes = new TestArmySpec("Legiones Astartes",
-    new TestCategories(new Map([
-        [TestCategory.FORMATION, 12], [TestCategory.UPGRADE, 4], [TestCategory.FAST_ATTACK, 1]
-    ])),
-    [new SingleAllyTypeRestriction("Allies - Solar Auxilia", "Allies - Knight World")],
-    [new OncePerArmyRestriction(testUpgrades.supreme)]
-)
-
-function testFormationsBySection(): Map<string, TestFormationSpec[]> {
-    const result: Map<string, TestFormationSpec[]> = new Map()
-
-    testFormations.forEach(formation => {
-        if (result.has(formation.section)) {
-            result.get(formation.section)?.push(formation)
-        } else {
-            result.set(formation.section, [formation])
-        }
-    })
-
-    console.log("testFormationsBySection", result)
-    return result
-}
-
-
-export const testFormationsBySections = testFormationsBySection()

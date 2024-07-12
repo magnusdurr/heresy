@@ -1,4 +1,5 @@
-import {TestFormationSpec, TestUpgradeSpec} from "./test";
+import {TestUpgradeSpec} from "./test";
+import {TestFormationSpec} from "./testFormationSpec";
 
 export interface BuildRestriction<Type> {
     isLegal(upgrades: Type[]): ValidationResult
@@ -79,8 +80,8 @@ export class OneFromGroupRestriction implements BuildRestriction<TestUpgradeSpec
     private upgradesInGroup: TestUpgradeSpec[];
     private groupName?: string;
 
-    constructor(groupName?: string, ...upgrade: TestUpgradeSpec[]) {
-        this.upgradesInGroup = upgrade;
+    constructor(upgrades: TestUpgradeSpec[], groupName?: string) {
+        this.upgradesInGroup = upgrades;
         this.groupName = groupName;
     }
 

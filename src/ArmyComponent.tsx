@@ -1,9 +1,11 @@
 import React from "react";
 import {Card, CardContent, Divider, Stack, Typography} from "@mui/material";
 
-import {Army, ArmySection} from "./ts/army";
+import {Army} from "./ts/army";
 import {Formation} from "./ts/formation";
 import {UnitComponent} from "./UnitComponent";
+
+import {ArmySection} from "./ts/armySection";
 
 export function ArmyComponent(props: { army: Army }) {
 

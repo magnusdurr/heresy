@@ -6,7 +6,7 @@ import React, {useState} from "react"
 import {Army} from "./ts/army";
 import {ChoseArmy} from "./ChoseArmy";
 import {ArmyBuilder} from "./ArmyBuilder";
-import {legionesAstartes} from "./ts/test";
+import {lsArmySpec} from "./ts/armySpec";
 
 function App() {
     const [darkMode, setDarkMode] = useState(localStorage.getItem('theme') === 'dark')
@@ -51,8 +51,11 @@ function App() {
 
                 {army === null ?
                     <ChoseArmy selectFunction={setArmy}/> :
-                    /*<ArmyComponent army={army!}></ArmyComponent>*/
-                    <ArmyBuilder armySpec={legionesAstartes}></ArmyBuilder>
+                    <>
+                        <ArmyBuilder armySpec={lsArmySpec}></ArmyBuilder>
+                        {/*<Divider/>
+                        <ArmyComponent army={army!}></ArmyComponent>*/}
+                    </>
                 }
             </ThemeProvider>
         </Container>

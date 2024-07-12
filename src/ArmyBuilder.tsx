@@ -1,13 +1,15 @@
-import {TestArmyAllocation, TestArmySpec, TestFormation, TestFormationSpec,} from "./ts/test";
+import {TestArmyAllocation, TestFormation,} from "./ts/test";
 import {Divider, Grid, Stack, Typography} from "@mui/material";
 import React, {createContext, useState} from "react"
 import {ArmyAllocationPanel} from "./ArmyBuilderAllocation";
 import {AddFormationComponent, FormationComponent} from "./ArmyBuilderFormation";
 import {CategoryChips, ValidationError} from "./ArmyBuilderUtils";
+import {ArmySpec} from "./ts/armySpec";
+import {TestFormationSpec} from "./ts/testFormationSpec";
 
-const ArmyContext = createContext<TestArmySpec | null>(null);
+export const ArmyContext = createContext<ArmySpec | null>(null);
 
-export function ArmyBuilder(props: { armySpec: TestArmySpec }) {
+export function ArmyBuilder(props: { armySpec: ArmySpec }) {
     const [armyFormations, setArmyFormations] = useState<TestFormation[]>([])
     const [armyAllocation, setArmyAllocation] = useState<TestArmyAllocation>(TestArmyAllocation.fromFormations(props.armySpec, []));
 
