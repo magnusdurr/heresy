@@ -2,10 +2,13 @@ import {Container, createTheme, CssBaseline, IconButton, Stack, ThemeProvider, T
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import BuildCircleIcon from '@mui/icons-material/BuildCircle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import React, {useState} from "react"
 import {ChoseArmy} from "./ChoseArmy";
 import {ArmyBuilder} from "./ArmyBuilder";
 import {ArmySpec} from "./ts/armySpec";
+import {ArmyList} from "./ArmyList";
 
 function App() {
     const [darkMode, setDarkMode] = useState(localStorage.getItem('theme') === 'dark')
@@ -16,6 +19,7 @@ function App() {
     })
 
     const [army, setArmy] = useState<ArmySpec | null>(null)
+    const [showBuilder, setShowBuilder] = useState(false)
 
     const toggleDarkTheme = () => {
         localStorage.setItem('theme', !darkMode ? 'dark' : 'light')
@@ -34,15 +38,24 @@ function App() {
                         </Typography>
                     </Stack>
                     <div>
+                        {army !== null && !showBuilder && <Tooltip title='Army Builder'>
+                            <IconButton onClick={() => setShowBuilder(true)}>
+                                <BuildCircleIcon/>
+                            </IconButton>
+                        </Tooltip>}
+                        {army !== null && showBuilder && <Tooltip title='Army List'>
+                            <IconButton onClick={() => setShowBuilder(false)}>
+                                <AssignmentIcon/>
+                            </IconButton>
+                        </Tooltip>}
                         <Tooltip title='Start over'>
                             <IconButton onClick={() => setArmy(null)}>
-                                <RestartAltIcon></RestartAltIcon>
+                                <RestartAltIcon/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Toggle theme'>
                             <IconButton onClick={toggleDarkTheme}>
-                                {theme.palette.mode === 'dark' ? <Brightness7Icon style={{color: 'white'}}/> :
-                                    <Brightness4Icon style={{color: 'gray'}}/>}
+                                {theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}
                             </IconButton>
                         </Tooltip>
                     </div>
@@ -50,11 +63,19 @@ function App() {
 
                 {army === null ?
                     <ChoseArmy selectFunction={setArmy}/> :
-                    <ArmyBuilder armySpec={army}></ArmyBuilder>
+                    <DisplayArmy showBuilder={showBuilder} army={army}/>
                 }
             </ThemeProvider>
         </Container>
     );
+}
+
+function DisplayArmy(props: { showBuilder: boolean, army: ArmySpec }) {
+    return (
+        props.showBuilder ?
+            <ArmyBuilder armySpec={props.army}/> :
+            <ArmyList armySpec={props.army}/>
+    )
 }
 
 export default App;

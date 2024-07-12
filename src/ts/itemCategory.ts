@@ -1,6 +1,6 @@
 export enum ItemCategory {
-    FORMATION = "Formations",
-    UPGRADE = "Upgrades",
+    FORMATION = "Formation",
+    UPGRADE = "Upgrade",
     CORE = "Core",
     HEAVY_SUPPORT = "Heavy Support",
     FAST_ATTACK = "Fast Attack",

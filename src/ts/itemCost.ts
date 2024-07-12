@@ -32,7 +32,7 @@ export class ItemCost {
         }, new Map()));
     }
 
-    static fromCounts(list: ItemCostEntry[]) {
+    static fromEntries(list: ItemCostEntry[]) {
         return new ItemCost(new Map(list.map(it => [it.category, it.count])))
     }
 }

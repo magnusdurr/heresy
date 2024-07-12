@@ -63,4 +63,8 @@ export class UnitCount {
         this.unit = unit;
         this.count = count;
     }
+
+    toDisplayString(): string {
+        return this.count > 1 ? `${this.count}x ${this.unit.name}` : this.unit.name
+    }
 }

@@ -4,7 +4,7 @@ import {Badge, Chip, Grid, Stack, Typography, useTheme} from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-export function CategoryChips(props: Readonly<{ items: ItemCostEntry[], color: string, forceText?: boolean }>) {
+export function CategoryChips(props: Readonly<{ items: ItemCostEntry[], color: string }>) {
     return (
         <React.Fragment>
             {props.items.map((categoryCount) => (

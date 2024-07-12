@@ -1,7 +1,9 @@
 import {BuildRestriction} from "./restrictions";
-import {ItemCost} from "./itemCost";
+import {ItemCost, ItemCostEntry} from "./itemCost";
 import {Unit} from "./unit";
 import {UpgradeSpec} from "./upgradeSpec";
+import {ItemCategory} from "./itemCategory";
+import {UnitCount} from "./formation";
 
 export class FormationSpec {
     name: string
@@ -20,6 +22,10 @@ export class FormationSpec {
         this.section = section;
         this.grants = grants;
         this.upgradeRestrictions = upgradeRestrictions;
+    }
+
+    unitCount(): UnitCount[] {
+        return Array.from(this.units.entries()).map(([unit, count]) => (new UnitCount(unit, count)));
     }
 
     static Builder = class {
@@ -46,8 +52,13 @@ export class FormationSpec {
             return this;
         }
 
-        withGrant(grants: ItemCost) {
-            this.grants = grants;
+        withGrant(list: ItemCostEntry[]) {
+            this.grants = ItemCost.fromEntries(list);
+            return this;
+        }
+
+        withSingleGrant(category: ItemCategory) {
+            this.grants = ItemCost.fromList([category]);
             return this;
         }
 

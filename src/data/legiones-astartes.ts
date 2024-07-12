@@ -10,35 +10,10 @@ import {
 import {ArmySection} from "../ts/armySection";
 import {FormationSpec} from "../ts/formationSpec";
 import {ArmySpec} from "../ts/armySpec";
-import {UpgradeSpec} from "../ts/upgradeSpec";
 import {ItemCategory} from "../ts/itemCategory";
+import {testUpgrades} from "./data-upgrades";
 
-export const testUpgrades = {
-    rhinos: new UpgradeSpec.Builder("Rhinos",
-        "Add enough Rhinos to transport all units in the formation",
-        ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK]))
-        .withUnitToAdd(units.rhino, 1)
-        .build(),
-
-    supreme: new UpgradeSpec.Builder("Supreme Commander",
-        "Add a supreme commander to the formation",
-        ItemCost.fromList([ItemCategory.CORE]))
-        .withUnitToAdd(units.supremeCommander, 1)
-        .build(),
-
-    plasma: new UpgradeSpec.Builder("Plasma Gun Legionaries", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.CORE])).build(),
-    dreadnoughts: new UpgradeSpec.Builder("Dreadnoughts", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.HEAVY_SUPPORT])).build(),
-    commander: new UpgradeSpec.Builder("Commander", "", new ItemCost(new Map([
-        [ItemCategory.UPGRADE, 1], [ItemCategory.ELITE, 0.5]
-    ]))).build(),
-    warhoundPair: new UpgradeSpec.Builder("Warhound Titan Pair", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK, ItemCategory.ELITE])).build(),
-    st_vulcanMegaBolter: new UpgradeSpec.Builder("Vulcan Mega-Bolter", "", ItemCost.fromList([ItemCategory.CORE])).build(),
-    st_infernoGun: new UpgradeSpec.Builder("Inferno Gun", "", ItemCost.fromList([ItemCategory.CORE])).build(),
-    st_scoutTLD: new UpgradeSpec.Builder("Scout Turbo-Laser Destructor", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.HEAVY_SUPPORT])).build(),
-    st_plasmaBlastgun: new UpgradeSpec.Builder("Plasma Blastgun", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.HEAVY_SUPPORT])).build()
-}
-
-export const lsArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/LegionesAstartes.jpg")
+export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/LegionesAstartes.jpg")
     .withGrant([
         {category: ItemCategory.FORMATION, count: 12},
         {category: ItemCategory.UPGRADE, count: 4},
@@ -50,16 +25,16 @@ export const lsArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/Legio
         new FormationSpec.Builder("Tactical Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.CORE]))
             .withUnit(units.sergeant, 1)
             .withUnit(units.tacticals, 4)
-            .withGrant(
-                new ItemCost(new Map([
-                    [ItemCategory.FAST_ATTACK, 2],
-                    [ItemCategory.HEAVY_SUPPORT, 2],
-                    [ItemCategory.ELITE, 1],
-                    [ItemCategory.ALLIES, 1]
-                ])))
+            .withGrant([
+                {category: ItemCategory.FAST_ATTACK, count: 2},
+                {category: ItemCategory.HEAVY_SUPPORT, count: 2},
+                {category: ItemCategory.ELITE, count: 1},
+                {category: ItemCategory.ALLIES, count: 1}
+            ])
             .withUpgrades(testUpgrades.rhinos, testUpgrades.supreme, testUpgrades.plasma, testUpgrades.dreadnoughts, testUpgrades.commander)
             .withUpgradeRestrictions(
-                new OncePerFormationRestriction(testUpgrades.rhinos),
+                new OncePerFormationRestriction(testUpgrades.plasma),
+                new OneFromGroupRestriction([testUpgrades.rhinos, testUpgrades.dreadnoughts]),
                 new OneFromGroupRestriction([testUpgrades.supreme, testUpgrades.commander])
             )
             .build()
@@ -71,7 +46,7 @@ export const lsArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/Legio
             .build(),
 
         new FormationSpec.Builder("Sicarian Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT]))
-            .withGrant(ItemCost.fromList([ItemCategory.UPGRADE]))
+            .withSingleGrant(ItemCategory.UPGRADE)
             .inSection("Heavy Support")
             .build(),
 
@@ -94,7 +69,7 @@ export const lsArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/Legio
             .build(),
 
         new FormationSpec.Builder("Xiphon Fighters", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
-            .withGrant(ItemCost.fromList([ItemCategory.UPGRADE]))
+            .withSingleGrant(ItemCategory.UPGRADE)
             .inSection("Fast Attack")
             .build()
     ]))
@@ -137,7 +112,7 @@ export const lsArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/Legio
     .withArmySection(new ArmySection("Allies - Solar Auxilia", [
         new FormationSpec.Builder("Auxilia Lasrifle Tercio", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES]))
             .inSection("Allies - Solar Auxilia")
-            .withGrant(ItemCost.fromList([ItemCategory.ALLIES_SA_SUPPORT]))
+            .withSingleGrant(ItemCategory.ALLIES_SA_SUPPORT)
             .build(),
 
         new FormationSpec.Builder("Aethon Heavy Sentinel Patrol", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ALLIES_SA_SUPPORT]))
@@ -155,12 +130,12 @@ export const lsArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/Legio
     .withArmySection(new ArmySection("Allies - Knight World", [
         new FormationSpec.Builder("Questoris Knights", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES]))
             .inSection("Allies - Knight World")
-            .withGrant(ItemCost.fromList([ItemCategory.ALLIES_KN_SUPPORT]))
+            .withSingleGrant(ItemCategory.ALLIES_KN_SUPPORT)
             .build(),
 
         new FormationSpec.Builder("Armiger Knights", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES]))
             .inSection("Allies - Knight World")
-            .withGrant(ItemCost.fromList([ItemCategory.UPGRADE]))
+            .withSingleGrant(ItemCategory.UPGRADE)
             .build(),
 
         new FormationSpec.Builder("Acastus Knights", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ALLIES_KN_SUPPORT]))

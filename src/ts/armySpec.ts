@@ -40,7 +40,7 @@ export class ArmySpec {
         }
 
         withGrant(grants: ItemCostEntry[]) {
-            this.grants = ItemCost.fromCounts(grants)
+            this.grants = ItemCost.fromEntries(grants)
             return this
         }
 
