@@ -1,11 +1,12 @@
 import {Dialog, Grid, Stack, Typography} from "@mui/material";
 import React from "react";
 import {UnitComponent} from "./UnitComponent";
-import {TestFormation} from "./ts/test";
+
+import {Formation} from "./ts/formation";
 
 
 export function DisplayUnitsDialog(props: {
-    formation: TestFormation,
+    formation: Formation,
     upgradeDialogOpen: boolean,
     closeDialogFunction: () => void
 }) {

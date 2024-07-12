@@ -19,28 +19,30 @@ import {
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, {useContext} from "react";
-import {TestCategory, TestFormation, TestUpgradeSpec} from "./ts/test";
+import {TestCategory} from "./ts/test";
 import InfoIcon from '@mui/icons-material/Info';
 import {CategoryChips, CostComponent, ValidationError, ValidationWarning} from "./ArmyBuilderUtils";
 import {ValidationResult} from "./ts/restrictions";
-import {TestFormationSpec} from "./ts/testFormationSpec";
+import {FormationSpec} from "./ts/formationSpec";
 import {ArmyContext} from "./ArmyBuilder";
 import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
+import {UpgradeSpec} from "./ts/upgradeSpec";
+import {Formation} from "./ts/formation";
 
 export function FormationComponent(props: Readonly<{
-    formation: TestFormation,
+    formation: Formation,
     deleteFunction: (id: string) => void
     updateFunction: (id: string) => void
 }>) {
     const [upgradeDialogOpen, setUpgradeDialogOpen] = React.useState(false);
     const [formationDetailsOpen, setFormationDetailsOpen] = React.useState(false);
 
-    const removeUpgrade = (upgrade: TestUpgradeSpec) => {
+    const removeUpgrade = (upgrade: UpgradeSpec) => {
         props.formation.upgrades = props.formation.upgrades.filter(item => item !== upgrade)
         props.updateFunction(props.formation.id)
     }
 
-    const addUpgrade = (upgrade: TestUpgradeSpec) => {
+    const addUpgrade = (upgrade: UpgradeSpec) => {
         props.formation.upgrades.push(upgrade)
         props.updateFunction(props.formation.id)
         setUpgradeDialogOpen(false)
@@ -69,10 +71,10 @@ export function FormationComponent(props: Readonly<{
 }
 
 export function DisplayFormationPanel(props: Readonly<{
-    formation: TestFormation,
+    formation: Formation,
     deleteFunction: (id: string) => void
     updateFunction: (id: string) => void
-    removeUpdateFunction: (update: TestUpgradeSpec) => void
+    removeUpdateFunction: (update: UpgradeSpec) => void
     showUpdatesFunction: () => void
     showUnitsFunction: () => void
 }>) {
@@ -147,8 +149,8 @@ export function DisplayFormationPanel(props: Readonly<{
 }
 
 export function DisplayUpgradePanel(props: Readonly<{
-    upgrade: TestUpgradeSpec,
-    removeUpdateFunction: (update: TestUpgradeSpec) => void
+    upgrade: UpgradeSpec,
+    removeUpdateFunction: (update: UpgradeSpec) => void
 }>) {
     return (
         <Stack direction="row" alignItems="center" ml={1}>
@@ -163,9 +165,9 @@ export function DisplayUpgradePanel(props: Readonly<{
 }
 
 export function FormationUpgradeDialog(props: Readonly<{
-    formation: TestFormation,
+    formation: Formation,
     upgradeDialogOpen: boolean,
-    addUpgradeFunction: (upgrade: TestUpgradeSpec) => void
+    addUpgradeFunction: (upgrade: UpgradeSpec) => void
     closeDialogFunction: () => void
 }>) {
     return (
@@ -193,9 +195,9 @@ export function FormationUpgradeDialog(props: Readonly<{
 }
 
 export function DisplayUpgradeSpec(props: Readonly<{
-    formation: TestFormation,
-    upgrade: TestUpgradeSpec,
-    addUpgrade: (upgrade: TestUpgradeSpec) => void
+    formation: Formation,
+    upgrade: UpgradeSpec,
+    addUpgrade: (upgrade: UpgradeSpec) => void
 }>) {
     const canApplyUpgrade = props.formation.canApplyUpgrade(props.upgrade)
     const theme = useTheme()
@@ -235,8 +237,8 @@ export function DisplayUpgradeSpec(props: Readonly<{
 
 
 export function AddFormationComponent(props: {
-    addFunction: (formation: TestFormationSpec) => void,
-    checkValidityFunction: (formation: TestFormationSpec) => ValidationResult
+    addFunction: (formation: FormationSpec) => void,
+    checkValidityFunction: (formation: FormationSpec) => ValidationResult
 }) {
 
     const [addFormationOpen, setAddFormationOpen] = React.useState(false);
@@ -288,8 +290,8 @@ export function AddFormationComponent(props: {
 }
 
 export function DisplayFormationSpecToAdd(props: Readonly<{
-    formation: TestFormationSpec,
-    addFunction: (formation: TestFormationSpec) => void,
+    formation: FormationSpec,
+    addFunction: (formation: FormationSpec) => void,
     validation: ValidationResult
     closePopupFunction: () => void
 }>) {

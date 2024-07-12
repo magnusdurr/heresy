@@ -1,95 +1,56 @@
+import {FormationSpec} from "./formationSpec";
+import {UpgradeSpec} from "./upgradeSpec";
+import {ValidationResult} from "./restrictions";
 import {Unit} from "./unit";
-
-export class Upgrade {
-    name: string
-    cost: number
-    type: UpgradeType
-    description: string
-    unitsToReplace: Map<Unit, number> // unit id -> number of units
-    unitsToAdd: Map<Unit, number> // unit id -> number of units
-
-    protected constructor(name: string, cost: number, type: UpgradeType, description: string, unitsToReplace: Map<Unit, number>, unitsToAdd: Map<Unit, number>) {
-        this.name = name
-        this.cost = cost
-        this.type = type
-        this.description = description
-        this.unitsToReplace = unitsToReplace
-        this.unitsToAdd = unitsToAdd
-    }
-
-    static Builder = class {
-        name: string
-        cost: number
-        type: UpgradeType
-        description: string = ''
-        unitsToReplace: Map<Unit, number> = new Map()
-        unitsToAdd: Map<Unit, number> = new Map()
-
-        constructor(name: string, cost: number, type: UpgradeType) {
-            this.name = name
-            this.cost = cost
-            this.type = type
-        }
-
-        withDescription(description: string) {
-            this.description = description
-            return this
-        }
-
-        withUnitToReplace(unit: Unit, number: number) {
-            this.unitsToReplace.set(unit, number)
-            return this
-        }
-
-        withUnitToAdd(unit: Unit, number: number) {
-            this.unitsToAdd.set(unit, number)
-            return this
-        }
-
-        build() {
-            return new Upgrade(this.name, this.cost, this.type, this.description, this.unitsToReplace, this.unitsToAdd)
-        }
-    }
-}
-
-export enum UpgradeType {
-    ADD, REPLACE
-}
+import {TestCategories, UnitCount} from "./test";
+import {v4 as uuidv4} from 'uuid';
 
 export class Formation {
-    name: string
-    cost: number = 1
-    units: Map<Unit, number>
-    upgradeOptions: Upgrade[]
+    id: string = uuidv4();
+    spec: FormationSpec
+    upgrades: UpgradeSpec[]
 
-    protected constructor(name: string, units: Map<Unit, number>, upgradeOptions: Upgrade[]) {
-        this.name = name
-        this.units = units
-        this.upgradeOptions = upgradeOptions
+    constructor(spec: FormationSpec, upgrades: UpgradeSpec[]) {
+        this.spec = spec
+        this.upgrades = upgrades
     }
 
-    static Builder = class {
-        name: string
-        units: Map<Unit, number>
-        upgradeOptions: Upgrade[] = []
+    canApplyUpgrade(upgrade: UpgradeSpec): ValidationResult {
+        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal([...this.upgrades, upgrade]))
+            .find(result => !result.success) || ValidationResult.success
+    }
 
-        constructor(name: string) {
-            this.name = name
-            this.units = new Map()
-        }
+    checkUpgradeValidationErrors(): ValidationResult[] {
+        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal(this.upgrades))
+            .filter(result => !result.success)
+    }
 
-        withUnit(unit: Unit, number: number) {
-            this.units.set(unit, number)
-            return this
-        }
+    costWithUpgrades() {
+        return this.spec.cost.merge(
+            this.upgrades.reduce((acc, upgrade) => acc.merge(upgrade.cost), new TestCategories(new Map()))
+        );
+    }
 
-        withUpgradeOption(upgrade: Upgrade) {
-            this.upgradeOptions.push(upgrade)
-            return this
-        }
+    unitsInFormation(): UnitCount[] {
+        const result = new Map(this.spec.units);
 
-        build() {
-            return new Formation(this.name, this.units, this.upgradeOptions)
-        }
+        this.upgrades.forEach(upgrade => {
+            upgrade.unitsToAdd.forEach((count, unit) => {
+                result.set(unit, (result.get(unit) || 0) + count);
+            });
+        })
+        this.upgrades.forEach(upgrade => {
+            upgrade.unitsToReplace.forEach((count, unit) => {
+                if (result.has(unit)) {
+                    result.set(unit, result.get(unit)! - count);
+                }
+            });
+        })
+
+        return this.mapToUnitCount(result)
+    }
+
+    mapToUnitCount(values: Map<Unit, number>) {
+        return Array.from(values.entries()).map(([unit, count]) => new UnitCount(unit, count));
     }
 }

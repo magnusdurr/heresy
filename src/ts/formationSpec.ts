@@ -1,17 +1,18 @@
 import {BuildRestriction} from "./restrictions";
-import {TestCategories, TestUpgradeSpec} from "./test";
+import {TestCategories} from "./test";
 import {Unit} from "./unit";
+import {UpgradeSpec} from "./upgradeSpec";
 
-export class TestFormationSpec {
+export class FormationSpec {
     name: string
     cost: TestCategories
     units: Map<Unit, number>
-    availableUpgrades: TestUpgradeSpec[]
+    availableUpgrades: UpgradeSpec[]
     section: string // TODO: Section should be removed
     grants: TestCategories
-    upgradeRestrictions: BuildRestriction<TestUpgradeSpec>[]
+    upgradeRestrictions: BuildRestriction<UpgradeSpec>[]
 
-    constructor(name: string, cost: TestCategories, units: Map<Unit, number>, availableUpgrades: TestUpgradeSpec[], section: string, grants: TestCategories, upgradeRestrictions: BuildRestriction<TestUpgradeSpec>[]) {
+    constructor(name: string, cost: TestCategories, units: Map<Unit, number>, availableUpgrades: UpgradeSpec[], section: string, grants: TestCategories, upgradeRestrictions: BuildRestriction<UpgradeSpec>[]) {
         this.name = name;
         this.cost = cost;
         this.units = units;
@@ -27,8 +28,8 @@ export class TestFormationSpec {
         private units: Map<Unit, number> = new Map()
         private grants: TestCategories = new TestCategories(new Map())
         private section: string = "Core"
-        private readonly availableUpgrades: TestUpgradeSpec[] = []
-        private readonly upgradeRestrictions: BuildRestriction<TestUpgradeSpec>[] = [];
+        private readonly availableUpgrades: UpgradeSpec[] = []
+        private readonly upgradeRestrictions: BuildRestriction<UpgradeSpec>[] = [];
 
         constructor(name: string, cost: TestCategories) {
             this.name = name;
@@ -40,7 +41,7 @@ export class TestFormationSpec {
             return this;
         }
 
-        withUpgrades(...upgrades: TestUpgradeSpec[]) {
+        withUpgrades(...upgrades: UpgradeSpec[]) {
             upgrades.forEach(upgrade => this.availableUpgrades.push(upgrade));
             return this;
         }
@@ -50,7 +51,7 @@ export class TestFormationSpec {
             return this;
         }
 
-        withUpgradeRestrictions(...restrictions: BuildRestriction<TestUpgradeSpec>[]) {
+        withUpgradeRestrictions(...restrictions: BuildRestriction<UpgradeSpec>[]) {
             restrictions.forEach(restriction => this.upgradeRestrictions.push(restriction));
             return this;
         }
@@ -61,7 +62,7 @@ export class TestFormationSpec {
         }
 
         build() {
-            return new TestFormationSpec(this.name, this.cost, this.units, this.availableUpgrades, this.section, this.grants, this.upgradeRestrictions);
+            return new FormationSpec(this.name, this.cost, this.units, this.availableUpgrades, this.section, this.grants, this.upgradeRestrictions);
         }
     }
 }

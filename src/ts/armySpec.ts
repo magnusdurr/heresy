@@ -1,17 +1,19 @@
-import {TestCategories, TestCategoryCount, TestFormation, TestUpgradeSpec} from "./test";
+import {TestCategories, TestCategoryCount} from "./test";
 import {BuildRestriction, ValidationResult} from "./restrictions";
 import {ArmySection} from "./armySection";
-import {TestFormationSpec} from "./testFormationSpec";
+import {FormationSpec} from "./formationSpec";
+import {UpgradeSpec} from "./upgradeSpec";
+import {Formation} from "./formation";
 
 export class ArmySpec {
     name: string
     imgUrl: string
     grants: TestCategories
-    formationRestrictions: BuildRestriction<TestFormationSpec>[]
-    upgradeRestriction: BuildRestriction<TestUpgradeSpec>[]
+    formationRestrictions: BuildRestriction<FormationSpec>[]
+    upgradeRestriction: BuildRestriction<UpgradeSpec>[]
     armySections: ArmySection[]
 
-    constructor(name: string, imgUrl: string, grants: TestCategories, formationRestrictions: BuildRestriction<TestFormationSpec>[], upgradeRestriction: BuildRestriction<TestUpgradeSpec>[], armySections: ArmySection[]) {
+    constructor(name: string, imgUrl: string, grants: TestCategories, formationRestrictions: BuildRestriction<FormationSpec>[], upgradeRestriction: BuildRestriction<UpgradeSpec>[], armySections: ArmySection[]) {
         this.name = name;
         this.imgUrl = imgUrl;
         this.grants = grants;
@@ -24,8 +26,8 @@ export class ArmySpec {
         name: string
         imgUrl: string
         grants: TestCategories
-        formationRestrictions: BuildRestriction<TestFormationSpec>[]
-        upgradeRestriction: BuildRestriction<TestUpgradeSpec>[]
+        formationRestrictions: BuildRestriction<FormationSpec>[]
+        upgradeRestriction: BuildRestriction<UpgradeSpec>[]
         armySections: ArmySection[]
 
         constructor(name: string, imgUrl: string) {
@@ -42,12 +44,12 @@ export class ArmySpec {
             return this
         }
 
-        withFormationRestriction(restriction: BuildRestriction<TestFormationSpec>) {
+        withFormationRestriction(restriction: BuildRestriction<FormationSpec>) {
             this.formationRestrictions.push(restriction)
             return this
         }
 
-        withUpgradeRestriction(restriction: BuildRestriction<TestUpgradeSpec>) {
+        withUpgradeRestriction(restriction: BuildRestriction<UpgradeSpec>) {
             this.upgradeRestriction.push(restriction)
             return this
         }
@@ -62,17 +64,17 @@ export class ArmySpec {
         }
     }
 
-    canAddFormation(existing: TestFormation[], toBeAdded: TestFormationSpec): ValidationResult {
+    canAddFormation(existing: Formation[], toBeAdded: FormationSpec): ValidationResult {
         return this.formationRestrictions.map(restriction => restriction.isLegal([...existing.map((formation => formation.spec)), toBeAdded]))
             .find(result => !result.success) || ValidationResult.success
     }
 
-    canAddUpgrade(existing: TestFormation[], toBeAdded: TestUpgradeSpec): ValidationResult {
+    canAddUpgrade(existing: Formation[], toBeAdded: UpgradeSpec): ValidationResult {
         return this.upgradeRestriction.map(restriction => restriction.isLegal([...existing.map((formation => formation.upgrades)).flat(), toBeAdded]))
             .find(result => !result.success) || ValidationResult.success
     }
 
-    validate(armyFormations: TestFormation[]) {
+    validate(armyFormations: Formation[]) {
         const formationErrors = this.formationRestrictions.map(restriction => restriction.isLegal([...armyFormations.map((formation => formation.spec))]))
             .filter(result => !result.success)
 

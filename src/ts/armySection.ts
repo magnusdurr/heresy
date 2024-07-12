@@ -1,10 +1,10 @@
-import {TestFormationSpec} from "./testFormationSpec";
+import {FormationSpec} from "./formationSpec";
 
 export class ArmySection {
     name: string
-    formations: TestFormationSpec[]
+    formations: FormationSpec[]
 
-    constructor(name: string, formations: TestFormationSpec[]) {
+    constructor(name: string, formations: FormationSpec[]) {
         this.name = name
         this.formations = formations
     }

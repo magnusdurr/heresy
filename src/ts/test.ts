@@ -1,9 +1,6 @@
-import {v4 as uuidv4} from "uuid";
-import {ValidationResult} from "./restrictions";
-
 import {ArmySpec} from "./armySpec";
-import {TestFormationSpec} from "./testFormationSpec";
 import {Unit} from "./unit";
+import {Formation} from "./formation";
 
 export enum TestCategory {
     FORMATION = "Formations",
@@ -59,100 +56,6 @@ export interface TestCategoryCount {
     count: number
 }
 
-export class TestUpgradeSpec {
-    name: string
-    description: string
-    cost: TestCategories
-    unitsToReplace: Map<Unit, number> // unit id -> number of units
-    unitsToAdd: Map<Unit, number> // unit id -> number of units
-
-    constructor(name: string, description: string, cost: TestCategories, unitsToReplace: Map<Unit, number>, unitsToAdd: Map<Unit, number>) {
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
-        this.unitsToReplace = unitsToReplace;
-        this.unitsToAdd = unitsToAdd;
-    }
-
-    static Builder = class {
-        private readonly name: string
-        private readonly description: string
-        private readonly cost: TestCategories
-        private readonly unitsToReplace: Map<Unit, number> = new Map()
-        private readonly unitsToAdd: Map<Unit, number> = new Map()
-
-        constructor(name: string, description: string, cost: TestCategories) {
-            this.name = name;
-            this.description = description
-            this.cost = cost;
-        }
-
-        withUnitToReplace(unit: Unit, number: number) {
-            this.unitsToReplace.set(unit, number);
-            return this;
-        }
-
-        withUnitToAdd(unit: Unit, number: number) {
-            this.unitsToAdd.set(unit, number);
-            return this;
-        }
-
-        build() {
-            return new TestUpgradeSpec(this.name, this.description, this.cost, this.unitsToReplace, this.unitsToAdd);
-        }
-    }
-}
-
-
-export class TestFormation {
-    id: string = uuidv4();
-    spec: TestFormationSpec
-    upgrades: TestUpgradeSpec[]
-
-    constructor(spec: TestFormationSpec, upgrades: TestUpgradeSpec[]) {
-        this.spec = spec
-        this.upgrades = upgrades
-    }
-
-    canApplyUpgrade(upgrade: TestUpgradeSpec): ValidationResult {
-        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal([...this.upgrades, upgrade]))
-            .find(result => !result.success) || ValidationResult.success
-    }
-
-    checkUpgradeValidationErrors(): ValidationResult[] {
-        return this.spec.upgradeRestrictions.map(restriction => restriction.isLegal(this.upgrades))
-            .filter(result => !result.success)
-    }
-
-    costWithUpgrades() {
-        return this.spec.cost.merge(
-            this.upgrades.reduce((acc, upgrade) => acc.merge(upgrade.cost), new TestCategories(new Map()))
-        );
-    }
-
-    unitsInFormation(): UnitCount[] {
-        const result = new Map(this.spec.units);
-
-        this.upgrades.forEach(upgrade => {
-            upgrade.unitsToAdd.forEach((count, unit) => {
-                result.set(unit, (result.get(unit) || 0) + count);
-            });
-        })
-        this.upgrades.forEach(upgrade => {
-            upgrade.unitsToReplace.forEach((count, unit) => {
-                if (result.has(unit)) {
-                    result.set(unit, result.get(unit)! - count);
-                }
-            });
-        })
-
-        return this.mapToUnitCount(result)
-    }
-
-    mapToUnitCount(values: Map<Unit, number>) {
-        return Array.from(values.entries()).map(([unit, count]) => new UnitCount(unit, count));
-    }
-}
 
 export class UnitCount {
     readonly unit: Unit
@@ -173,7 +76,7 @@ export class TestArmyAllocation {
         this.grants = grants;
     }
 
-    static fromFormations(army: ArmySpec, formations: TestFormation[]): TestArmyAllocation {
+    static fromFormations(army: ArmySpec, formations: Formation[]): TestArmyAllocation {
         const totalCost = formations.map(formation => formation.costWithUpgrades())
             .reduce((acc, formation) => acc.merge(formation), new TestCategories(new Map()));
 
