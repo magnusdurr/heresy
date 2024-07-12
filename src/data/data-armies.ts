@@ -1,10 +1,9 @@
-import {smArmy} from "./legiones-astartes";
-import {Army} from "../ts/army";
+import {lsArmySpec} from "./legiones-astartes";
+import {ArmySpec} from "../ts/armySpec";
 
-export const armies: Army[] = [
-    smArmy,
-    new Army("2",
-        "Solar Auxilia",
-        "./img/SolarAuxilia.jpg",
-        [])
+export const armies: ArmySpec[] = [
+    lsArmySpec,
+
+    new ArmySpec.Builder("Solar Auxilia", "./img/SolarAuxilia.jpg")
+        .build()
 ]

@@ -3,10 +3,9 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import React, {useState} from "react"
-import {Army} from "./ts/army";
 import {ChoseArmy} from "./ChoseArmy";
 import {ArmyBuilder} from "./ArmyBuilder";
-import {lsArmySpec} from "./ts/armySpec";
+import {ArmySpec} from "./ts/armySpec";
 
 function App() {
     const [darkMode, setDarkMode] = useState(localStorage.getItem('theme') === 'dark')
@@ -16,7 +15,7 @@ function App() {
         }
     })
 
-    const [army, setArmy] = useState<Army | null>(null)
+    const [army, setArmy] = useState<ArmySpec | null>(null)
 
     const toggleDarkTheme = () => {
         localStorage.setItem('theme', !darkMode ? 'dark' : 'light')
@@ -51,11 +50,7 @@ function App() {
 
                 {army === null ?
                     <ChoseArmy selectFunction={setArmy}/> :
-                    <>
-                        <ArmyBuilder armySpec={lsArmySpec}></ArmyBuilder>
-                        {/*<Divider/>
-                        <ArmyComponent army={army!}></ArmyComponent>*/}
-                    </>
+                    <ArmyBuilder armySpec={army}></ArmyBuilder>
                 }
             </ThemeProvider>
         </Container>

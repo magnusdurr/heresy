@@ -1,7 +1,7 @@
 import {Card, CardActionArea, CardContent, CardMedia, Divider, Stack, Typography} from "@mui/material";
 import {armies} from "./data/data-armies";
-import {Army} from "./ts/army";
 import React from "react";
+import {ArmySpec} from "./ts/armySpec";
 
 export function ChoseArmy(props: { selectFunction: Function }) {
     return (
@@ -10,8 +10,8 @@ export function ChoseArmy(props: { selectFunction: Function }) {
                mt="50px"
                justifyContent="space-around">
 
-            {armies.map((army: Army, index) => (
-                <Card key={army.id}>
+            {armies.map((army: ArmySpec, index) => (
+                <Card key={index}>
                     <CardActionArea onClick={() => props.selectFunction(army)}>
                         <CardMedia
                             component="img"

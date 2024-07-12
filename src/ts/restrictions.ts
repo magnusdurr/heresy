@@ -2,7 +2,7 @@ import {TestUpgradeSpec} from "./test";
 import {TestFormationSpec} from "./testFormationSpec";
 
 export interface BuildRestriction<Type> {
-    isLegal(upgrades: Type[]): ValidationResult
+    isLegal(items: Type[]): ValidationResult
 }
 
 export class ValidationResult {
