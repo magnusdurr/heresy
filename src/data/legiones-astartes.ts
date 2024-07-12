@@ -31,7 +31,13 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                 {category: ItemCategory.ELITE, count: 1},
                 {category: ItemCategory.ALLIES, count: 1}
             ])
-            .withUpgrades(testUpgrades.rhinos, testUpgrades.supreme, testUpgrades.plasma, testUpgrades.dreadnoughts, testUpgrades.commander)
+            .withUpgrades(
+                testUpgrades.supreme,
+                testUpgrades.commander,
+                testUpgrades.plasma,
+                testUpgrades.rhinos,
+                testUpgrades.dreadnoughts,
+            )
             .withUpgradeRestrictions(
                 new OncePerFormationRestriction(testUpgrades.plasma),
                 new OneFromGroupRestriction([testUpgrades.rhinos, testUpgrades.dreadnoughts]),
@@ -41,6 +47,9 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     ]))
     .withArmySection(new ArmySection("Heavy Support", [
         new FormationSpec.Builder("Heavy Support Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT]))
+            .withUnit(units.sergeant, 1)
+            .withUnit(units.havocs, 2)
+            .withUnit(units.rhinoSupport, 2)
             .withUpgrades(testUpgrades.dreadnoughts, testUpgrades.commander)
             .inSection("Heavy Support")
             .build(),

@@ -1,5 +1,6 @@
 import {Weapon} from "./weapon";
 
+// TODO: Handle multiple weapons of same type & firing arcs
 export class Unit {
     name: string
     unitType: UnitType
@@ -10,8 +11,9 @@ export class Unit {
     weapons: Weapon[]
     specialRules: SpecialRule[]
     dc: number
+    notes?: string
 
-    protected constructor(name: string, unitType: UnitType, armour: number, move: number, cc: number, ff: number, weapons: Weapon[], specialRules: SpecialRule[], dc: number) {
+    protected constructor(name: string, unitType: UnitType, armour: number, move: number, cc: number, ff: number, weapons: Weapon[], specialRules: SpecialRule[], dc: number, notes?: string) {
         this.name = name;
         this.unitType = unitType;
         this.armour = armour;
@@ -21,6 +23,7 @@ export class Unit {
         this.weapons = weapons;
         this.specialRules = specialRules;
         this.dc = dc;
+        this.notes = notes;
     }
 
     static Builder = class {
@@ -33,6 +36,7 @@ export class Unit {
         weapons: Weapon[]
         specialRules: SpecialRule[]
         dc: number
+        notes?: string
 
         constructor(name: string, unitType: UnitType) {
             this.name = name
@@ -44,6 +48,14 @@ export class Unit {
             this.weapons = [];
             this.specialRules = [];
             this.dc = 0;
+        }
+
+        withStats(move: number, armour: number, cc: number, ff: number) {
+            this.move = move;
+            this.armour = armour;
+            this.cc = cc;
+            this.ff = ff;
+            return this;
         }
 
         withArmour(armour: number) {
@@ -81,8 +93,13 @@ export class Unit {
             return this;
         }
 
+        withNotes(notes: string) {
+            this.notes = notes;
+            return this;
+        }
+
         build(): Unit {
-            return new Unit(this.name, this.unitType, this.armour, this.move, this.cc, this.ff, this.weapons, this.specialRules, this.dc);
+            return new Unit(this.name, this.unitType, this.armour, this.move, this.cc, this.ff, this.weapons, this.specialRules, this.dc, this.notes);
         }
     }
 }
@@ -100,6 +117,16 @@ export class SpecialRule {
         this.abbreviation = abbreviation;
         this.name = name;
         this.description = description;
+    }
+}
+
+export class VariableSpecialRule extends SpecialRule {
+    constructor(name: string, description: string[], abbreviation: string) {
+        super(name, description, abbreviation);
+    }
+
+    withVariable(variable: string): SpecialRule {
+        return new SpecialRule(this.name, this.description, this.abbreviation!.replace('$', variable));
     }
 }
 

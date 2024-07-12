@@ -21,6 +21,8 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import InfoIcon from '@mui/icons-material/Info';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {UpgradeSpec} from "./ts/upgradeSpec";
+import {UnitComponent} from "./UnitComponent";
+import {Unit} from "./ts/unit";
 
 export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
     return (
@@ -62,6 +64,9 @@ function ListFormation(props: Readonly<{ formation: FormationSpec }>) {
         setExpanded(!expanded);
     };
 
+    const unitsFromUpgrades: Unit[] = props.formation.availableUpgrades.map((upgrade) =>
+        Array.from(upgrade.unitsToAdd).map(entry => entry[0])).flat()
+
     return (
         <Card>
             <CardHeader sx={{paddingBottom: 0}}
@@ -89,8 +94,8 @@ function ListFormation(props: Readonly<{ formation: FormationSpec }>) {
                         <Typography variant="body2">
                             <ul className="upgrade-list">
                                 {props.formation.availableUpgrades.map(upgrade => (
-                                    <Tooltip title={<UpgradeTooltip upgrade={upgrade}/>}>
-                                        <li key={upgrade.name}>{upgrade.name}</li>
+                                    <Tooltip title={<UpgradeTooltip upgrade={upgrade}/>} enterTouchDelay={0}>
+                                        <li key={upgrade.name}>{upgrade.name} <InfoIcon fontSize="inherit"/></li>
                                     </Tooltip>
                                 ))}
                             </ul>
@@ -98,7 +103,24 @@ function ListFormation(props: Readonly<{ formation: FormationSpec }>) {
                     </>}
             </CardContent>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>Display unit stats here...</CardContent>
+                <CardContent>
+                    <Stack spacing={3}>
+                        <Stack spacing={1}>
+                            <Typography variant="caption">Units</Typography>
+                            {Array.from(props.formation.units.keys()).map((entry, index) => (
+                                <UnitComponent key={index} unit={entry} count={1}/>
+                            ))}
+                        </Stack>
+
+                        {unitsFromUpgrades.length > 0 &&
+                            <Stack spacing={1}>
+                                <Typography variant="caption">Upgrades</Typography>
+                                {unitsFromUpgrades.map((unit, index) => (
+                                    <UnitComponent key={index} unit={unit} count={1}/>
+                                ))}
+                            </Stack>}
+                    </Stack>
+                </CardContent>
             </Collapse>
         </Card>
     )

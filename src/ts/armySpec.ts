@@ -5,6 +5,7 @@ import {FormationSpec} from "./formationSpec";
 import {UpgradeSpec} from "./upgradeSpec";
 import {Formation} from "./formation";
 
+// TODO: Add description etc. needed for the army list. In markdown...
 export class ArmySpec {
     name: string
     imgUrl: string

@@ -9,8 +9,8 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
     const unit = props.unit;
 
     return (
-        <Paper style={{padding: '5px 10px 5px 10px', marginTop: '1em'}} elevation={5}>
-            <Typography variant="h6">
+        <Paper style={{padding: '5px 10px 5px 10px'}} elevation={5}>
+            <Typography variant="subtitle1">
                 {props.count > 1 ? props.count + 'x ' : ''}
                 {unit.name}
                 {unit.unitType === UnitType.CHAR && ' (Character)'}
