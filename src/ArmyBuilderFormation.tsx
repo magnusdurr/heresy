@@ -1,4 +1,8 @@
 import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Button,
     Card,
     CardActionArea,
     CardContent,
@@ -15,9 +19,44 @@ import {
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
-import {TestCategory, TestFormation, TestUpgradeSpec} from "./ts/test";
+import {TestCategory, TestFormation, testFormationsBySections, TestFormationSpec, TestUpgradeSpec} from "./ts/test";
 import InfoIcon from '@mui/icons-material/Info';
 import {CategoryChips, CostComponent, ValidationError, ValidationWarning} from "./ArmyBuilderUtils";
+import {ValidationResult} from "./ts/restrictions";
+
+export function FormationComponent(props: Readonly<{
+    formation: TestFormation,
+    deleteFunction: (id: string) => void
+    updateFunction: (id: string) => void
+}>) {
+    const [upgradeDialogOpen, setUpgradeDialogOpen] = React.useState(false);
+
+    const removeUpgrade = (upgrade: TestUpgradeSpec) => {
+        props.formation.upgrades = props.formation.upgrades.filter(item => item !== upgrade)
+        props.updateFunction(props.formation.id)
+    }
+
+    const addUpgrade = (upgrade: TestUpgradeSpec) => {
+        props.formation.upgrades.push(upgrade)
+        props.updateFunction(props.formation.id)
+        setUpgradeDialogOpen(false)
+    }
+
+    return (
+        <>
+            <DisplayFormationPanel formation={props.formation}
+                                   deleteFunction={props.deleteFunction}
+                                   updateFunction={props.updateFunction}
+                                   removeUpdateFunction={removeUpgrade}
+                                   showUpdatesFunction={() => setUpgradeDialogOpen(true)}/>
+
+            <FormationUpgradeDialog formation={props.formation}
+                                    upgradeDialogOpen={upgradeDialogOpen}
+                                    addUpgradeFunction={addUpgrade}
+                                    closeDialogFunction={() => setUpgradeDialogOpen(false)}/>
+        </>
+    )
+}
 
 export function DisplayFormationPanel(props: Readonly<{
     formation: TestFormation,
@@ -131,9 +170,9 @@ export function FormationUpgradeDialog(props: Readonly<{
                     </Grid>
                     {props.formation.spec.availableUpgrades.map((upgrade) => (
                         <Grid item>
-                            <FormationUpgradeComponent formation={props.formation}
-                                                       upgrade={upgrade}
-                                                       addUpgrade={props.addUpgradeFunction}/>
+                            <DisplayUpgradeSpec formation={props.formation}
+                                                upgrade={upgrade}
+                                                addUpgrade={props.addUpgradeFunction}/>
                         </Grid>
                     ))}
                 </Grid>
@@ -142,7 +181,7 @@ export function FormationUpgradeDialog(props: Readonly<{
     )
 }
 
-export function FormationUpgradeComponent(props: Readonly<{
+export function DisplayUpgradeSpec(props: Readonly<{
     formation: TestFormation,
     upgrade: TestUpgradeSpec,
     addUpgrade: (upgrade: TestUpgradeSpec) => void
@@ -177,6 +216,97 @@ export function FormationUpgradeComponent(props: Readonly<{
                         </Grid>}
                     </Grid>
 
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    )
+}
+
+
+export function AddFormationComponent(props: {
+    addFunction: (formation: TestFormationSpec) => void,
+    checkValidityFunction: (formation: TestFormationSpec) => ValidationResult
+}) {
+
+    const [addFormationOpen, setAddFormationOpen] = React.useState(false);
+    const openAddFormation = () => setAddFormationOpen(true);
+    const closeAddFormation = () => setAddFormationOpen(false);
+
+    const [expanded, setExpanded] = React.useState<string | false>('panel1');
+
+    const handleChange =
+        (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+            setExpanded(newExpanded ? panel : false);
+        };
+
+    return (
+        <>
+            <Button onClick={openAddFormation}>Add formation</Button>
+
+            <Dialog maxWidth="sm"
+                    fullWidth
+                    open={addFormationOpen}
+                    onClose={closeAddFormation}
+            >
+                <Stack spacing={1} sx={{m: 2}}>
+                    <Typography variant="h6">Select Formation</Typography>
+                    {Array.from(testFormationsBySections.entries()).map((entry) => (
+                        <Accordion expanded={expanded === entry[0]}
+                                   onChange={handleChange(entry[0])}
+                                   disableGutters="true">
+                            <AccordionSummary>
+                                <Typography variant="body1">{entry[0]}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                {entry[1].map((formation) => (
+                                    <DisplayFormationSpecToAdd formation={formation}
+                                                               closePopupFunction={closeAddFormation}
+                                                               addFunction={props.addFunction}
+                                                               validation={props.checkValidityFunction(formation)}/>
+                                ))}
+                            </AccordionDetails>
+                        </Accordion>
+                    ))}
+                </Stack>
+            </Dialog>
+        </>
+    )
+}
+
+export function DisplayFormationSpecToAdd(props: Readonly<{
+    formation: TestFormationSpec,
+    addFunction: (formation: TestFormationSpec) => void,
+    validation: ValidationResult
+    closePopupFunction: () => void
+}>) {
+    const costToDisplay = props.formation.cost.toList().filter(
+        (item) => item.category !== TestCategory.CORE && item.category !== TestCategory.FORMATION && item.category !== TestCategory.UPGRADE)
+
+    const nameWidth = props.validation.success ? 'auto' : 4
+
+    return (
+        <Card variant="outlined">
+            <CardActionArea disabled={!props.validation.success} onClick={() => {
+                props.addFunction(props.formation)
+                props.closePopupFunction()
+            }}>
+                <CardContent sx={{m: 0, p: 1}}>
+                    <Grid container direction="row" spacing={1} alignItems="center">
+                        <Grid item xs={nameWidth}>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                                <CostComponent cost={props.formation.cost.getOrZero(TestCategory.FORMATION)}/>
+                                <Typography noWrap variant="body2">{props.formation.name}</Typography>
+                            </Stack>
+                        </Grid>
+                        {props.validation.success ? <>
+                                <CategoryChips items={props.formation.grants.toList()} color="success"/>
+                                <CategoryChips items={costToDisplay} color="primary"/>
+                            </> :
+                            <Grid item xs={8}>
+                                <ValidationWarning message={props.validation.message!}/>
+                            </Grid>
+                        }
+                    </Grid>
                 </CardContent>
             </CardActionArea>
         </Card>

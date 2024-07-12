@@ -49,7 +49,7 @@ export function ValidationWarning(props: Readonly<{ message: string }>) {
     )
 }
 
-export function CostComponent(props: { cost: number }) {
+export function CostComponent(props: Readonly<{ cost: number }>) {
     return (
         <Badge badgeContent={props.cost} color="primary" showZero>
             <AttachMoneyIcon/>

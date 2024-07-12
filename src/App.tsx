@@ -5,7 +5,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import React, {useState} from "react"
 import {Army} from "./ts/army";
 import {ChoseArmy} from "./ChoseArmy";
-import {TestArmyBuilder} from "./TestArmyBuilder";
+import {ArmyBuilder} from "./ArmyBuilder";
 import {legionesAstartes} from "./ts/test";
 
 function App() {
@@ -52,7 +52,7 @@ function App() {
                 {army === null ?
                     <ChoseArmy selectFunction={setArmy}/> :
                     /*<ArmyComponent army={army!}></ArmyComponent>*/
-                    <TestArmyBuilder armySpec={legionesAstartes}></TestArmyBuilder>
+                    <ArmyBuilder armySpec={legionesAstartes}></ArmyBuilder>
                 }
             </ThemeProvider>
         </Container>

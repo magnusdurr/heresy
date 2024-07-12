@@ -128,17 +128,26 @@ export class TestUpgradeSpec {
 export class TestArmySpec {
     name: string
     grants: TestCategories
-    restrictions: BuildRestriction<TestFormationSpec>[]
+    formationRestrictions: BuildRestriction<TestFormationSpec>[]
+    upgradeRestriction: BuildRestriction<TestUpgradeSpec>[]
 
-    constructor(name: string, grants: TestCategories, restrictions: BuildRestriction<TestFormationSpec>[]) {
+    constructor(name: string,
+                grants: TestCategories,
+                formationRestrictions: BuildRestriction<TestFormationSpec>[],
+                upgradeRestriction: BuildRestriction<TestUpgradeSpec>[]) {
         this.name = name;
         this.grants = grants;
-        this.restrictions = restrictions;
+        this.formationRestrictions = formationRestrictions;
+        this.upgradeRestriction = upgradeRestriction;
     }
 
-    // TODO: How to call this from the UI?
     canAddFormation(existing: TestFormation[], toBeAdded: TestFormationSpec): ValidationResult {
-        return this.restrictions.map(restriction => restriction.isLegal([...existing.map((formation => formation.spec)), toBeAdded]))
+        return this.formationRestrictions.map(restriction => restriction.isLegal([...existing.map((formation => formation.spec)), toBeAdded]))
+            .find(result => !result.success) || ValidationResult.success
+    }
+
+    canAddUpgrade(existing: TestFormation[], toBeAdded: TestUpgradeSpec): ValidationResult {
+        return this.upgradeRestriction.map(restriction => restriction.isLegal([...existing.map((formation => formation.upgrades)).flat(), toBeAdded]))
             .find(result => !result.success) || ValidationResult.success
     }
 }
