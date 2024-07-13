@@ -11,9 +11,11 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
     return (
         <Paper style={{padding: '5px 10px 5px 10px'}} elevation={5}>
             <Typography variant="subtitle1">
-                {props.count > 1 ? props.count + 'x ' : ''}
-                {unit.name}
-                {unit.unitType === UnitType.CHAR && ' (Character)'}
+                <b>
+                    {props.count > 1 ? props.count + 'x ' : ''}
+                    {unit.name}
+                    {unit.unitType === UnitType.CHAR && ' (Character)'}
+                </b>
             </Typography>
             <Divider/>
 

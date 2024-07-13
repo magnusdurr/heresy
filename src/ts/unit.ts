@@ -121,10 +121,6 @@ export class SpecialRule {
 }
 
 export class VariableSpecialRule extends SpecialRule {
-    constructor(name: string, description: string[], abbreviation: string) {
-        super(name, description, abbreviation);
-    }
-
     withVariable(variable: string): SpecialRule {
         return new SpecialRule(this.name, this.description, this.abbreviation!.replace('$', variable));
     }
