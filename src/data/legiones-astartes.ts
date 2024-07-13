@@ -24,7 +24,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     .withArmySection(new ArmySection("Core", [
         new FormationSpec.Builder("Tactical Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.CORE]))
             .withUnit(units.sergeant, 1)
-            .withUnit(units.tacticals, 4)
+            .withUnit(units.legionairesTactical, 4)
             .withGrant([
                 {category: ItemCategory.FAST_ATTACK, count: 2},
                 {category: ItemCategory.HEAVY_SUPPORT, count: 2},
@@ -34,12 +34,12 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .withUpgrades(
                 testUpgrades.supreme,
                 testUpgrades.commander,
-                testUpgrades.plasma,
+                testUpgrades.specialistPlasma,
                 testUpgrades.rhinos,
                 testUpgrades.dreadnoughts,
             )
             .withUpgradeRestrictions(
-                new OncePerFormationRestriction(testUpgrades.plasma),
+                new OncePerFormationRestriction(testUpgrades.specialistPlasma),
                 new OneFromGroupRestriction([testUpgrades.rhinos, testUpgrades.dreadnoughts]),
                 new OneFromGroupRestriction([testUpgrades.supreme, testUpgrades.commander])
             )
@@ -55,7 +55,9 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .build(),
 
         new FormationSpec.Builder("Sicarian Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT]))
+            .withUnit(units.sicarianAccelerator, 2)
             .withSingleGrant(ItemCategory.UPGRADE)
+            .withUpgrades(testUpgrades.sicarianPlasma)
             .inSection("Heavy Support")
             .build(),
 

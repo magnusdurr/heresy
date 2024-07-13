@@ -2,7 +2,7 @@ import {SpecialRule, Unit, UnitType} from './ts/unit';
 import {Divider, Grid, Paper, Stack, Tooltip, Typography} from "@mui/material";
 import React from "react";
 import Markdown from 'react-markdown';
-import {Weapon} from "./ts/weapon";
+import {EquippedWeapon} from "./ts/weapon";
 
 export function UnitComponent(props: { unit: Unit, count: number }) {
 
@@ -21,12 +21,12 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
 
             <Grid container columnSpacing={5}>
                 {unit.unitType !== UnitType.CHAR &&
-                    <Grid item xs={12} sm={5}>
+                    <Grid item xs={12} sm={5} md={4}>
                         <UnitStatsComponent unit={unit}/>
                     </Grid>
                 }
                 {unit.weapons !== undefined && unit.weapons.length > 0 &&
-                    <Grid item xs={12} sm={7}>
+                    <Grid item xs={12} sm={7} md={8}>
                         <WeaponsList weapons={unit.weapons}/>
                     </Grid>
                 }
@@ -35,7 +35,7 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
             {unit.specialRules.length > 0 &&
                 <Typography variant="body2" mt={1}>
                     {'Notes: '}
-                    <ul className="comma-list">
+                    <ul className="upgrade-list">
                         {unit.specialRules.map(specialRule => (
                             <SpecialRuleComponent rule={specialRule}/>
                         ))}
@@ -48,7 +48,7 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
 
 function UnitStatsComponent(props: { unit: Unit }) {
     return (
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} mt={0.4}>
             <UnitStatItem label="Type" value={unitTypeName(props.unit.unitType)}/>
             <UnitStatItem label="Speed" value={props.unit.move} suffix="cm"/>
             <UnitStatItem label="Armour" value={props.unit.armour} suffix="+"/>
@@ -58,32 +58,38 @@ function UnitStatsComponent(props: { unit: Unit }) {
     )
 }
 
-function WeaponsList(props: { weapons: Weapon[] }) {
+function WeaponsList(props: { weapons: EquippedWeapon[] }) {
     return (
-        <Grid container>
-            <Grid item xs={4}>
+        <Grid container columnSpacing={2}>
+            <Grid item xs={5} alignItems="center">
                 <Typography variant="caption">Weapons</Typography>
             </Grid>
             <Grid item xs={2}>
                 <Typography variant="caption">Range</Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={5}>
                 <Typography variant="caption">Firepower</Typography>
             </Grid>
             {props.weapons.map(weapon => (
                 <>
-                    {weapon.modes.map(mode => (
+                    {weapon.weapon.modes.map(mode => (
                         <>
-                            <Grid item xs={4}>
-                                <Typography variant="body2">{weapon.name}</Typography>
+                            <Grid item xs={5}>
+                                <Typography variant="body2">
+                                    {weapon.count > 1 && weapon.count + 'x '}
+                                    {weapon.weapon.name}
+                                </Typography>
                             </Grid>
                             <Grid item xs={2}>
-                                <Typography variant="body2">{weapon.range}cm</Typography>
+                                <Typography
+                                    variant="body2">{weapon.weapon.range === 0 ? 'N/A' : `${weapon.weapon.range}cm`}</Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={5}>
                                 <Typography variant="body2">
-                                    {mode.firepower(weapon.shots)}&nbsp;
+                                    {mode.firepower(weapon.weapon.shots)}&nbsp;
                                     <ul className="comma-list">
+                                        {weapon.firingArc !== undefined &&
+                                            <SpecialRuleComponent rule={weapon.firingArcSpecialRule()!}/>}
                                         {mode.specialRules.map(specialRule => (
                                             <SpecialRuleComponent rule={specialRule}/>
                                         ))}

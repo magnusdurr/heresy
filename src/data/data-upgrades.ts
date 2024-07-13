@@ -4,22 +4,22 @@ import {ItemCategory} from "../ts/itemCategory";
 import {units} from "./data-units";
 
 export const testUpgrades = {
+    supreme: new UpgradeSpec.Builder("Supreme Commander",
+        "Add a Supreme Commander in a Command Squad to the formation",
+        ItemCost.fromList([]))
+        .withUnitToAdd(units.supremeCommander, 1)
+        .build(),
+
+    specialistPlasma: new UpgradeSpec.Builder("Specialist Legionaries",
+        "Add two Plasma Gun Legionaries to the formation",
+        ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.CORE]))
+        .withUnitToAdd(units.legionairesSpecialistPlasmaGuns, 2)
+        .build(),
+
     rhinos: new UpgradeSpec.Builder("Rhinos",
         "Add enough Rhinos to transport all units in the formation, all units in the formation must fit in the Rhinos.",
         ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK]))
         .withUnitToAdd(units.rhino, 1)
-        .build(),
-
-    supreme: new UpgradeSpec.Builder("Supreme Commander",
-        "Add a supreme commander to the formation",
-        ItemCost.fromList([ItemCategory.CORE]))
-        .withUnitToAdd(units.supremeCommander, 1)
-        .build(),
-
-    plasma: new UpgradeSpec.Builder("Plasma Gun Legionaries",
-        "Add two Plasma Gun Legionaries to the formation",
-        ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.CORE]))
-        .withUnitToAdd(units.tacticalsPlasma, 2)
         .build(),
 
     dreadnoughts: new UpgradeSpec.Builder("Dreadnoughts",
@@ -28,10 +28,17 @@ export const testUpgrades = {
         .withUnitToAdd(units.dreadnought, 2)
         .build(),
 
-    commander: new UpgradeSpec.Builder("Commander",
-        "Add one Commander to the formation",
+    commander: new UpgradeSpec.Builder("Chaplain",
+        "Add one Chaplain in a Command Squad to the formation",
         new ItemCost(new Map([[ItemCategory.UPGRADE, 1], [ItemCategory.ELITE, 0.5]])))
-        .withUnitToAdd(units.commander, 1)
+        .withUnitToAdd(units.chaplain, 1)
+        .build(),
+
+    sicarianPlasma: new UpgradeSpec.Builder("Plasma Weapons",
+        "Replace the Sicarian Accelerators with Sicarian Plasma",
+        ItemCost.fromList([]))
+        .withUnitToAdd(units.sicarianPlasma, 2)
+        .withUnitToReplace(units.sicarianAccelerator, 2)
         .build(),
 
     warhoundPair: new UpgradeSpec.Builder("Warhound Titan Pair", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK, ItemCategory.ELITE])).build(),

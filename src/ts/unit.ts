@@ -1,19 +1,18 @@
-import {Weapon} from "./weapon";
+import {EquippedWeapon, Weapon} from "./weapon";
 
-// TODO: Handle multiple weapons of same type & firing arcs
 export class Unit {
-    name: string
-    unitType: UnitType
-    armour: number
-    move: number
-    cc: number
-    ff: number
-    weapons: Weapon[]
-    specialRules: SpecialRule[]
-    dc: number
-    notes?: string
+    readonly name: string
+    readonly unitType: UnitType
+    readonly armour: number
+    readonly move: number
+    readonly cc: number
+    readonly ff: number
+    readonly weapons: EquippedWeapon[]
+    readonly specialRules: SpecialRule[]
+    readonly dc: number
+    readonly notes?: string
 
-    protected constructor(name: string, unitType: UnitType, armour: number, move: number, cc: number, ff: number, weapons: Weapon[], specialRules: SpecialRule[], dc: number, notes?: string) {
+    protected constructor(name: string, unitType: UnitType, armour: number, move: number, cc: number, ff: number, weapons: EquippedWeapon[], specialRules: SpecialRule[], dc: number, notes?: string) {
         this.name = name;
         this.unitType = unitType;
         this.armour = armour;
@@ -33,7 +32,7 @@ export class Unit {
         move: number
         cc: number
         ff: number
-        weapons: Weapon[]
+        weapons: EquippedWeapon[]
         specialRules: SpecialRule[]
         dc: number
         notes?: string
@@ -84,6 +83,11 @@ export class Unit {
         }
 
         withWeapon(weapon: Weapon) {
+            this.weapons.push(new EquippedWeapon(weapon));
+            return this;
+        }
+
+        withEquippedWeapon(weapon: EquippedWeapon) {
             this.weapons.push(weapon);
             return this;
         }

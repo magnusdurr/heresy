@@ -4,6 +4,34 @@ export enum WeaponType {
     AP = "AP", AT = "AT", AA = "AA", ASSAULT = "Assault", FIRE_FIGHT = "Small Arms"
 }
 
+export enum FiringArc {
+    FIXED_FORWARD = "FxF",
+    FORWARD_ARC = "FwA"
+}
+
+export class EquippedWeapon {
+    weapon: Weapon
+    count: number
+    firingArc?: FiringArc
+
+    constructor(weapon: Weapon, count?: number, firingArc?: FiringArc) {
+        this.weapon = weapon;
+        this.count = count ?? 1;
+        this.firingArc = firingArc;
+    }
+
+    firingArcSpecialRule(): SpecialRule | undefined {
+        switch (this.firingArc) {
+            case FiringArc.FIXED_FORWARD:
+                return new SpecialRule("Fixed Forward", ["TODO"], "FxF")
+            case FiringArc.FORWARD_ARC:
+                return new SpecialRule("Forward Arc", ["TODO"], "FwA")
+            default:
+                return undefined
+        }
+    }
+}
+
 export class Weapon {
     name: string
     range: number
