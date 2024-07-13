@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/heresy/static/css/main.4e4aa2e9.css",
-    "main.js": "/heresy/static/js/main.bbcb3514.js",
+    "main.css": "/heresy/static/css/main.45036bcf.css",
+    "main.js": "/heresy/static/js/main.0a4541f8.js",
     "static/media/SolarAuxilia.jpg": "/heresy/static/media/SolarAuxilia.51c9698a3ec2e8389209.jpg",
     "static/media/LegionesAstartes.jpg": "/heresy/static/media/LegionesAstartes.39822df7897897626af7.jpg",
     "index.html": "/heresy/index.html",
-    "main.4e4aa2e9.css.map": "/heresy/static/css/main.4e4aa2e9.css.map",
-    "main.bbcb3514.js.map": "/heresy/static/js/main.bbcb3514.js.map"
+    "main.45036bcf.css.map": "/heresy/static/css/main.45036bcf.css.map",
+    "main.0a4541f8.js.map": "/heresy/static/js/main.0a4541f8.js.map"
   },
   "entrypoints": [
-    "static/css/main.4e4aa2e9.css",
-    "static/js/main.bbcb3514.js"
+    "static/css/main.45036bcf.css",
+    "static/js/main.0a4541f8.js"
   ]
 }
