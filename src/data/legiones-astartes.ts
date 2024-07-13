@@ -62,20 +62,21 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .build(),
 
         new FormationSpec.Builder("Predator Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT]))
+            .withUnit(units.predatorDestructor, 3)
+            .withUpgrades(testUpgrades.predatorAnnihilators)
             .inSection("Heavy Support")
             .build(),
     ]))
     .withArmySection(new ArmySection("Fast Attack", [
         new FormationSpec.Builder("Assault Marine Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
-            .withUpgrades(testUpgrades.commander)
+            .withUnit(units.sergeant)
+            .withUnit(units.legionairesAssault, 4)
             .inSection("Fast Attack")
             .build(),
 
-        new FormationSpec.Builder("Thunderhawk", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK, ItemCategory.FAST_ATTACK]))
-            .inSection("Fast Attack")
-            .build(),
-
-        new FormationSpec.Builder("Storm Eagle", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
+        new FormationSpec.Builder("Air Transport", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
+            .withUnit(units.stormEagle)
+            .withUpgrades(testUpgrades.thunderHawk)
             .inSection("Fast Attack")
             .build(),
 
@@ -96,7 +97,13 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     ]))
     .withArmySection(new ArmySection("Titans", [
         new FormationSpec.Builder("Warhound Titan", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK, ItemCategory.FAST_ATTACK]))
-            .withUpgrades(testUpgrades.warhoundPair, testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD)
+            .withUpgrades(
+                testUpgrades.warhoundPair,
+                testUpgrades.st_vulcanMegaBolter,
+                testUpgrades.st_infernoGun,
+                testUpgrades.st_plasmaBlastgun,
+                testUpgrades.st_scoutTLD
+            )
             .withUpgradeRestrictions(
                 new MandatoryUpgradesRestriction(2, 2, [testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD], "weapon upgrades"),
                 new OncePerFormationRestriction(testUpgrades.warhoundPair),

@@ -47,7 +47,7 @@ export class Formation {
             });
         })
 
-        return this.mapToUnitCount(result)
+        return this.mapToUnitCount(result).filter(unitCount => unitCount.count > 0)
     }
 
     mapToUnitCount(values: Map<Unit, number>): UnitCount[] {

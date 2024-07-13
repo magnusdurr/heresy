@@ -83,20 +83,23 @@ export function DisplayFormationPanel(props: Readonly<{
 
     function costToDisplay() {
         return props.formation.costWithUpgrades().toList().filter((item) =>
-            item.category !== ItemCategory.CORE && item.category !== ItemCategory.FORMATION && item.category !== ItemCategory.UPGRADE)
+            item.category !== ItemCategory.CORE && item.category !== ItemCategory.FORMATION)
     }
 
     return (
         <Paper key={props.formation.id}>
             <Grid container alignItems="baseline" rowSpacing={1} columnSpacing={0} m={1}>
                 <Grid container direction="column" xs={10}>
-                    <Grid container direction="row" columnSpacing={1} alignItems="center">
+                    <Grid container direction="row" columnSpacing={1} alignItems="baseline">
                         <Grid item>
                             <Typography variant="h6">{props.formation.spec.name}</Typography>
                         </Grid>
                         <CategoryChips items={props.formation.spec.grants?.toList() ?? []} color={"success"}/>
                         <CategoryChips items={costToDisplay()} color={"primary"}/>
                     </Grid>
+
+                    <Typography mt={1}
+                                variant="body2">{props.formation.unitsInFormation().map(uc => uc.toDisplayString()).join(", ")}</Typography>
 
                     {props.formation.upgrades.length > 0 &&
                         <Grid container columnSpacing={1} alignItems="center" mt={1}>
@@ -270,7 +273,7 @@ export function AddFormationComponent(props: {
 
                         <Accordion expanded={expanded === section.name}
                                    onChange={handleChange(section.name)}
-                                   disableGutters="true">
+                                   disableGutters>
                             <AccordionSummary>
                                 <Typography variant="body1">{section.name}</Typography>
                             </AccordionSummary>

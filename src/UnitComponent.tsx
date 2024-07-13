@@ -1,5 +1,17 @@
 import {SpecialRule, Unit, UnitType} from './ts/unit';
-import {Divider, Grid, Paper, Stack, Tooltip, Typography} from "@mui/material";
+import {
+    Divider,
+    Grid,
+    Paper,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import React from "react";
 import Markdown from 'react-markdown';
 import {EquippedWeapon} from "./ts/weapon";
@@ -19,29 +31,31 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
             </Typography>
             <Divider/>
 
-            <Grid container columnSpacing={5}>
+            <Grid container columnSpacing={5} rowSpacing={1}>
                 {unit.unitType !== UnitType.CHAR &&
-                    <Grid item xs={12} sm={5} md={4}>
+                    <Grid item>
                         <UnitStatsComponent unit={unit}/>
                     </Grid>
                 }
                 {unit.weapons !== undefined && unit.weapons.length > 0 &&
-                    <Grid item xs={12} sm={7} md={8}>
+                    <Grid item>
                         <WeaponsList weapons={unit.weapons}/>
                     </Grid>
                 }
-            </Grid>
 
-            {unit.specialRules.length > 0 &&
-                <Typography variant="body2" mt={1}>
-                    {'Notes: '}
-                    <ul className="upgrade-list">
-                        {unit.specialRules.map(specialRule => (
-                            <SpecialRuleComponent rule={specialRule}/>
-                        ))}
-                    </ul>
-                </Typography>
-            }
+                <Grid item xs={12}>
+                    {unit.specialRules.length > 0 &&
+                        <Typography variant="body2">
+                            {'Notes: '}
+                            <ul className="upgrade-list">
+                                {unit.specialRules.map(specialRule => (
+                                    <SpecialRuleComponent rule={specialRule}/>
+                                ))}
+                            </ul>
+                        </Typography>
+                    }
+                </Grid>
+            </Grid>
         </Paper>
     );
 }
@@ -60,47 +74,50 @@ function UnitStatsComponent(props: { unit: Unit }) {
 
 function WeaponsList(props: { weapons: EquippedWeapon[] }) {
     return (
-        <Grid container columnSpacing={2}>
-            <Grid item xs={5} alignItems="center">
-                <Typography variant="caption">Weapons</Typography>
-            </Grid>
-            <Grid item xs={2}>
-                <Typography variant="caption">Range</Typography>
-            </Grid>
-            <Grid item xs={5}>
-                <Typography variant="caption">Firepower</Typography>
-            </Grid>
-            {props.weapons.map(weapon => (
-                <>
-                    {weapon.weapon.modes.map(mode => (
-                        <>
-                            <Grid item xs={5}>
-                                <Typography variant="body2">
-                                    {weapon.count > 1 && weapon.count + 'x '}
-                                    {weapon.weapon.name}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Typography
-                                    variant="body2">{weapon.weapon.range === 0 ? 'N/A' : `${weapon.weapon.range}cm`}</Typography>
-                            </Grid>
-                            <Grid item xs={5}>
-                                <Typography variant="body2">
-                                    {mode.firepower(weapon.weapon.shots)}&nbsp;
-                                    <ul className="comma-list">
-                                        {weapon.firingArc !== undefined &&
-                                            <SpecialRuleComponent rule={weapon.firingArcSpecialRule()!}/>}
-                                        {mode.specialRules.map(specialRule => (
-                                            <SpecialRuleComponent rule={specialRule}/>
-                                        ))}
-                                    </ul>
-                                </Typography>
-                            </Grid>
-                        </>
-                    ))}
-                </>
-            ))}
-        </Grid>
+        <Table size="small">
+            <TableHead>
+                <TableRow>
+                    <TableCell className="dense-cell-header"><Typography
+                        variant="caption">Weapons</Typography></TableCell>
+                    <TableCell className="dense-cell-header"><Typography
+                        variant="caption">Range</Typography></TableCell>
+                    <TableCell className="dense-cell-header"><Typography
+                        variant="caption">Firepower</Typography></TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {props.weapons.map(weapon => (
+                    <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                        {weapon.weapon.modes.map(mode => (
+                            <>
+                                <TableCell className="dense-cell">
+                                    <Typography variant="body2">
+                                        {weapon.count > 1 && weapon.count + 'x '}
+                                        {weapon.weapon.name}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell className="dense-cell">
+                                    <Typography
+                                        variant="body2">{weapon.weapon.range === 0 ? 'N/A' : `${weapon.weapon.range}cm`}</Typography>
+                                </TableCell>
+                                <TableCell className="dense-cell">
+                                    <Typography variant="body2">
+                                        {mode.firepower(weapon.weapon.shots)}&nbsp;&nbsp;
+                                        <ul className="comma-list">
+                                            {weapon.firingArc !== undefined &&
+                                                <SpecialRuleComponent rule={weapon.firingArcSpecialRule()!}/>}
+                                            {mode.specialRules.map(specialRule => (
+                                                <SpecialRuleComponent rule={specialRule}/>
+                                            ))}
+                                        </ul>
+                                    </Typography>
+                                </TableCell>
+                            </>
+                        ))}
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
     )
 
 }

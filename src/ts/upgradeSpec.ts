@@ -29,13 +29,13 @@ export class UpgradeSpec {
             this.cost = cost;
         }
 
-        withUnitToReplace(unit: Unit, number: number) {
-            this.unitsToReplace.set(unit, number);
+        withUnitToReplace(unit: Unit, number?: number) {
+            this.unitsToReplace.set(unit, number ?? 1);
             return this;
         }
 
-        withUnitToAdd(unit: Unit, number: number) {
-            this.unitsToAdd.set(unit, number);
+        withUnitToAdd(unit: Unit, number?: number) {
+            this.unitsToAdd.set(unit, number ?? 1);
             return this;
         }
 

@@ -42,8 +42,8 @@ export class FormationSpec {
             this.cost = cost;
         }
 
-        withUnit(unit: Unit, count: number) {
-            this.units.set(unit, count);
+        withUnit(unit: Unit, count?: number) {
+            this.units.set(unit, count ?? 1);
             return this;
         }
 

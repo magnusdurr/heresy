@@ -1,4 +1,4 @@
-import {EquippedWeapon, Weapon} from "./weapon";
+import {EquippedWeapon, FiringArc, Weapon} from "./weapon";
 
 export class Unit {
     readonly name: string
@@ -82,8 +82,18 @@ export class Unit {
             return this;
         }
 
-        withWeapon(weapon: Weapon) {
-            this.weapons.push(new EquippedWeapon(weapon));
+        withSpecialRules(...specialRule: SpecialRule[]) {
+            specialRule.forEach(rule => this.specialRules.push(rule));
+            return this;
+        }
+
+        withWeapon(weapon: Weapon, count?: number) {
+            this.weapons.push(new EquippedWeapon(weapon, count ?? 1));
+            return this;
+        }
+
+        withFiringArcWeapon(weapon: Weapon, firingArc: FiringArc, count?: number) {
+            this.weapons.push(new EquippedWeapon(weapon, count ?? 1, firingArc));
             return this;
         }
 

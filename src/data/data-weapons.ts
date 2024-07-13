@@ -2,6 +2,15 @@ import {Weapon, WeaponMode, WeaponType} from "../ts/weapon";
 import {specialRules} from "./data-special-rules";
 
 export const weapons = {
+    assaultCannonDread: new Weapon.Builder("Dreadnought Assault Cannon")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 4)
+            .withType(WeaponType.AT, 5)
+            .build()
+        )
+        .build(),
+
     autocannonTwinAccelerotor: new Weapon.Builder("Twin Accelerator Autocannon")
         .withRange(45)
         .withShots(2)
@@ -9,6 +18,25 @@ export const weapons = {
             .withType(WeaponType.AP, 5)
             .withType(WeaponType.AT, 6)
             .withType(WeaponType.AA, 6)
+            .build()
+        )
+        .build(),
+
+    autocannonPredator: new Weapon.Builder("Predator Autocannon")
+        .withRange(45)
+        .withShots(2)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .withType(WeaponType.AT, 6)
+            .build()
+        )
+        .build(),
+
+    battleCannon: new Weapon.Builder("Battle Cannon")
+        .withRange(75)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 4)
+            .withType(WeaponType.AT, 4)
             .build()
         )
         .build(),
@@ -29,6 +57,32 @@ export const weapons = {
         )
         .build(),
 
+    bolterHeavyTwinAC: new Weapon.Builder("Aircraft Twin Heavy Bolter")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 3)
+            .withType(WeaponType.AA, 5)
+            .build()
+        )
+        .build(),
+
+    boltPistol: new Weapon.Builder("Bolt Pistol")
+        .withRange(15)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .build()
+        )
+        .build(),
+
+    chainsword: new Weapon.Builder("Chainsword")
+        .withRange(0)
+        .withMode(new WeaponMode.Builder()
+            .withAssaultType()
+            .withSpecialRule(specialRules.extraAttack.withVariable("1"))
+            .build()
+        )
+        .build(),
+
     lascannon: new Weapon.Builder("Lascannon")
         .withRange(45)
         .withMode(new WeaponMode.Builder()
@@ -38,11 +92,38 @@ export const weapons = {
         )
         .build(),
 
+    lascannonTwin: new Weapon.Builder("Twin Lascannon")
+        .withRange(45)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .withType(WeaponType.AT, 4)
+            .build()
+        )
+        .build(),
+
+    lascannonQuad: new Weapon.Builder("Quad Lascannon")
+        .withRange(45)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .withType(WeaponType.AT, 3)
+            .build()
+        )
+        .build(),
+
     meltagun: new Weapon.Builder("Meltagun")
         .withRange(30)
         .withMode(new WeaponMode.Builder()
             .withType(WeaponType.AT, 6)
             .withSpecialRule(specialRules.macro)
+            .build()
+        )
+        .build(),
+
+    missileLauncher: new Weapon.Builder("Missile Launcher")
+        .withRange(60)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .withType(WeaponType.AT, 6)
             .build()
         )
         .build(),
@@ -73,24 +154,6 @@ export const weapons = {
         .withMode(new WeaponMode.Builder()
             .withType(WeaponType.AP, 6)
             .withType(WeaponType.AT, 6)
-            .build()
-        )
-        .build(),
-
-    missileLauncher: new Weapon.Builder("Missile Launcher")
-        .withRange(60)
-        .withMode(new WeaponMode.Builder()
-            .withType(WeaponType.AP, 6)
-            .withType(WeaponType.AT, 6)
-            .build()
-        )
-        .build(),
-
-    assaultCannonDread: new Weapon.Builder("Dreadnought Assault Cannon")
-        .withRange(30)
-        .withMode(new WeaponMode.Builder()
-            .withType(WeaponType.AP, 4)
-            .withType(WeaponType.AT, 5)
             .build()
         )
         .build(),
