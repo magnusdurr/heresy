@@ -11,8 +11,21 @@ export class Unit {
     readonly specialRules: SpecialRule[]
     readonly dc: number
     readonly notes?: string
+    readonly criticalHitEffect?: string
 
-    protected constructor(name: string, unitType: UnitType, armour: number, move: number, cc: number, ff: number, weapons: EquippedWeapon[], specialRules: SpecialRule[], dc: number, notes?: string) {
+    protected constructor(
+        name: string,
+        unitType: UnitType,
+        armour: number,
+        move: number,
+        cc: number,
+        ff: number,
+        weapons: EquippedWeapon[],
+        specialRules: SpecialRule[],
+        dc: number,
+        notes?: string,
+        criticalHitEffect?: string
+    ) {
         this.name = name;
         this.unitType = unitType;
         this.armour = armour;
@@ -23,6 +36,7 @@ export class Unit {
         this.specialRules = specialRules;
         this.dc = dc;
         this.notes = notes;
+        this.criticalHitEffect = criticalHitEffect;
     }
 
     static Builder = class {
@@ -36,6 +50,7 @@ export class Unit {
         private specialRules: SpecialRule[]
         private dc: number
         private notes?: string
+        private criticalHitEffect?: string
 
         constructor(name: string, unitType: UnitType) {
             this.name = name
@@ -87,6 +102,11 @@ export class Unit {
             return this;
         }
 
+        withCritEffect(criticalHitEffect: string) {
+            this.criticalHitEffect = criticalHitEffect;
+            return this;
+        }
+
         withNotes(notes: string) {
             this.notes = notes;
             return this;
@@ -99,7 +119,7 @@ export class Unit {
 }
 
 export enum UnitType {
-    CHAR, INF, LV, AV, HAV, WE, FIGHTER
+    CHAR, INF, LV, AV, HAV, WE, FIGHTER, WEAPON
 }
 
 export class SpecialRule {

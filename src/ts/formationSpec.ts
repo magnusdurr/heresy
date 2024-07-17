@@ -52,6 +52,11 @@ export class FormationSpec {
             return this;
         }
 
+        withUpgradeList(upgrades: UpgradeSpec[]) {
+            upgrades.forEach(upgrade => this.availableUpgrades.push(upgrade));
+            return this;
+        }
+
         withGrant(list: ItemCostEntry[]) {
             this.grants = ItemCost.fromEntries(list);
             return this;

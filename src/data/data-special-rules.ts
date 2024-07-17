@@ -36,6 +36,11 @@ export const specialRules = {
     transport: new VariableSpecialRule("Transport", [
         "Units with the *Transport* special rule can transport (x) number of INF units without *Bulky* or *Mounted*."
     ], "Transport($)"),
+    voidShield: new VariableSpecialRule("Void Shield", [
+        "Imperial Titans are protected by void shield generators. The number of void shields each Titan has is noted on the Titan’s datasheet.",
+        "Each void shield will automatically stop one point of damage and then go down. Do not make armour saves for damage stopped by void shields, nor allocate Blast markers. Once all of the shields have been knocked down, the Titan may be damaged normally and you may make saving throws against any hits that are scored. Hits from close combat ignore void shields but units using their firefight values must first knock down any shields before they can damage the Titan.",
+        "Void shields that have been knocked down can be repaired. Each Titan can repair one downed void shield in the end phase of each turn. In addition, if a Titan regroups it can use the dice roll to either repair the void shield or remove Blast markers (e.g., if you rolled a 2 you could repair 2 shields, remove 2 Blast markers or repair 1 shield and remove 1 Blast marker).",
+    ], "Void Shields($)"),
     walker: new VariableSpecialRule("Walker", [
         "Some vehicle units are noted as being walkers. They are able to negotiate dangerous terrain more easily than other vehicles. To represent this they may re-roll any failed dangerous terrain tests."
     ]),
@@ -45,12 +50,16 @@ export const specialRules = {
     macro: new SpecialRule("Macro Weapon", [
         "Only units with reinforced armour or invulnerable saves receive a saving throw against hits from a macro-weapon."
     ], "MW"),
-
     energetic: new SpecialRule("Energetic", [
         "When performing a *sustained fire* action, *energetic* weapons receive an extra +1 to hit modifier."
     ]),
-
     extraAttack: new VariableSpecialRule("Extra Attacks", [
         "Some assault and close combat weapons are noted as having extra attacks (+x). Units armed with these weapons receive a number of extra attacks equal to x during an assault. For example, an assault weapon noted as having extra attacks (+2) would allow the unit using it to make two extra close combat attacks in an assault. Sometimes the entry will specify a dice roll rather than a fixed number. For example, a weapon that had extra attacks (D3) would attack D3 times each time it attacked. Extra attacks can apply to shooting attacks, close combat attacks, and firefight attacks."
-    ], "EA(+$)")
+    ], "EA(+$)"),
+    ignoreCover: new SpecialRule("Ignore Cover", [
+        "Some weapons are noted as being able to *ignore cover*. These weapons are designed to negate the effects of cover, either by blasting it apart or simply bypassing it altogether. These weapons ignore cover to hit modifiers, and negate infantry cover saves."
+    ], "IC"),
+    slowFiring: new VariableSpecialRule("Slow Firing", [
+        "Some weapons are noted as being *slow firing*. These weapons must take one turn to reload after they have fired. This means that if they fire on one turn they may not fire during the next. We have found that the best way of remembering this is simply to turn the unit around to face away from the enemy when it fires, and then turn it back again when the formation is activated again next turn, but you can use any method you prefer."
+    ], "Slw"),
 }

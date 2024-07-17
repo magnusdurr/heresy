@@ -47,6 +47,12 @@ export const testUpgrades = {
         .withUnitToAdd(units.legionesAstartes.chaplain, 1)
         .build(),
 
+    commanderAssault: new UpgradeSpec.Builder("Chaplain",
+        "Add one Chaplain in an Assault Command Squad to the formation",
+        new ItemCost(new Map([[ItemCategory.UPGRADE, 1], [ItemCategory.ELITE, 0.5]])))
+        .withUnitToAdd(units.legionesAstartes.chaplainAssault, 1)
+        .build(),
+
     predatorAnnihilators: new UpgradeSpec.Builder("Annihilators",
         "Replace the Predator Destructors with Predator Annihilators",
         ItemCost.fromList([]))
@@ -68,11 +74,48 @@ export const testUpgrades = {
         .withUnitToReplace(units.legionesAstartes.stormEagle)
         .build(),
 
-    warhoundPair: new UpgradeSpec.Builder("Warhound Titan Pair", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK, ItemCategory.HEAVY_SUPPORT])).build(),
-    st_vulcanMegaBolter: new UpgradeSpec.Builder("Vulcan Mega-Bolter", "", ItemCost.fromList([ItemCategory.CORE])).build(),
-    st_infernoGun: new UpgradeSpec.Builder("Inferno Gun", "", ItemCost.fromList([ItemCategory.CORE])).build(),
-    st_scoutTLD: new UpgradeSpec.Builder("Scout Turbo-Laser Destructor", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.HEAVY_SUPPORT])).build(),
-    st_plasmaBlastgun: new UpgradeSpec.Builder("Plasma Blastgun", "", ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.HEAVY_SUPPORT])).build(),
+    warhoundPair: new UpgradeSpec.Builder("Warhound Titan Pair",
+        "Add a second Warhound Titan to the formation",
+        ItemCost.fromEntries([
+            {category: ItemCategory.UPGRADE, count: 2},
+            {category: ItemCategory.FAST_ATTACK, count: 1},
+            {category: ItemCategory.HEAVY_SUPPORT, count: 1},
+        ]))
+        .withUnitToAdd(units.titans.warhound)
+        .build(),
+
+    scoutTitanWeapons: {
+        vulcanMegaBolter: new UpgradeSpec.Builder(
+            "Vulcan Mega-Bolter",
+            "One Vulcan Mega-Bolter",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.scoutTitanWeapons.vulcanMegaBolter)
+            .build(),
+        infernoGun: new UpgradeSpec.Builder(
+            "Inferno Gun",
+            "One Inferno Gun",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.scoutTitanWeapons.infernoGun)
+            .build(),
+        scoutTurboLaserDestructor: new UpgradeSpec.Builder(
+            "Scout Turbo-Laser Destructor",
+            "One Scout Turbo-Laser Destructor",
+            ItemCost.fromEntries([
+                {category: ItemCategory.UPGRADE, count: 0.5},
+                {category: ItemCategory.HEAVY_SUPPORT, count: 1}
+            ]))
+            .withUnitToAdd(units.titans.scoutTitanWeapons.turboLaserDestructor)
+            .build(),
+        plasmaBlastgun: new UpgradeSpec.Builder(
+            "Plasma Blastgun",
+            "One Plasma Blastgun",
+            ItemCost.fromEntries([
+                {category: ItemCategory.UPGRADE, count: 0.5},
+                {category: ItemCategory.HEAVY_SUPPORT, count: 1}
+            ]))
+            .withUnitToAdd(units.titans.scoutTitanWeapons.plasmaBlastgun)
+            .build(),
+    },
 
     lemanRussVanquisher: new UpgradeSpec.Builder("Vanquishers",
         "Replace the Leman Russ Battle Tanks with Leman Russ Vanquishers",

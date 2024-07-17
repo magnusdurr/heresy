@@ -25,6 +25,8 @@ export class ItemCost {
         return Array.from(this.entries).map(([key, value]) => ({category: key, count: value}));
     }
 
+    static free = new ItemCost(new Map());
+
     static fromList(list: ItemCategory[]) {
         return new ItemCost(list.reduce((acc, category) => {
             acc.set(category, (acc.get(category) || 0) + 1);

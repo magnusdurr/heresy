@@ -220,7 +220,7 @@ export function DisplayUpgradeSpec(props: Readonly<{
                     <Grid item container direction="row" spacing={1} alignItems="center">
                         <Grid item xs={nameWidth}>
                             <Stack direction="row" spacing={2} alignItems="center">
-                                <CostComponent cost={props.upgrade.cost.getOrZero(ItemCategory.FORMATION)}/>
+                                <CostComponent cost={props.upgrade.cost.getOrZero(ItemCategory.UPGRADE)}/>
                                 <Typography noWrap variant="body2"
                                             sx={{color: textColor}}>{props.upgrade.name}</Typography>
                             </Stack>

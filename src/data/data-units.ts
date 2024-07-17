@@ -32,6 +32,20 @@ export const units = {
             .withWeapon(weapons.powerSword)
             .build(),
 
+        chaplainAssault: new Unit.Builder("Assault Command Squad w. Chaplain", UnitType.INF)
+            .withStats(30, 4, 2, 4)
+            .withSpecialRules(
+                specialRules.blitz,
+                specialRules.command.withVariable("15"),
+                specialRules.inspiring,
+                specialRules.invulnerableSave,
+                specialRules.leader,
+                specialRules.jumpPack
+            )
+            .withWeapon(weapons.plasmaPistol)
+            .withWeapon(weapons.powerSword)
+            .build(),
+
         sergeant: new Unit.Builder("Sergeant", UnitType.CHAR)
             .withSpecialRule(specialRules.leader)
             .build(),
@@ -109,7 +123,7 @@ export const units = {
             .withFiringArcWeapon(weapons.lascannonQuad, FiringArc.FORWARD_ARC)
             .withFiringArcWeapon(weapons.bolterHeavyTwinAC, FiringArc.FORWARD_ARC)
             .withSpecialRules(specialRules.reinforcedArmour, specialRules.transport.withVariable("4"))
-            // TODO .withCritEffect("The Storm Eagle is destroyed")
+            .withCritEffect("The Storm Eagle, and any units being transported, is destroyed")
             .build(),
 
         thunderHawk: new Unit.Builder("Thunderhawk", UnitType.WE)
@@ -118,7 +132,7 @@ export const units = {
             .withFiringArcWeapon(weapons.battleCannon, FiringArc.FORWARD_ARC)
             .withFiringArcWeapon(weapons.bolterHeavyTwinAC, FiringArc.FORWARD_ARC, 4)
             .withSpecialRules(specialRules.reinforcedArmour, specialRules.transport.withVariable("8"))
-            // TODO .withCritEffect("The Storm Eagle is destroyed")
+            .withCritEffect("The Thunderhawk, and any units being transported, is destroyed")
             .build(),
 
         xiphonInterceptor: new Unit.Builder("Xiphon Interceptor", UnitType.FIGHTER)
@@ -181,5 +195,30 @@ export const units = {
             .withWeapon(weapons.vanquisherCannon)
             .withWeapon(weapons.lascannon, 3)
             .build(),
+    },
+    titans: {
+        warhound: new Unit.Builder("Warhound Titan", UnitType.WE)
+            .withDC(3)
+            .withSpecialRules(specialRules.walker, specialRules.voidShield.withVariable("2"))
+            .withStats(25, 5, 4, 5)
+            .build(),
+
+        scoutTitanWeapons: {
+            vulcanMegaBolter: new Unit.Builder("Vulcan Mega-Bolter", UnitType.WEAPON)
+                .withWeapon(weapons.scoutTitan.vulcanMegaBolter)
+                .build(),
+            infernoGun: new Unit.Builder("Inferno Gun", UnitType.WEAPON)
+                .withStats(25, 5, 6, 5)
+                .withWeapon(weapons.scoutTitan.infernoGun)
+                .build(),
+            turboLaserDestructor: new Unit.Builder("Scout Turbo-Laser Destructor", UnitType.WEAPON)
+                .withStats(25, 5, 6, 5)
+                .withWeapon(weapons.scoutTitan.turboLaserDestructor)
+                .build(),
+            plasmaBlastgun: new Unit.Builder("Plasma Blastgun", UnitType.WEAPON)
+                .withStats(25, 5, 6, 5)
+                .withWeapon(weapons.scoutTitan.plasmaBlastgun)
+                .build(),
+        }
     }
 }

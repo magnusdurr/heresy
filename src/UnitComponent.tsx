@@ -22,17 +22,21 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
 
     return (
         <Paper style={{padding: '5px 10px 5px 10px'}} elevation={5}>
-            <Typography variant="subtitle1">
-                <b>
-                    {props.count > 1 ? props.count + 'x ' : ''}
-                    {unit.name}
-                    {unit.unitType === UnitType.CHAR && ' (Character)'}
-                </b>
-            </Typography>
-            <Divider/>
+            {unit.unitType !== UnitType.WEAPON &&
+                <>
+                    <Typography variant="subtitle1">
+                        <b>
+                            {props.count > 1 ? props.count + 'x ' : ''}
+                            {unit.name}
+                            {unit.unitType === UnitType.CHAR && ' (Character)'}
+                        </b>
+                    </Typography>
+                    <Divider/>
+                </>
+            }
 
             <Grid container columnSpacing={5} rowSpacing={1}>
-                {unit.unitType !== UnitType.CHAR &&
+                {(unit.unitType !== UnitType.CHAR && unit.unitType !== UnitType.WEAPON) &&
                     <Grid item>
                         <UnitStatsComponent unit={unit}/>
                     </Grid>
@@ -44,20 +48,24 @@ export function UnitComponent(props: { unit: Unit, count: number }) {
                 }
 
                 <Grid item xs={12}>
-                    {unit.specialRules.length > 0 &&
-                        <Typography variant="body2">
+                    <Typography variant="body2">
+                        {unit.dc > 0 && <>Damage Capacity: {unit.dc}{unit.specialRules.length > 0 ? ', ' : ''}</>}
+                        {(unit.specialRules.length > 0) && <>
                             {'Notes: '}
                             <ul className="upgrade-list">
                                 {unit.specialRules.map(specialRule => (
                                     <SpecialRuleComponent rule={specialRule}/>
                                 ))}
                             </ul>
-                        </Typography>
-                    }
+                        </>
+                        }
+                    </Typography>
+
                 </Grid>
             </Grid>
         </Paper>
-    );
+    )
+        ;
 }
 
 function UnitStatsComponent(props: { unit: Unit }) {
@@ -134,7 +142,7 @@ function SpecialRuleComponent(props: { rule: SpecialRule }) {
                 ))}
             </>
         }>
-            <li>{props.rule.abbreviation ? props.rule.abbreviation : props.rule.name}</li>
+            <li><i>{props.rule.abbreviation ? props.rule.abbreviation : props.rule.name}</i></li>
         </Tooltip>
     )
 }
@@ -157,6 +165,12 @@ function unitTypeName(type: UnitType): string {
             return "INF"
         case UnitType.AV:
             return "AV"
+        case UnitType.LV:
+            return "LV"
+        case UnitType.WE:
+            return "WE"
+        case UnitType.FIGHTER:
+            return "Fighter"
         default:
             return "Unknown"
     }

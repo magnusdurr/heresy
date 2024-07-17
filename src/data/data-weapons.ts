@@ -224,5 +224,40 @@ export const weapons = {
             .withType(WeaponType.AA, 6)
             .build())
         .withRange(15)
-        .build()
+        .build(),
+
+    // TITAN WEAPONS
+    scoutTitan: {
+        vulcanMegaBolter: new Weapon.Builder("Vulcan Mega-Bolter")
+            .withRange(45)
+            .withShots(4)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 3)
+                .withType(WeaponType.AT, 5)
+                .build())
+            .build(),
+        infernoGun: new Weapon.Builder("Inferno Gun")
+            .withRange(30)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.BP, 3)
+                .withSpecialRule(specialRules.ignoreCover)
+                .build())
+            .build(),
+        turboLaserDestructor: new Weapon.Builder("Scout Turbo-Laser Destructor")
+            .withRange(45)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 5)
+                .withType(WeaponType.AT, 3)
+                .build())
+            .build(),
+        plasmaBlastgun: new Weapon.Builder("Plasma Blastgun")
+            .withRange(45)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 2)
+                .withSpecialRule(specialRules.macro)
+                .withSpecialRule(specialRules.slowFiring)
+                .build())
+            .build(),
+    }
 }

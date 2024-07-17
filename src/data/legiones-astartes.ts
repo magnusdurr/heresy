@@ -72,6 +72,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
         new FormationSpec.Builder("Assault Marine Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
             .withUnit(units.legionesAstartes.sergeant)
             .withUnit(units.legionesAstartes.legionairesAssault, 4)
+            .withUpgrades(testUpgrades.commanderAssault)
             .inSection("Fast Attack")
             .build(),
 
@@ -103,20 +104,23 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
         new FormationSpec.Builder("Warhound Titan", ItemCost.fromList(
             [ItemCategory.FORMATION, ItemCategory.FAST_ATTACK, ItemCategory.TITANS])
         )
+            .withUnit(units.titans.warhound)
             .withUpgrades(
                 testUpgrades.warhoundPair,
-                testUpgrades.st_vulcanMegaBolter,
-                testUpgrades.st_infernoGun,
-                testUpgrades.st_plasmaBlastgun,
-                testUpgrades.st_scoutTLD
+                testUpgrades.scoutTitanWeapons.vulcanMegaBolter,
+                testUpgrades.scoutTitanWeapons.infernoGun,
+                testUpgrades.scoutTitanWeapons.plasmaBlastgun,
+                testUpgrades.scoutTitanWeapons.scoutTurboLaserDestructor
             )
             .withUpgradeRestrictions(
-                new MandatoryUpgradesRestriction(2, 2, [testUpgrades.st_vulcanMegaBolter, testUpgrades.st_infernoGun, testUpgrades.st_plasmaBlastgun, testUpgrades.st_scoutTLD], "weapon upgrades"),
+                new MandatoryUpgradesRestriction(2, 2, [
+                    testUpgrades.scoutTitanWeapons.vulcanMegaBolter, testUpgrades.scoutTitanWeapons.infernoGun, testUpgrades.scoutTitanWeapons.plasmaBlastgun, testUpgrades.scoutTitanWeapons.scoutTurboLaserDestructor
+                ], "weapon upgrades"),
                 new OncePerFormationRestriction(testUpgrades.warhoundPair),
-                new OncePerFormationRestriction(testUpgrades.st_vulcanMegaBolter),
-                new OncePerFormationRestriction(testUpgrades.st_plasmaBlastgun),
-                new OncePerFormationRestriction(testUpgrades.st_infernoGun),
-                new OncePerFormationRestriction(testUpgrades.st_scoutTLD),
+                new OncePerFormationRestriction(testUpgrades.scoutTitanWeapons.vulcanMegaBolter,),
+                new OncePerFormationRestriction(testUpgrades.scoutTitanWeapons.infernoGun,),
+                new OncePerFormationRestriction(testUpgrades.scoutTitanWeapons.plasmaBlastgun,),
+                new OncePerFormationRestriction(testUpgrades.scoutTitanWeapons.scoutTurboLaserDestructor),
             )
             .inSection("Titans")
             .build(),
@@ -148,7 +152,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
 
         new FormationSpec.Builder("Leman Russ Squadron", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ALLIES_SA_SUPPORT, ItemCategory.HEAVY_SUPPORT]))
             .withUnit(units.solarAuxilia.lemanRuss, 4)
-            .withUpgrades(testUpgrades.malcadoreVanquisher)
+            .withUpgrades(testUpgrades.lemanRussVanquisher)
             .inSection("Allies - Solar Auxilia")
             .build(),
 
