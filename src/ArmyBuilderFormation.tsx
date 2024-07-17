@@ -83,7 +83,7 @@ export function DisplayFormationPanel(props: Readonly<{
 
     function costToDisplay() {
         return props.formation.costWithUpgrades().toList().filter((item) =>
-            item.category !== ItemCategory.CORE && item.category !== ItemCategory.FORMATION)
+            item.category !== ItemCategory.CORE)
     }
 
     return (

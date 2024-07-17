@@ -49,6 +49,15 @@ export const weapons = {
         )
         .build(),
 
+    bolterCombi: new Weapon.Builder("Combi-Bolter")
+        .withRange(30)
+        .withShots(2)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .build()
+        )
+        .build(),
+
     bolterHeavy: new Weapon.Builder("Heavy Bolter")
         .withRange(30)
         .withMode(new WeaponMode.Builder()
@@ -110,6 +119,23 @@ export const weapons = {
         )
         .build(),
 
+    lascannonQuadAC: new Weapon.Builder("AC Quad Lascannon")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AT, 6)
+            .withType(WeaponType.AA, 6)
+            .build()
+        )
+        .build(),
+
+    lasgun: new Weapon.Builder("Lasgun")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .build()
+        )
+        .build(),
+
     meltagun: new Weapon.Builder("Meltagun")
         .withRange(30)
         .withMode(new WeaponMode.Builder()
@@ -121,6 +147,16 @@ export const weapons = {
 
     missileLauncher: new Weapon.Builder("Missile Launcher")
         .withRange(60)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .withType(WeaponType.AT, 6)
+            .build()
+        )
+        .build(),
+
+    multilaser: new Weapon.Builder("Multi-Laser")
+        .withRange(45)
+        .withShots(2)
         .withMode(new WeaponMode.Builder()
             .withType(WeaponType.AP, 6)
             .withType(WeaponType.AT, 6)
@@ -171,5 +207,22 @@ export const weapons = {
             .withSpecialRule(specialRules.macro)
             .withAssaultType()
             .build())
+        .build(),
+
+    vanquisherCannon: new Weapon.Builder("Vanquisher Cannon")
+        .withRange(90)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .withType(WeaponType.AT, 3)
+            .build()
+        )
+        .build(),
+
+    xiphonRotaryMissiles: new Weapon.Builder("AC Rotary Missile Launcher")
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .withType(WeaponType.AA, 6)
+            .build())
+        .withRange(15)
         .build()
 }

@@ -5,6 +5,7 @@ export enum ItemCategory {
     HEAVY_SUPPORT = "Heavy Support",
     FAST_ATTACK = "Fast Attack",
     ELITE = "Elite",
+    TITANS = "Titans",
     ALLIES = "Allies",
     ALLIES_SA_SUPPORT = "Solar Auxilia Support",
     ALLIES_KN_SUPPORT = "Knight World Support"

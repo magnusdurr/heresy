@@ -26,16 +26,16 @@ export class Unit {
     }
 
     static Builder = class {
-        name: string
-        unitType: UnitType
-        armour: number
-        move: number
-        cc: number
-        ff: number
-        weapons: EquippedWeapon[]
-        specialRules: SpecialRule[]
-        dc: number
-        notes?: string
+        private readonly name: string
+        private readonly unitType: UnitType
+        private armour: number
+        private move: number
+        private cc: number
+        private ff: number
+        private weapons: EquippedWeapon[]
+        private specialRules: SpecialRule[]
+        private dc: number
+        private notes?: string
 
         constructor(name: string, unitType: UnitType) {
             this.name = name
@@ -53,26 +53,6 @@ export class Unit {
             this.move = move;
             this.armour = armour;
             this.cc = cc;
-            this.ff = ff;
-            return this;
-        }
-
-        withArmour(armour: number) {
-            this.armour = armour;
-            return this;
-        }
-
-        withMove(move: number) {
-            this.move = move;
-            return this;
-        }
-
-        withCC(cc: number) {
-            this.cc = cc;
-            return this;
-        }
-
-        withFF(ff: number) {
             this.ff = ff;
             return this;
         }
@@ -119,7 +99,7 @@ export class Unit {
 }
 
 export enum UnitType {
-    CHAR, INF, LV, AV, HAV, WE
+    CHAR, INF, LV, AV, HAV, WE, FIGHTER
 }
 
 export class SpecialRule {

@@ -36,6 +36,9 @@ export const specialRules = {
     transport: new VariableSpecialRule("Transport", [
         "Units with the *Transport* special rule can transport (x) number of INF units without *Bulky* or *Mounted*."
     ], "Transport($)"),
+    walker: new VariableSpecialRule("Walker", [
+        "Some vehicle units are noted as being walkers. They are able to negotiate dangerous terrain more easily than other vehicles. To represent this they may re-roll any failed dangerous terrain tests."
+    ]),
 
     // Weapon rules
 

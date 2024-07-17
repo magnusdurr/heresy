@@ -16,19 +16,20 @@ import {testUpgrades} from "./data-upgrades";
 export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes", "./img/LegionesAstartes.jpg")
     .withGrant([
         {category: ItemCategory.FORMATION, count: 12},
-        {category: ItemCategory.UPGRADE, count: 4},
+        {category: ItemCategory.UPGRADE, count: 5},
         {category: ItemCategory.FAST_ATTACK, count: 1}
     ])
     .withFormationRestriction(new SingleAllyTypeRestriction("Allies - Solar Auxilia", "Allies - Knight World"))
     .withUpgradeRestriction(new OncePerArmyRestriction(testUpgrades.supreme))
     .withArmySection(new ArmySection("Core", [
         new FormationSpec.Builder("Tactical Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.CORE]))
-            .withUnit(units.sergeant, 1)
-            .withUnit(units.legionairesTactical, 4)
+            .withUnit(units.legionesAstartes.sergeant, 1)
+            .withUnit(units.legionesAstartes.legionairesTactical, 4)
             .withGrant([
-                {category: ItemCategory.FAST_ATTACK, count: 2},
-                {category: ItemCategory.HEAVY_SUPPORT, count: 2},
+                {category: ItemCategory.FAST_ATTACK, count: 1.5},
+                {category: ItemCategory.HEAVY_SUPPORT, count: 1.5},
                 {category: ItemCategory.ELITE, count: 1},
+                {category: ItemCategory.TITANS, count: 1},
                 {category: ItemCategory.ALLIES, count: 1}
             ])
             .withUpgrades(
@@ -47,56 +48,61 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     ]))
     .withArmySection(new ArmySection("Heavy Support", [
         new FormationSpec.Builder("Heavy Support Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT]))
-            .withUnit(units.sergeant, 1)
-            .withUnit(units.havocs, 2)
-            .withUnit(units.rhinoSupport, 2)
-            .withUpgrades(testUpgrades.dreadnoughts, testUpgrades.commander)
+            .withUnit(units.legionesAstartes.sergeant, 1)
+            .withUnit(units.legionesAstartes.havocs, 2)
+            .withUnit(units.legionesAstartes.rhinoSupport, 2)
+            .withUpgrades(testUpgrades.dreadnoughtReplace, testUpgrades.commander)
             .inSection("Heavy Support")
             .build(),
 
         new FormationSpec.Builder("Sicarian Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT]))
-            .withUnit(units.sicarianAccelerator, 2)
+            .withUnit(units.legionesAstartes.sicarianAccelerator, 2)
             .withSingleGrant(ItemCategory.UPGRADE)
             .withUpgrades(testUpgrades.sicarianPlasma)
             .inSection("Heavy Support")
             .build(),
 
         new FormationSpec.Builder("Predator Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT]))
-            .withUnit(units.predatorDestructor, 3)
+            .withUnit(units.legionesAstartes.predatorDestructor, 3)
             .withUpgrades(testUpgrades.predatorAnnihilators)
             .inSection("Heavy Support")
             .build(),
     ]))
     .withArmySection(new ArmySection("Fast Attack", [
         new FormationSpec.Builder("Assault Marine Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
-            .withUnit(units.sergeant)
-            .withUnit(units.legionairesAssault, 4)
+            .withUnit(units.legionesAstartes.sergeant)
+            .withUnit(units.legionesAstartes.legionairesAssault, 4)
             .inSection("Fast Attack")
             .build(),
 
         new FormationSpec.Builder("Air Transport", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
-            .withUnit(units.stormEagle)
+            .withUnit(units.legionesAstartes.stormEagle)
             .withUpgrades(testUpgrades.thunderHawk)
             .inSection("Fast Attack")
             .build(),
 
         new FormationSpec.Builder("Xiphon Fighters", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK]))
+            .withUnit(units.legionesAstartes.xiphonInterceptor, 2)
             .withSingleGrant(ItemCategory.UPGRADE)
             .inSection("Fast Attack")
             .build()
     ]))
     .withArmySection(new ArmySection("Elite", [
         new FormationSpec.Builder("Terminators", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ELITE]))
+            .withUnit(units.legionesAstartes.sergeant)
+            .withUnit(units.legionesAstartes.cataphractiiTerminators, 4)
             .inSection("Elite")
-            .withUpgrades(testUpgrades.commander)
             .build(),
 
         new FormationSpec.Builder("Dreadnought Detachment", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ELITE]))
+            .withUnit(units.legionesAstartes.dreadnought, 3)
             .inSection("Elite")
             .build()
     ]))
     .withArmySection(new ArmySection("Titans", [
-        new FormationSpec.Builder("Warhound Titan", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.FAST_ATTACK, ItemCategory.FAST_ATTACK]))
+        new FormationSpec.Builder("Warhound Titan", ItemCost.fromList(
+            [ItemCategory.FORMATION, ItemCategory.FAST_ATTACK, ItemCategory.TITANS])
+        )
             .withUpgrades(
                 testUpgrades.warhoundPair,
                 testUpgrades.st_vulcanMegaBolter,
@@ -116,32 +122,39 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .build(),
 
         new FormationSpec.Builder("Reaver Titan", new ItemCost(new Map([
-            [ItemCategory.FORMATION, 2], [ItemCategory.HEAVY_SUPPORT, 1], [ItemCategory.ELITE, 2]
+            [ItemCategory.FORMATION, 2], [ItemCategory.HEAVY_SUPPORT, 1], [ItemCategory.TITANS, 2]
         ])))
             .inSection("Titans")
             .build(),
 
         new FormationSpec.Builder("Warlord Titan", new ItemCost(new Map([
-            [ItemCategory.FORMATION, 2], [ItemCategory.HEAVY_SUPPORT, 2], [ItemCategory.ELITE, 2]
+            [ItemCategory.FORMATION, 2], [ItemCategory.HEAVY_SUPPORT, 2], [ItemCategory.TITANS, 2], [ItemCategory.ELITE, 1]
         ])))
             .inSection("Titans")
             .build()
     ]))
     .withArmySection(new ArmySection("Allies - Solar Auxilia", [
         new FormationSpec.Builder("Auxilia Lasrifle Tercio", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES]))
+            .withUnit(units.solarAuxilia.auxiliaCommand)
+            .withUnit(units.solarAuxilia.auxillaries, 5)
             .inSection("Allies - Solar Auxilia")
             .withSingleGrant(ItemCategory.ALLIES_SA_SUPPORT)
             .build(),
 
         new FormationSpec.Builder("Aethon Heavy Sentinel Patrol", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ALLIES_SA_SUPPORT]))
+            .withUnit(units.solarAuxilia.aethonHeavySentinel, 4)
             .inSection("Allies - Solar Auxilia")
             .build(),
 
         new FormationSpec.Builder("Leman Russ Squadron", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ALLIES_SA_SUPPORT, ItemCategory.HEAVY_SUPPORT]))
+            .withUnit(units.solarAuxilia.lemanRuss, 4)
+            .withUpgrades(testUpgrades.malcadoreVanquisher)
             .inSection("Allies - Solar Auxilia")
             .build(),
 
         new FormationSpec.Builder("Malcador Tank Squadron", ItemCost.fromList([ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ALLIES_SA_SUPPORT, ItemCategory.HEAVY_SUPPORT]))
+            .withUnit(units.solarAuxilia.malcadore, 2)
+            .withUpgrades(testUpgrades.malcadoreVanquisher)
             .inSection("Allies - Solar Auxilia")
             .build()
     ]))
