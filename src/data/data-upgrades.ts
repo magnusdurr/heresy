@@ -6,19 +6,19 @@ import {units} from "./data-units";
 export const testUpgrades = {
     supreme: new UpgradeSpec.Builder("Supreme Commander",
         "Add a Supreme Commander in a Command Squad to the formation",
-        ItemCost.fromList([]))
+        ItemCost.free)
         .withUnitToAdd(units.legionesAstartes.supremeCommander, 1)
         .build(),
 
     specialistPlasma: new UpgradeSpec.Builder("Specialist Legionaries",
         "Add two Plasma Gun Legionaries to the formation",
-        ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.CORE]))
+        ItemCost.fromList(ItemCategory.UPGRADE))
         .withUnitToAdd(units.legionesAstartes.legionairesSpecialistPlasmaGuns, 2)
         .build(),
 
     rhinos: new UpgradeSpec.Builder("Rhinos",
         "Add enough Rhinos to transport all units in the formation, all units in the formation must fit in the Rhinos.",
-        ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK]))
+        ItemCost.fromList(ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK))
         .withUnitToAdd(units.legionesAstartes.rhino, 1)
         .build(),
 
@@ -55,21 +55,21 @@ export const testUpgrades = {
 
     predatorAnnihilators: new UpgradeSpec.Builder("Annihilators",
         "Replace the Predator Destructors with Predator Annihilators",
-        ItemCost.fromList([]))
+        ItemCost.free)
         .withUnitToAdd(units.legionesAstartes.predatorAnnihilator, 3)
         .withUnitToReplace(units.legionesAstartes.predatorDestructor, 3)
         .build(),
 
     sicarianPlasma: new UpgradeSpec.Builder("Plasma Weapons",
         "Replace the Sicarian Accelerators with Sicarian Plasma",
-        ItemCost.fromList([]))
+        ItemCost.free)
         .withUnitToAdd(units.legionesAstartes.sicarianPlasma, 2)
         .withUnitToReplace(units.legionesAstartes.sicarianAccelerator, 2)
         .build(),
 
     thunderHawk: new UpgradeSpec.Builder("Thunderhawk",
         "Replace the Storm Eagle with a Thunderhawk",
-        ItemCost.fromList([ItemCategory.UPGRADE, ItemCategory.FAST_ATTACK]))
+        ItemCost.fromList(ItemCategory.UPGRADE))
         .withUnitToAdd(units.legionesAstartes.thunderHawk)
         .withUnitToReplace(units.legionesAstartes.stormEagle)
         .build(),
@@ -119,14 +119,14 @@ export const testUpgrades = {
 
     lemanRussVanquisher: new UpgradeSpec.Builder("Vanquishers",
         "Replace the Leman Russ Battle Tanks with Leman Russ Vanquishers",
-        ItemCost.fromList([]))
+        ItemCost.free)
         .withUnitToAdd(units.solarAuxilia.lemanRussVanquisher, 4)
         .withUnitToReplace(units.solarAuxilia.lemanRuss, 4)
         .build(),
 
     malcadoreVanquisher: new UpgradeSpec.Builder("Vanquishers",
         "Replace the Malcadore Battle Tanks with Malcadore Vanquishers",
-        ItemCost.fromList([]))
+        ItemCost.free)
         .withUnitToAdd(units.solarAuxilia.malcadoreVanquisher, 2)
         .withUnitToReplace(units.solarAuxilia.malcadore, 2)
         .build()

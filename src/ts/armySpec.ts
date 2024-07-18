@@ -34,7 +34,7 @@ export class ArmySpec {
         constructor(name: string, imgUrl: string) {
             this.name = name
             this.imgUrl = imgUrl
-            this.grants = ItemCost.fromList([])
+            this.grants = ItemCost.empty
             this.formationRestrictions = []
             this.upgradeRestriction = []
             this.armySections = []

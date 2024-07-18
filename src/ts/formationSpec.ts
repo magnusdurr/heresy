@@ -57,13 +57,13 @@ export class FormationSpec {
             return this;
         }
 
-        withGrant(list: ItemCostEntry[]) {
+        withGrant(...list: ItemCostEntry[]) {
             this.grants = ItemCost.fromEntries(list);
             return this;
         }
 
         withSingleGrant(category: ItemCategory) {
-            this.grants = ItemCost.fromList([category]);
+            this.grants = ItemCost.fromList(category);
             return this;
         }
 
