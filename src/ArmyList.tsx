@@ -8,6 +8,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import {UpgradeSpec} from "./ts/upgradeSpec";
 import {ItemCategory} from "./ts/itemCategory";
 import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
+import {FormationHeader} from "./FormationHeader";
 
 export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
     return (
@@ -49,36 +50,12 @@ function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
         <>
             <Card>
                 <CardContent>
-                    <Stack direction="row" justifyContent="space-between">
-                        <Box mr={3}>
-                            <CostComponent cost={props.formation.cost.getOrZero(ItemCategory.FORMATION)}/>
-                        </Box>
-                        <Grid container spacing={1}>
-                            <Grid item sm={5} xs={12}>
-                                <Typography variant="subtitle1" sx={{lineHeight: 1}}>
-                                    {props.formation.name}<br/>
-                                    <small>{props.formation.unitCount().map(uc => uc.toDisplayString()).join(", ")}</small>
-                                </Typography>
-                            </Grid>
-                            <Grid item sm={7} xs={12}>
-                                <Stack direction="column">
-                                    <Typography variant="caption">Grants & Cost</Typography>
-                                    <Grid container columnSpacing={1}>
-                                        <CategoryChips items={props.formation.grants?.toList() ?? []}
-                                                       color={"success"}/>
-                                        <CategoryChips
-                                            items={props.formation.cost.toList().filter(it => it.category !== ItemCategory.FORMATION)}
-                                            color={"primary"}/>
-                                    </Grid>
-                                </Stack>
-                            </Grid>
-                        </Grid>
-                        <Stack>
-                            <IconButton aria-label="unit info" onClick={() => setFormationDetailsOpen(true)}>
-                                <InfoIcon/>
-                            </IconButton>
-                        </Stack>
-                    </Stack>
+                    <FormationHeader formation={props.formation}>
+                        <IconButton aria-label="unit info" onClick={() => setFormationDetailsOpen(true)}>
+                            <InfoIcon/>
+                        </IconButton>
+                    </FormationHeader>
+
                     <Box mt={1}>
                         <Typography variant="caption">Upgrades</Typography>
                     </Box>

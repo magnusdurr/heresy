@@ -3,6 +3,8 @@ import React from "react";
 import {Badge, Chip, Grid, Stack, Typography, useTheme} from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import {FormationSpec} from "./ts/formationSpec";
+import {Formation} from "./ts/formation";
 
 export function CategoryChips(props: Readonly<{ items: ItemCostEntry[], color: string }>) {
     return (
@@ -55,4 +57,14 @@ export function CostComponent(props: Readonly<{ cost: number }>) {
             <AttachMoneyIcon/>
         </Badge>
     )
+}
+
+export function FormationLabel(props: Readonly<{ formation: FormationSpec | Formation }>) {
+    const name = props.formation instanceof Formation ? props.formation.spec.name : props.formation.name;
+    const units = props.formation instanceof Formation ? props.formation.unitsInFormation() : props.formation.unitCount();
+
+    return (<Typography variant="subtitle1" sx={{lineHeight: 1}}>
+        {name}<br/>
+        <small>{units.map(uc => uc.toDisplayString()).join(", ")}</small>
+    </Typography>)
 }

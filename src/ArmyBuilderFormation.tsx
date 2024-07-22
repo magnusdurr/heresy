@@ -2,6 +2,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Box,
     Button,
     Card,
     CardActionArea,
@@ -10,7 +11,6 @@ import {
     DialogContent,
     Grid,
     IconButton,
-    Paper,
     Stack,
     Tooltip,
     Typography,
@@ -29,6 +29,7 @@ import {UpgradeSpec} from "./ts/upgradeSpec";
 import {Formation} from "./ts/formation";
 import {Upgrade} from "./ts/upgrade";
 import {ItemCategory} from "./ts/itemCategory";
+import {FormationHeader} from "./FormationHeader";
 
 export function FormationComponent(props: Readonly<{
     formation: Formation,
@@ -81,73 +82,62 @@ export function DisplayFormationPanel(props: Readonly<{
 }>) {
     const validationErrors = props.formation.checkUpgradeValidationErrors()
 
-    function costToDisplay() {
-        return props.formation.costWithUpgrades().toList()
-    }
-
     return (
-        <Paper key={props.formation.id}>
-            <Grid container alignItems="baseline" rowSpacing={1} columnSpacing={0} m={1}>
-                <Grid container direction="column" xs={10}>
-                    <Grid container direction="row" columnSpacing={1} alignItems="baseline">
+        <Card key={props.formation.id}>
+            <CardContent>
+                <FormationHeader formation={props.formation}>
+                    <>
+                        <Box>
+                            <Tooltip title="Formation Details">
+                                <IconButton size="small" onClick={() => {
+                                    props.showUnitsFunction()
+                                }}>
+                                    <InfoIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+
+                        <Box>
+                            <Tooltip title="Delete">
+                                <IconButton size="small" onClick={() => {
+                                    props.deleteFunction(props.formation.id)
+                                }}>
+                                    <DeleteIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+
+                        {props.formation.spec.availableUpgrades.length > 0 &&
+                            <Box>
+                                <Tooltip title="Upgrade">
+                                    <IconButton size="small" onClick={() => props.showUpdatesFunction()}>
+                                        <UpgradeIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
+                        }
+                    </>
+                </FormationHeader>
+
+                {props.formation.upgrades.length > 0 &&
+                    <Grid container columnSpacing={1} alignItems="center" mt={1}>
                         <Grid item>
-                            <Typography variant="h6">{props.formation.spec.name}</Typography>
+                            <Typography variant="body1" fontStyle="italic">Upgrades:</Typography>
                         </Grid>
-                        <CategoryChips items={props.formation.spec.grants?.toList() ?? []} color={"success"}/>
-                        <CategoryChips items={costToDisplay()} color={"primary"}/>
-                    </Grid>
-
-                    <Typography mt={1}
-                                variant="body2">{props.formation.unitsInFormation().map(uc => uc.toDisplayString()).join(", ")}</Typography>
-
-                    {props.formation.upgrades.length > 0 &&
-                        <Grid container columnSpacing={1} alignItems="center" mt={1}>
+                        {props.formation.upgrades.map((upgrade) => (
                             <Grid item>
-                                <Typography variant="body1" fontStyle="italic">Upgrades:</Typography>
+                                <DisplayUpgradePanel upgrade={upgrade}
+                                                     removeUpdateFunction={props.removeUpdateFunction}/>
                             </Grid>
-                            {props.formation.upgrades.map((upgrade) => (
-                                <Grid item>
-                                    <DisplayUpgradePanel upgrade={upgrade}
-                                                         removeUpdateFunction={props.removeUpdateFunction}/>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    }
+                        ))}
+                    </Grid>
+                }
 
-                    {validationErrors.map((error) => (
-                        <Grid item xs={12}>
-                            <ValidationError message={error.message!}/>
-                        </Grid>
-                    ))}
-                </Grid>
-
-                <Grid item xs={2}>
-                    <Tooltip title="Formation Details">
-                        <IconButton size="small" onClick={() => {
-                            props.showUnitsFunction()
-                        }}>
-                            <InfoIcon/>
-                        </IconButton>
-                    </Tooltip>
-
-                    <Tooltip title="Delete">
-                        <IconButton size="small" onClick={() => {
-                            props.deleteFunction(props.formation.id)
-                        }}>
-                            <DeleteIcon/>
-                        </IconButton>
-                    </Tooltip>
-
-                    {props.formation.spec.availableUpgrades.length > 0 &&
-                        <Tooltip title="Upgrade">
-                            <IconButton size="small" onClick={() => props.showUpdatesFunction()}>
-                                <UpgradeIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    }
-                </Grid>
-            </Grid>
-        </Paper>
+                {validationErrors.map((error) => (
+                    <ValidationError message={error.message!}/>
+                ))}
+            </CardContent>
+        </Card>
     )
 }
 
