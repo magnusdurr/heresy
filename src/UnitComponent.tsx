@@ -17,11 +17,10 @@ import Markdown from 'react-markdown';
 import {EquippedWeapon} from "./ts/weapon";
 
 type UnitComponentProps = {
-    unit: Unit,
-    count: number
+    unit: Unit
 }
 
-export function UnitComponent({unit, count}: UnitComponentProps) {
+export function UnitComponent({unit}: UnitComponentProps) {
 
     return (
         <Paper style={{padding: '5px 10px 5px 10px'}} elevation={5}>
@@ -29,7 +28,6 @@ export function UnitComponent({unit, count}: UnitComponentProps) {
                 <>
                     <Typography variant="subtitle1">
                         <b>
-                            {count > 1 ? count + 'x ' : ''}
                             {unit.name}
                             {unit.unitType === UnitType.CHAR && ' (Character)'}
                         </b>

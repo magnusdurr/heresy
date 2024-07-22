@@ -1,29 +1,13 @@
 import {ArmySpec} from "./ts/armySpec";
 import {ArmySection} from "./ts/armySection";
-import {
-    Box,
-    Card,
-    CardContent,
-    CardHeader,
-    Collapse,
-    Divider,
-    Grid,
-    IconButton,
-    Stack,
-    Tooltip,
-    Typography
-} from "@mui/material";
+import {Box, Card, CardContent, Divider, Grid, IconButton, Stack, Tooltip, Typography} from "@mui/material";
 import {CategoryChips, CostComponent} from "./ArmyBuilderUtils";
 import React from "react";
 import {FormationSpec} from "./ts/formationSpec";
-
-import ShieldIcon from '@mui/icons-material/Shield';
 import InfoIcon from '@mui/icons-material/Info';
-import CancelIcon from '@mui/icons-material/Cancel';
 import {UpgradeSpec} from "./ts/upgradeSpec";
-import {UnitComponent} from "./UnitComponent";
-import {Unit} from "./ts/unit";
 import {ItemCategory} from "./ts/itemCategory";
+import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
 
 export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
     return (
@@ -52,85 +36,68 @@ function DisplayArmySection(props: Readonly<{ section: ArmySection }>) {
         <Stack spacing={1}>
             <Typography variant="caption">{props.section.name}</Typography>
             {props.section.formations.map((formation) => (
-                <ListFormation formation={formation}/>
+                <DisplayListFormation formation={formation}/>
             ))}
         </Stack>
     )
 }
 
-function ListFormation(props: Readonly<{ formation: FormationSpec }>) {
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
-    const unitsFromUpgrades: Unit[] = props.formation.availableUpgrades.map((upgrade) =>
-        Array.from(upgrade.unitsToAdd).map(entry => entry[0])).flat()
+function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
+    const [formationDetailsOpen, setFormationDetailsOpen] = React.useState(false);
 
     return (
-        <Card>
-            <CardHeader sx={{paddingBottom: 0}}
-                        action={
-                            <IconButton aria-label="unit info" onClick={handleExpandClick}>
-                                {!expanded ? <InfoIcon/> : <CancelIcon/>}
-                            </IconButton>
-                        }
-                        avatar={<ShieldIcon/>}
-                        title={props.formation.name}
-                        subheader={props.formation.unitCount().map(uc => uc.toDisplayString()).join(", ")}
-            />
-            <CardContent>
-                <Stack direction="row" alignItems="center" columnGap={2}>
-                    <CostComponent cost={props.formation.cost.getOrZero(ItemCategory.FORMATION)}/>
-                    <Stack direction="column">
-                        <Typography variant="caption">Grants & Cost</Typography>
-                        <Grid container spacing={1}>
-                            <CategoryChips items={props.formation.grants?.toList() ?? []} color={"success"}/>
-                            <CategoryChips
-                                items={props.formation.cost.toList().filter(it => it.category !== ItemCategory.FORMATION)}
-                                color={"primary"}/>
-                        </Grid>
-                    </Stack>
-                </Stack>
-
-                {props.formation.availableUpgrades.length > 0 &&
-                    <>
-                        <Box mt={1}>
-                            <Typography variant="caption">Upgrades</Typography>
+        <>
+            <Card>
+                <CardContent>
+                    <Stack direction="row" justifyContent="space-between">
+                        <Box mr={3}>
+                            <CostComponent cost={props.formation.cost.getOrZero(ItemCategory.FORMATION)}/>
                         </Box>
-                        <Typography variant="body2">
-                            <ul className="upgrade-list">
-                                {props.formation.availableUpgrades.map(upgrade => (
-                                    <Tooltip title={<UpgradeTooltip upgrade={upgrade}/>} enterTouchDelay={0}>
-                                        <li key={upgrade.name}>{upgrade.name} <InfoIcon fontSize="inherit"/></li>
-                                    </Tooltip>
-                                ))}
-                            </ul>
-                        </Typography>
-                    </>}
-            </CardContent>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent sx={{m: 0.5, p: 0}}>
-                    <Stack spacing={3}>
-                        <Stack spacing={1}>
-                            <Typography variant="caption">Units</Typography>
-                            {Array.from(props.formation.units.keys()).map((entry, index) => (
-                                <UnitComponent key={index} unit={entry} count={1}/>
-                            ))}
+                        <Grid container spacing={1}>
+                            <Grid item sm={5} xs={12}>
+                                <Typography variant="subtitle1" sx={{lineHeight: 1}}>
+                                    {props.formation.name}<br/>
+                                    <small>{props.formation.unitCount().map(uc => uc.toDisplayString()).join(", ")}</small>
+                                </Typography>
+                            </Grid>
+                            <Grid item sm={7} xs={12}>
+                                <Stack direction="column">
+                                    <Typography variant="caption">Grants & Cost</Typography>
+                                    <Grid container columnSpacing={1}>
+                                        <CategoryChips items={props.formation.grants?.toList() ?? []}
+                                                       color={"success"}/>
+                                        <CategoryChips
+                                            items={props.formation.cost.toList().filter(it => it.category !== ItemCategory.FORMATION)}
+                                            color={"primary"}/>
+                                    </Grid>
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                        <Stack>
+                            <IconButton aria-label="unit info" onClick={() => setFormationDetailsOpen(true)}>
+                                <InfoIcon/>
+                            </IconButton>
                         </Stack>
-
-                        {unitsFromUpgrades.length > 0 &&
-                            <Stack spacing={1}>
-                                <Typography variant="caption">Upgrades</Typography>
-                                {unitsFromUpgrades.map((unit, index) => (
-                                    <UnitComponent key={index} unit={unit} count={1}/>
-                                ))}
-                            </Stack>}
                     </Stack>
+                    <Box mt={1}>
+                        <Typography variant="caption">Upgrades</Typography>
+                    </Box>
+                    <Typography variant="body2">
+                        <ul className="upgrade-list">
+                            {props.formation.availableUpgrades.map(upgrade => (
+                                <Tooltip title={<UpgradeTooltip upgrade={upgrade}/>} enterTouchDelay={0}>
+                                    <li key={upgrade.name}>{upgrade.name} <InfoIcon fontSize="inherit"/></li>
+                                </Tooltip>
+                            ))}
+                        </ul>
+                    </Typography>
                 </CardContent>
-            </Collapse>
-        </Card>
+            </Card>
+
+            <DisplayUnitsDialog formation={props.formation}
+                                isDialogOpen={formationDetailsOpen}
+                                closeDialogFunction={() => setFormationDetailsOpen(false)}/>
+        </>
     )
 }
 

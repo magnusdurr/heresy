@@ -24,6 +24,22 @@ export class FormationSpec {
         this.upgradeRestrictions = upgradeRestrictions;
     }
 
+    possibleUpgradeUnits(): UnitCount[] {
+        const result = new Map();
+
+        this.availableUpgrades.forEach(upgrade => {
+            upgrade.unitsToAdd.forEach((count, unit) => {
+                result.set(unit, (result.get(unit) || 0) + count);
+            });
+        })
+
+        return this.mapToUnitCount(result).filter(unitCount => unitCount.count > 0)
+    }
+
+    mapToUnitCount(values: Map<Unit, number>): UnitCount[] {
+        return Array.from(values.entries()).map(([unit, count]) => new UnitCount(unit, count));
+    }
+
     unitCount(): UnitCount[] {
         return Array.from(this.units.entries()).map(([unit, count]) => (new UnitCount(unit, count)));
     }
