@@ -92,6 +92,15 @@ export const weapons = {
         )
         .build(),
 
+    deathwind: new Weapon.Builder("Deathwind")
+        .withRange(15)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .withType(WeaponType.AT, 6)
+            .build()
+        )
+        .build(),
+
     lascannon: new Weapon.Builder("Lascannon")
         .withRange(45)
         .withMode(new WeaponMode.Builder()

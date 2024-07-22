@@ -52,9 +52,10 @@ export function UnitComponent({unit, count}: UnitComponentProps) {
 
                 <Grid item xs={12}>
                     <Typography variant="body2">
-                        {unit.dc > 0 && <>Damage Capacity: {unit.dc}{unit.specialRules.length > 0 ? ', ' : ''}</>}
+                        {unit.dc > 0 && <>Damage Capacity: {unit.dc}</>}
+                        {unit.dc > 0 && unit.specialRules.length > 0 ? '; ' : ''}
                         {(unit.specialRules.length > 0) && <>
-                            {'Notes: '}
+                            {'Special Rules: '}
                             <ul className="upgrade-list">
                                 {unit.specialRules.map(specialRule => (
                                     <SpecialRuleComponent rule={specialRule}/>
@@ -62,6 +63,8 @@ export function UnitComponent({unit, count}: UnitComponentProps) {
                             </ul>
                         </>
                         }
+                        {unit.notes !== undefined && unit.specialRules.length > 0 ? '; ' : ''}
+                        {unit.notes !== undefined && <>Notes: <i>{unit.notes}</i></>}
                     </Typography>
 
                 </Grid>
@@ -153,10 +156,13 @@ function UnitStatItem(props: { label: string, value: any, suffix?: string }) {
     return (
         <Stack direction="column" alignItems="center">
             <Typography variant="caption">{props.label}</Typography>
-            <Typography variant="body2">
-                {props.value}
-                {props.suffix !== undefined && props.suffix}
-            </Typography>
+            {props.value === 0 ?
+                <Typography variant="body2">-</Typography> :
+                <Typography variant="body2">
+                    {props.value}
+                    {props.suffix !== undefined && props.suffix}
+                </Typography>
+            }
         </Stack>
     )
 }

@@ -23,7 +23,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     .withUpgradeRestriction(new OncePerArmyRestriction(testUpgrades.supreme))
     .withArmySection(new ArmySection("Core", [
         new FormationSpec.Builder("Tactical Detachment", ItemCost.fromList(ItemCategory.FORMATION))
-            .withUnit(units.legionesAstartes.sergeant, 1)
+            .withUnit(units.legionesAstartes.lieutenant, 1)
             .withUnit(units.legionesAstartes.legionairesTactical, 4)
             .withGrant(
                 {category: ItemCategory.FAST_ATTACK, count: 1.5},
@@ -34,24 +34,26 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             )
             .withUpgrades(
                 testUpgrades.supreme,
-                testUpgrades.commander,
+                testUpgrades.chaplain,
                 testUpgrades.specialistPlasma,
                 testUpgrades.rhinos,
                 testUpgrades.dreadnoughts,
+                testUpgrades.dropPod
             )
             .withUpgradeRestrictions(
                 new OncePerFormationRestriction(testUpgrades.specialistPlasma),
+                new OncePerFormationRestriction(testUpgrades.dropPod),
                 new OneFromGroupRestriction([testUpgrades.rhinos, testUpgrades.dreadnoughts]),
-                new OneFromGroupRestriction([testUpgrades.supreme, testUpgrades.commander])
+                new OneFromGroupRestriction([testUpgrades.supreme, testUpgrades.chaplain])
             )
             .build()
     ]))
     .withArmySection(new ArmySection("Heavy Support", [
         new FormationSpec.Builder("Heavy Support Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT))
-            .withUnit(units.legionesAstartes.sergeant, 1)
+            .withUnit(units.legionesAstartes.lieutenant, 1)
             .withUnit(units.legionesAstartes.havocs, 2)
             .withUnit(units.legionesAstartes.rhinoSupport, 2)
-            .withUpgrades(testUpgrades.dreadnoughtReplace, testUpgrades.commander)
+            .withUpgrades(testUpgrades.dreadnoughtReplace, testUpgrades.chaplain)
             .inSection("Heavy Support")
             .build(),
 
@@ -70,9 +72,9 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     ]))
     .withArmySection(new ArmySection("Fast Attack", [
         new FormationSpec.Builder("Assault Marine Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.FAST_ATTACK))
-            .withUnit(units.legionesAstartes.sergeant)
+            .withUnit(units.legionesAstartes.lieutenant)
             .withUnit(units.legionesAstartes.legionairesAssault, 4)
-            .withUpgrades(testUpgrades.commanderAssault)
+            .withUpgrades(testUpgrades.chaplain)
             .inSection("Fast Attack")
             .build(),
 
@@ -90,7 +92,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     ]))
     .withArmySection(new ArmySection("Elite", [
         new FormationSpec.Builder("Terminators", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.ELITE))
-            .withUnit(units.legionesAstartes.sergeant)
+            .withUnit(units.legionesAstartes.lieutenant)
             .withUnit(units.legionesAstartes.cataphractiiTerminators, 4)
             .inSection("Elite")
             .build(),

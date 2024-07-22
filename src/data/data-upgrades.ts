@@ -41,16 +41,17 @@ export const testUpgrades = {
         .withUnitToAdd(units.legionesAstartes.dreadnought, 2)
         .build(),
 
-    commander: new UpgradeSpec.Builder("Chaplain",
-        "Add one Chaplain in a Command Squad to the formation",
-        new ItemCost(new Map([[ItemCategory.UPGRADE, 1], [ItemCategory.ELITE, 0.5]])))
-        .withUnitToAdd(units.legionesAstartes.chaplain, 1)
+    dropPod: new UpgradeSpec.Builder("Drop Pod",
+        "The formation will enter play in a Drop Pod, all units in the formation must fit in the Drop Pod to take this upgrade.",
+        ItemCost.fromList(ItemCategory.UPGRADE))
+        .withUnitToAdd(units.legionesAstartes.dropPod)
         .build(),
 
-    commanderAssault: new UpgradeSpec.Builder("Chaplain",
-        "Add one Chaplain in an Assault Command Squad to the formation",
+    chaplain: new UpgradeSpec.Builder("Chaplain",
+        "Replace the formation Lieutenant with a Chaplain",
         new ItemCost(new Map([[ItemCategory.UPGRADE, 1], [ItemCategory.ELITE, 0.5]])))
-        .withUnitToAdd(units.legionesAstartes.chaplainAssault, 1)
+        .withUnitToAdd(units.legionesAstartes.chaplain)
+        .withUnitToReplace(units.legionesAstartes.lieutenant)
         .build(),
 
     predatorAnnihilators: new UpgradeSpec.Builder("Annihilators",

@@ -7,7 +7,7 @@ export const specialRules = {
         "Units with *Blitz* adds 5cm to their movement when they make a charge move."
     ]),
     bulky: new SpecialRule("Bulky", [
-        "Units takes extra space in transports... TODO"
+        "Units takes one extra space in assault transports."
     ]),
     command: new VariableSpecialRule("Command", [
         "Some units and characters are noted as being commanders. Commanders can order up to three formations of troops to follow them when they make an assault, as long as all the formations have at least one unit within (x)cm of a unit from the commander’s formation.",
@@ -36,6 +36,9 @@ export const specialRules = {
     transport: new VariableSpecialRule("Transport", [
         "Units with the *Transport* special rule can transport (x) number of INF units without *Bulky* or *Mounted*."
     ], "Transport($)"),
+    transportAssault: new VariableSpecialRule("Assault Transport", [
+        "Units with the *Assault Transport* special rule can transport (x) number of INF units or AV units with the *Walker* special rule."
+    ], "Assault Transport($)"),
     voidShield: new VariableSpecialRule("Void Shield", [
         "Imperial Titans are protected by void shield generators. The number of void shields each Titan has is noted on the Titan’s datasheet.",
         "Each void shield will automatically stop one point of damage and then go down. Do not make armour saves for damage stopped by void shields, nor allocate Blast markers. Once all of the shields have been knocked down, the Titan may be damaged normally and you may make saving throws against any hits that are scored. Hits from close combat ignore void shields but units using their firefight values must first knock down any shields before they can damage the Titan.",

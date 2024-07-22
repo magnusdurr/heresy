@@ -225,7 +225,9 @@ export function DisplayUpgradeSpec(props: Readonly<{
                             </Stack>
                         </Grid>
                         {showAsEnabled &&
-                            <CategoryChips items={props.upgrade.cost.toList()} color="primary"/>}
+                            <CategoryChips
+                                items={props.upgrade.cost.toList().filter(it => it.category !== ItemCategory.UPGRADE)}
+                                color="primary"/>}
 
                         {!showAsEnabled && <Grid item xs={8}>
                             <ValidationWarning message={canApplyUpgrade.message!}/>
