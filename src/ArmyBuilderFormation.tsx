@@ -2,7 +2,6 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
-    Box,
     Button,
     Card,
     CardActionArea,
@@ -16,11 +15,9 @@ import {
     Typography,
     useTheme
 } from "@mui/material";
-import UpgradeIcon from "@mui/icons-material/Upgrade";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, {useContext} from "react";
-import InfoIcon from '@mui/icons-material/Info';
-import {CategoryChips, CostComponent, ValidationError, ValidationWarning} from "./ArmyBuilderUtils";
+import {CategoryChips, CostComponent, ValidationWarning} from "./ArmyBuilderUtils";
 import {ValidationResult} from "./ts/restrictions";
 import {FormationSpec} from "./ts/formationSpec";
 import {ArmyContext} from "./ArmyBuilder";
@@ -29,7 +26,7 @@ import {UpgradeSpec} from "./ts/upgradeSpec";
 import {Formation} from "./ts/formation";
 import {Upgrade} from "./ts/upgrade";
 import {ItemCategory} from "./ts/itemCategory";
-import {FormationHeader} from "./FormationHeader";
+import {DisplayFormationPanel} from "./DisplayFormationPanel";
 
 export function FormationComponent(props: Readonly<{
     formation: Formation,
@@ -69,75 +66,6 @@ export function FormationComponent(props: Readonly<{
                                 isDialogOpen={formationDetailsOpen}
                                 closeDialogFunction={() => setFormationDetailsOpen(false)}/>
         </>
-    )
-}
-
-export function DisplayFormationPanel(props: Readonly<{
-    formation: Formation,
-    deleteFunction: (id: string) => void
-    updateFunction: (id: string) => void
-    removeUpdateFunction: (id: string) => void
-    showUpdatesFunction: () => void
-    showUnitsFunction: () => void
-}>) {
-    const validationErrors = props.formation.checkUpgradeValidationErrors()
-
-    return (
-        <Card key={props.formation.id}>
-            <CardContent>
-                <FormationHeader formation={props.formation}>
-                    <>
-                        <Box>
-                            <Tooltip title="Formation Details">
-                                <IconButton size="small" onClick={() => {
-                                    props.showUnitsFunction()
-                                }}>
-                                    <InfoIcon/>
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-
-                        <Box>
-                            <Tooltip title="Delete">
-                                <IconButton size="small" onClick={() => {
-                                    props.deleteFunction(props.formation.id)
-                                }}>
-                                    <DeleteIcon/>
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-
-                        {props.formation.spec.availableUpgrades.length > 0 &&
-                            <Box>
-                                <Tooltip title="Upgrade">
-                                    <IconButton size="small" onClick={() => props.showUpdatesFunction()}>
-                                        <UpgradeIcon/>
-                                    </IconButton>
-                                </Tooltip>
-                            </Box>
-                        }
-                    </>
-                </FormationHeader>
-
-                {props.formation.upgrades.length > 0 &&
-                    <Grid container columnSpacing={1} alignItems="center" mt={1}>
-                        <Grid item>
-                            <Typography variant="body1" fontStyle="italic">Upgrades:</Typography>
-                        </Grid>
-                        {props.formation.upgrades.map((upgrade) => (
-                            <Grid item>
-                                <DisplayUpgradePanel upgrade={upgrade}
-                                                     removeUpdateFunction={props.removeUpdateFunction}/>
-                            </Grid>
-                        ))}
-                    </Grid>
-                }
-
-                {validationErrors.map((error) => (
-                    <ValidationError message={error.message!}/>
-                ))}
-            </CardContent>
-        </Card>
     )
 }
 

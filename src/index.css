@@ -50,7 +50,8 @@ code {
 }
 
 .upgrade-list li {
-    display: inline;
+    display: inline-block;
+    margin-right: 5px;
 }
 
 .upgrade-list li:hover {
@@ -58,11 +59,32 @@ code {
 }
 
 .upgrade-list li::after {
-    content: ", ";
+    margin-right: 5px;
     text-decoration: none;
 }
 
 .upgrade-list li:last-child::after {
+    content: "";
+    text-decoration: none;
+}
+
+.upgrade-list-no-commas {
+    display: inline;
+    list-style: none;
+    padding: 0;
+    text-decoration: none;
+}
+
+.upgrade-list-no-commas li {
+    display: inline-block;
+}
+
+.upgrade-list-no-commas li::after {
+    content: " ";
+    text-decoration: none;
+}
+
+.upgrade-list-no-commas li:last-child::after {
     content: "";
     text-decoration: none;
 }

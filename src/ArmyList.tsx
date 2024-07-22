@@ -1,7 +1,7 @@
 import {ArmySpec} from "./ts/armySpec";
 import {ArmySection} from "./ts/armySection";
-import {Box, Card, CardContent, Divider, Grid, IconButton, Stack, Tooltip, Typography} from "@mui/material";
-import {CategoryChips, CostComponent} from "./ArmyBuilderUtils";
+import {Box, Card, Divider, Grid, IconButton, Stack, Tooltip, Typography} from "@mui/material";
+import {CategoryChips, CostComponent, HeresyCardContent} from "./ArmyBuilderUtils";
 import React from "react";
 import {FormationSpec} from "./ts/formationSpec";
 import InfoIcon from '@mui/icons-material/Info';
@@ -49,11 +49,13 @@ function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
     return (
         <>
             <Card>
-                <CardContent>
+                <HeresyCardContent>
                     <FormationHeader formation={props.formation}>
-                        <IconButton aria-label="unit info" onClick={() => setFormationDetailsOpen(true)}>
-                            <InfoIcon/>
-                        </IconButton>
+                        <Box>
+                            <IconButton aria-label="unit info" onClick={() => setFormationDetailsOpen(true)}>
+                                <InfoIcon/>
+                            </IconButton>
+                        </Box>
                     </FormationHeader>
 
                     <Box mt={1}>
@@ -68,7 +70,7 @@ function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
                             ))}
                         </ul>
                     </Typography>
-                </CardContent>
+                </HeresyCardContent>
             </Card>
 
             <DisplayUnitsDialog formation={props.formation}

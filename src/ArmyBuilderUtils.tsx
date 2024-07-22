@@ -1,6 +1,6 @@
 import {ItemCostEntry} from "./ts/itemCost";
 import React from "react";
-import {Badge, Chip, Grid, Stack, Typography, useTheme} from "@mui/material";
+import {Badge, CardContent, Chip, Grid, Stack, styled, Typography, useTheme} from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import {FormationSpec} from "./ts/formationSpec";
@@ -68,3 +68,10 @@ export function FormationLabel(props: Readonly<{ formation: FormationSpec | Form
         <small>{units.map(uc => uc.toDisplayString()).join(", ")}</small>
     </Typography>)
 }
+
+export const HeresyCardContent = styled(CardContent)(`
+      padding: 20px 10px 5px 5px;
+      &:last-child {
+        padding-bottom: 5px;
+      }
+    `);

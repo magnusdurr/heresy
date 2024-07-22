@@ -1,5 +1,6 @@
 import {FormationSpec} from "./ts/formationSpec";
-import {Box, Grid, Stack, Typography} from "@mui/material";
+import {Stack, Typography} from "@mui/material";
+import Grid from '@mui/material/Unstable_Grid2';
 import {CategoryChips, CostComponent, FormationLabel} from "./ArmyBuilderUtils";
 import {ItemCategory} from "./ts/itemCategory";
 import React from "react";
@@ -14,30 +15,28 @@ export function FormationHeader({formation, children}: React.PropsWithChildren<F
     const cost = formation instanceof Formation ? formation.costWithUpgrades() : formationSpec.cost;
 
     return (
-        <Stack direction="row" justifyContent="space-between">
-            <Box mr={3}>
-                <CostComponent cost={cost.getOrZero(ItemCategory.FORMATION)}/>
-            </Box>
-            <Grid container spacing={1}>
-                <Grid item sm={5} xs={12}>
-                    <FormationLabel formation={formation}/>
-                </Grid>
-                <Grid item sm={7} xs={12}>
-                    <Stack direction="column">
-                        <Typography variant="caption">Grants & Cost</Typography>
-                        <Grid container columnSpacing={1}>
-                            <CategoryChips items={formationSpec.grants?.toList() ?? []}
-                                           color={"success"}/>
-                            <CategoryChips
-                                items={cost.toList().filter(it => it.category !== ItemCategory.FORMATION)}
-                                color={"primary"}/>
-                        </Grid>
-                    </Stack>
-                </Grid>
-            </Grid>
-            <Stack direction="row">
+        <Grid container spacing={1}>
+            <Grid justifyContent="end" display="flex" sm={2} xs={3} order={{sm: 3, xs: 2}}>
                 {children}
-            </Stack>
-        </Stack>
+            </Grid>
+            <Grid sm={5} xs={9} order={{xs: 1}}>
+                <Stack direction="row" spacing={2}>
+                    <CostComponent cost={cost.getOrZero(ItemCategory.FORMATION)}/>
+                    <FormationLabel formation={formation}/>
+                </Stack>
+            </Grid>
+            <Grid sm={5} xs={12} order={{sm: 2, xs: 3}}>
+                <Stack direction="column">
+                    <Typography variant="caption">Grants & Cost</Typography>
+                    <Grid container columnSpacing={1}>
+                        <CategoryChips items={formationSpec.grants?.toList() ?? []}
+                                       color={"success"}/>
+                        <CategoryChips
+                            items={cost.toList().filter(it => it.category !== ItemCategory.FORMATION)}
+                            color={"primary"}/>
+                    </Grid>
+                </Stack>
+            </Grid>
+        </Grid>
     )
 }
