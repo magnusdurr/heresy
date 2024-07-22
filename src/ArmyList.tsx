@@ -13,7 +13,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import {CategoryChips} from "./ArmyBuilderUtils";
+import {CategoryChips, CostComponent} from "./ArmyBuilderUtils";
 import React from "react";
 import {FormationSpec} from "./ts/formationSpec";
 
@@ -23,6 +23,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import {UpgradeSpec} from "./ts/upgradeSpec";
 import {UnitComponent} from "./UnitComponent";
 import {Unit} from "./ts/unit";
+import {ItemCategory} from "./ts/itemCategory";
 
 export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
     return (
@@ -80,11 +81,18 @@ function ListFormation(props: Readonly<{ formation: FormationSpec }>) {
                         subheader={props.formation.unitCount().map(uc => uc.toDisplayString()).join(", ")}
             />
             <CardContent>
-                <Typography variant="caption">Grants & Cost</Typography>
-                <Grid container spacing={1}>
-                    <CategoryChips items={props.formation.grants?.toList() ?? []} color={"success"}/>
-                    <CategoryChips items={props.formation.cost.toList()} color={"primary"}/>
-                </Grid>
+                <Stack direction="row" alignItems="center" columnGap={2}>
+                    <CostComponent cost={props.formation.cost.getOrZero(ItemCategory.FORMATION)}/>
+                    <Stack direction="column">
+                        <Typography variant="caption">Grants & Cost</Typography>
+                        <Grid container spacing={1}>
+                            <CategoryChips items={props.formation.grants?.toList() ?? []} color={"success"}/>
+                            <CategoryChips
+                                items={props.formation.cost.toList().filter(it => it.category !== ItemCategory.FORMATION)}
+                                color={"primary"}/>
+                        </Grid>
+                    </Stack>
+                </Stack>
 
                 {props.formation.availableUpgrades.length > 0 &&
                     <>
@@ -129,10 +137,14 @@ function ListFormation(props: Readonly<{ formation: FormationSpec }>) {
 function UpgradeTooltip(props: { upgrade: UpgradeSpec }) {
     return (
         <Stack spacing={1} pb={1}>
-            <Typography variant="caption">{props.upgrade.name}</Typography>
+            <Stack direction="row" justifyContent="space-between">
+                <Typography variant="caption">{props.upgrade.name}</Typography>
+                <CostComponent cost={props.upgrade.cost.getOrZero(ItemCategory.UPGRADE)}/>
+            </Stack>
             <Typography variant="body2">{props.upgrade.description}</Typography>
             <Grid container spacing={1}>
-                <CategoryChips items={props.upgrade.cost.toList()} color="primary"/>
+                <CategoryChips items={props.upgrade.cost.toList().filter(it => it.category !== ItemCategory.UPGRADE)}
+                               color="primary"/>
             </Grid>
         </Stack>
     )
