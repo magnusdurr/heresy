@@ -22,7 +22,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
     .withFormationRestriction(new SingleAllyTypeRestriction("Allies - Solar Auxilia", "Allies - Knight World"))
     .withUpgradeRestriction(new OncePerArmyRestriction(testUpgrades.supreme))
     .withArmySection(new ArmySection("Core", [
-        new FormationSpec.Builder("Tactical Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.CORE))
+        new FormationSpec.Builder("Tactical Detachment", ItemCost.fromList(ItemCategory.FORMATION))
             .withUnit(units.legionesAstartes.sergeant, 1)
             .withUnit(units.legionesAstartes.legionairesTactical, 4)
             .withGrant(

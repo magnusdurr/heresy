@@ -103,7 +103,7 @@ function ListFormation(props: Readonly<{ formation: FormationSpec }>) {
                     </>}
             </CardContent>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
+                <CardContent sx={{m: 0.5, p: 0}}>
                     <Stack spacing={3}>
                         <Stack spacing={1}>
                             <Typography variant="caption">Units</Typography>

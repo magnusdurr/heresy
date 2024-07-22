@@ -1,4 +1,14 @@
-import {Container, createTheme, CssBaseline, IconButton, Stack, ThemeProvider, Tooltip, Typography} from '@mui/material'
+import {
+    Container,
+    createTheme,
+    CssBaseline,
+    IconButton,
+    Stack,
+    ThemeProvider,
+    Tooltip,
+    Typography,
+    useMediaQuery
+} from '@mui/material'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -26,11 +36,14 @@ function App() {
         setDarkMode(!darkMode)
     }
 
+    const lessThanSmall = useMediaQuery(theme.breakpoints.down("sm"));
+
+
     return (
         <Container maxWidth="md">
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
-                <Stack direction='row' mt="50px" justifyContent="space-between">
+                <Stack direction='row' mt="10px" justifyContent="space-between">
                     <Stack direction="column" justifyContent="center">
                         <Typography variant="h5">
                             {army === null && "Select your army"}

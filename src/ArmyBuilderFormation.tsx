@@ -65,7 +65,7 @@ export function FormationComponent(props: Readonly<{
                                     closeDialogFunction={() => setUpgradeDialogOpen(false)}/>
 
             <DisplayUnitsDialog formation={props.formation}
-                                upgradeDialogOpen={formationDetailsOpen}
+                                isDialogOpen={formationDetailsOpen}
                                 closeDialogFunction={() => setFormationDetailsOpen(false)}/>
         </>
     )
@@ -82,8 +82,7 @@ export function DisplayFormationPanel(props: Readonly<{
     const validationErrors = props.formation.checkUpgradeValidationErrors()
 
     function costToDisplay() {
-        return props.formation.costWithUpgrades().toList().filter((item) =>
-            item.category !== ItemCategory.CORE)
+        return props.formation.costWithUpgrades().toList()
     }
 
     return (
@@ -300,7 +299,7 @@ export function DisplayFormationSpecToAdd(props: Readonly<{
     closePopupFunction: () => void
 }>) {
     const costToDisplay = props.formation.cost.toList().filter(
-        (item) => item.category !== ItemCategory.CORE && item.category !== ItemCategory.FORMATION && item.category !== ItemCategory.UPGRADE)
+        (item) => item.category !== ItemCategory.FORMATION && item.category !== ItemCategory.UPGRADE)
 
     const nameWidth = props.validation.success ? 'auto' : 4
 

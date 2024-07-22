@@ -6,13 +6,13 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 export function CategoryChips(props: Readonly<{ items: ItemCostEntry[], color: string }>) {
     return (
-        <React.Fragment>
+        <>
             {props.items.map((categoryCount) => (
                 <Grid item key={categoryCount.category}>
                     <CategoryChip categoryCount={categoryCount} color={props.color}/>
                 </Grid>
             ))}
-        </React.Fragment>
+        </>
     )
 }
 

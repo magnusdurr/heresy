@@ -4,62 +4,61 @@ import ErrorIcon from "@mui/icons-material/Error";
 import {ArmyAllocation} from "./ts/armyAllocation";
 import {ItemCategory} from "./ts/itemCategory";
 
-export function ArmyAllocationPanel(props: Readonly<{ armyAllocation: ArmyAllocation }>) {
+type ArmyAllocationPanelProps = {
+    armyAllocation: ArmyAllocation
+}
+
+export function ArmyAllocationPanel({armyAllocation}: ArmyAllocationPanelProps) {
     return (
         <Grid container spacing={1}>
             {Object.keys(ItemCategory).map((key) => (ItemCategory[key as keyof typeof ItemCategory]))
-                .filter((category) => category !== ItemCategory.CORE)
                 .map((category) => (
-                    <Grid item key={category}>
-                        <ArmyAllowanceComponent name={category}
-                                                available={props.armyAllocation.grants.getOrZero(category)}
-                                                used={props.armyAllocation.cost.getOrZero(category)}/>
-                    </Grid>
+                    <ArmyAllowanceComponent name={category}
+                                            available={armyAllocation.grants.getOrZero(category)}
+                                            used={armyAllocation.cost.getOrZero(category)}/>
                 ))}
         </Grid>
     )
 }
 
-export function ArmyAllowanceComponent(props: Readonly<{
+type ArmyAllowanceComponentProps = {
     name: string,
-    available?: number,
-    used?: number,
-    extras?: number
-}>) {
+    available: number,
+    used: number
+}
+
+function ArmyAllowanceComponent({name, available, used}: ArmyAllowanceComponentProps) {
     return (
         <>
-            {(props.available ?? 0) + (props.used ?? 0) > 0 &&
-                <Card>
-                    <CardContent>
-                        <Stack direction="column" alignItems="center">
-                            <Typography variant="caption">{props.name}</Typography>
-                            <AllowanceValue used={props.used}
-                                            available={Math.floor(props.available ?? 0)}
-                                            extras={props.extras}/>
-                        </Stack>
-                    </CardContent>
-                </Card>
+            {available + used > 0 &&
+                <Grid item key={name}>
+                    <Card>
+                        <CardContent>
+                            <Stack direction="column" alignItems="center">
+                                <Typography variant="caption">{name}</Typography>
+                                <Stack direction="row" spacing={1}>
+                                    <Typography>{used}/{Math.floor(available)}</Typography>
+                                    {used > available && <ErrorIcon color="error"/>}
+                                </Stack>
+                            </Stack>
+                        </CardContent>
+                    </Card>
+                </Grid>
             }
         </>
     )
 }
 
-export function AllowanceValue(props: Readonly<{ used?: number, available?: number, extras?: number }>) {
-    const used = props.used ?? 0
-    const available = props.available ?? 0
-    const extras = props.extras ?? 0
+type AllowanceValueProps = {
+    available: number,
+    used: number
+}
 
-    const isOverAllowance = () => {
-        return used > available + extras
-    }
-
+function AllowanceValue({available, used}: AllowanceValueProps) {
     return (
         <Stack direction="row" spacing={1}>
-            <Typography>
-                {props.used}/{props.available}
-                {props.extras !== undefined && '+' + props.extras}
-            </Typography>
-            {isOverAllowance() && <ErrorIcon color="error"/>}
+            <Typography>{used}/{available}</Typography>
+            {used > available && <ErrorIcon color="error"/>}
         </Stack>
     )
 }
