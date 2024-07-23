@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, {useContext} from "react";
-import {CategoryChips, CostComponent, ValidationWarning} from "./ArmyBuilderUtils";
+import {CategoryChips, CostComponent, HeresyCardContent, ValidationWarning} from "./ArmyBuilderUtils";
 import {ValidationResult} from "./ts/restrictions";
 import {FormationSpec} from "./ts/formationSpec";
 import {ArmyContext} from "./ArmyBuilder";
@@ -27,6 +27,7 @@ import {Formation} from "./ts/formation";
 import {Upgrade} from "./ts/upgrade";
 import {ItemCategory} from "./ts/itemCategory";
 import {DisplayFormationPanel} from "./DisplayFormationPanel";
+import {FormationHeader} from "./FormationHeader";
 
 export function FormationComponent(props: Readonly<{
     formation: Formation,
@@ -171,7 +172,6 @@ export function AddFormationComponent(props: {
     const armySpec = useContext(ArmyContext)!
 
     const [expanded, setExpanded] = React.useState<string | false>('panel1');
-
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
             setExpanded(newExpanded ? panel : false);
@@ -196,7 +196,7 @@ export function AddFormationComponent(props: {
                             <AccordionSummary>
                                 <Typography variant="body1">{section.name}</Typography>
                             </AccordionSummary>
-                            <AccordionDetails>
+                            <AccordionDetails sx={{m: 0.5, p: 0}}>
                                 {section.formations.map((formation) => (
                                     <DisplayFormationSpecToAdd formation={formation}
                                                                closePopupFunction={closeAddFormation}
@@ -218,35 +218,16 @@ export function DisplayFormationSpecToAdd(props: Readonly<{
     validation: ValidationResult
     closePopupFunction: () => void
 }>) {
-    const costToDisplay = props.formation.cost.toList().filter(
-        (item) => item.category !== ItemCategory.FORMATION && item.category !== ItemCategory.UPGRADE)
-
-    const nameWidth = props.validation.success ? 'auto' : 4
-
     return (
         <Card variant="outlined">
             <CardActionArea disabled={!props.validation.success} onClick={() => {
                 props.addFunction(props.formation)
                 props.closePopupFunction()
             }}>
-                <CardContent sx={{m: 0, p: 1}}>
-                    <Grid container direction="row" spacing={1} alignItems="center">
-                        <Grid item xs={nameWidth}>
-                            <Stack direction="row" spacing={2} alignItems="center">
-                                <CostComponent cost={props.formation.cost.getOrZero(ItemCategory.FORMATION)}/>
-                                <Typography noWrap variant="body2">{props.formation.name}</Typography>
-                            </Stack>
-                        </Grid>
-                        {props.validation.success ? <>
-                                <CategoryChips items={props.formation.grants.toList()} color="success"/>
-                                <CategoryChips items={costToDisplay} color="primary"/>
-                            </> :
-                            <Grid item xs={8}>
-                                <ValidationWarning message={props.validation.message!}/>
-                            </Grid>
-                        }
-                    </Grid>
-                </CardContent>
+                <HeresyCardContent>
+                    <FormationHeader formation={props.formation}/>
+                    {!props.validation.success && <ValidationWarning message={props.validation.message!}/>}
+                </HeresyCardContent>
             </CardActionArea>
         </Card>
     )
