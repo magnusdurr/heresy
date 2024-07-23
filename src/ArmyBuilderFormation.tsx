@@ -5,9 +5,6 @@ import {
     Button,
     Card,
     CardActionArea,
-    CardContent,
-    Dialog,
-    DialogContent,
     Grid,
     IconButton,
     Stack,
@@ -21,13 +18,14 @@ import {CategoryChips, CostComponent, HeresyCardContent, ValidationWarning} from
 import {ValidationResult} from "./ts/restrictions";
 import {FormationSpec} from "./ts/formationSpec";
 import {ArmyContext} from "./ArmyBuilder";
-import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
+import {DisplayUnitsDialog} from "./DisplayUnitsDialog";
 import {UpgradeSpec} from "./ts/upgradeSpec";
 import {Formation} from "./ts/formation";
 import {Upgrade} from "./ts/upgrade";
 import {ItemCategory} from "./ts/itemCategory";
 import {DisplayFormationPanel} from "./DisplayFormationPanel";
 import {FormationHeader} from "./FormationHeader";
+import {HeresyDialog} from "./HeresyDialog";
 
 export function FormationComponent(props: Readonly<{
     formation: Formation,
@@ -93,26 +91,20 @@ export function FormationUpgradeDialog(props: Readonly<{
     closeDialogFunction: () => void
 }>) {
     return (
-        <Dialog fullWidth
-                maxWidth="sm"
-                open={props.upgradeDialogOpen}
-                onClose={props.closeDialogFunction}
-        >
-            <DialogContent>
-                <Grid container direction="column" spacing={1}>
-                    <Grid item>
-                        <Typography variant="h6">Select Upgrade</Typography>
-                    </Grid>
-                    {props.formation.spec.availableUpgrades.map((upgrade) => (
-                        <Grid item>
-                            <DisplayUpgradeSpec formation={props.formation}
-                                                upgrade={upgrade}
-                                                addUpgrade={props.addUpgradeFunction}/>
-                        </Grid>
-                    ))}
-                </Grid>
-            </DialogContent>
-        </Dialog>
+        <HeresyDialog
+            maxWidth="sm"
+            title="Select Upgrade"
+            isOpen={props.upgradeDialogOpen}
+            closeFunction={props.closeDialogFunction}>
+
+            <Stack direction="column" spacing={1}>
+                {props.formation.spec.availableUpgrades.map((upgrade) => (
+                    <DisplayUpgradeSpec formation={props.formation}
+                                        upgrade={upgrade}
+                                        addUpgrade={props.addUpgradeFunction}/>
+                ))}
+            </Stack>
+        </HeresyDialog>
     )
 }
 
@@ -134,7 +126,7 @@ export function DisplayUpgradeSpec(props: Readonly<{
             <CardActionArea disabled={!showAsEnabled} onClick={() => {
                 props.addUpgrade(props.upgrade)
             }}>
-                <CardContent sx={{m: 0, p: 1}}>
+                <HeresyCardContent>
                     <Grid item container direction="row" spacing={1} alignItems="center">
                         <Grid item xs={nameWidth}>
                             <Stack direction="row" spacing={2} alignItems="center">
@@ -153,7 +145,7 @@ export function DisplayUpgradeSpec(props: Readonly<{
                         </Grid>}
                     </Grid>
 
-                </CardContent>
+                </HeresyCardContent>
             </CardActionArea>
         </Card>
     )
@@ -181,15 +173,13 @@ export function AddFormationComponent(props: {
         <>
             <Button onClick={openAddFormation}>Add formation</Button>
 
-            <Dialog maxWidth="sm"
-                    fullWidth
-                    open={addFormationOpen}
-                    onClose={closeAddFormation}
-            >
-                <Stack spacing={1} sx={{m: 2}}>
-                    <Typography variant="h6">Select Formation</Typography>
-                    {armySpec.armySections.map((section) => (
+            <HeresyDialog title="Select Formation"
+                          maxWidth="sm"
+                          isOpen={addFormationOpen}
+                          closeFunction={closeAddFormation}>
 
+                <Stack spacing={1}>
+                    {armySpec.armySections.map((section) => (
                         <Accordion expanded={expanded === section.name}
                                    onChange={handleChange(section.name)}
                                    disableGutters>
@@ -207,7 +197,7 @@ export function AddFormationComponent(props: {
                         </Accordion>
                     ))}
                 </Stack>
-            </Dialog>
+            </HeresyDialog>
         </>
     )
 }

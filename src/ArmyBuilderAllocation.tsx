@@ -48,17 +48,3 @@ function ArmyAllowanceComponent({name, available, used}: ArmyAllowanceComponentP
         </>
     )
 }
-
-type AllowanceValueProps = {
-    available: number,
-    used: number
-}
-
-function AllowanceValue({available, used}: AllowanceValueProps) {
-    return (
-        <Stack direction="row" spacing={1}>
-            <Typography>{used}/{available}</Typography>
-            {used > available && <ErrorIcon color="error"/>}
-        </Stack>
-    )
-}

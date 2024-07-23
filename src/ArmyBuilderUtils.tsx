@@ -6,7 +6,10 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import {FormationSpec} from "./ts/formationSpec";
 import {Formation} from "./ts/formation";
 
-export function CategoryChips(props: Readonly<{ items: ItemCostEntry[], color: string }>) {
+export function CategoryChips(props: Readonly<{
+    items: ItemCostEntry[],
+    color: "success" | "primary" | "secondary" | "error" | "info" | "warning",
+}>) {
     return (
         <>
             {props.items.map((categoryCount) => (
@@ -20,7 +23,7 @@ export function CategoryChips(props: Readonly<{ items: ItemCostEntry[], color: s
 
 export function CategoryChip(props: Readonly<{
     categoryCount: ItemCostEntry,
-    color: string,
+    color: "success" | "primary" | "secondary" | "error" | "info" | "warning",
     forceText?: boolean
 }>) {
     return (
@@ -70,7 +73,7 @@ export function FormationLabel(props: Readonly<{ formation: FormationSpec | Form
 }
 
 export const HeresyCardContent = styled(CardContent)(`
-      padding: 20px 10px 5px 5px;
+      padding: 15px 10px 5px 5px;
       &:last-child {
         padding-bottom: 5px;
       }

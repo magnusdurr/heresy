@@ -6,6 +6,7 @@ type HeresyDialogProps = {
     subtitle?: string,
     isOpen: boolean
     closeFunction: () => void
+    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl"
 }
 
 export function HeresyDialog({
@@ -13,11 +14,12 @@ export function HeresyDialog({
                                  subtitle,
                                  isOpen,
                                  closeFunction,
+                                 maxWidth,
                                  children
                              }: React.PropsWithChildren<HeresyDialogProps>) {
     return (
         <Dialog fullWidth
-                maxWidth="md"
+                maxWidth={maxWidth ?? 'md'}
                 sx={{m: 0, p: 0}}
                 open={isOpen}
                 onClose={closeFunction}>

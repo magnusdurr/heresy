@@ -7,7 +7,7 @@ import {FormationSpec} from "./ts/formationSpec";
 import InfoIcon from '@mui/icons-material/Info';
 import {UpgradeSpec} from "./ts/upgradeSpec";
 import {ItemCategory} from "./ts/itemCategory";
-import {DisplayUnitsDialog} from "./ArmyBuilderUnit";
+import {DisplayUnitsDialog} from "./DisplayUnitsDialog";
 import {FormationHeader} from "./FormationHeader";
 
 export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
