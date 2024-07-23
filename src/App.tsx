@@ -1,14 +1,4 @@
-import {
-    Container,
-    createTheme,
-    CssBaseline,
-    IconButton,
-    Stack,
-    ThemeProvider,
-    Tooltip,
-    Typography,
-    useMediaQuery
-} from '@mui/material'
+import {Container, createTheme, CssBaseline, IconButton, Stack, ThemeProvider, Tooltip, Typography} from '@mui/material'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -44,9 +34,6 @@ function App() {
         localStorage.setItem('theme', !darkMode ? 'dark' : 'light')
         setDarkMode(!darkMode)
     }
-
-    const lessThanSmall = useMediaQuery(theme.breakpoints.down("sm"));
-
 
     return (
         <Container maxWidth="md">
