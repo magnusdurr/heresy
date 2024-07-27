@@ -22,7 +22,6 @@ export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
                 </Grid>
             </Grid>
             <Divider/>
-            <Typography variant="h5">Formations</Typography>
 
             {props.armySpec.armySections.map((section) => (
                 <DisplayArmySection section={section}/>
@@ -35,7 +34,7 @@ export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
 function DisplayArmySection(props: Readonly<{ section: ArmySection }>) {
     return (
         <Stack spacing={1}>
-            <Typography variant="caption">{props.section.name}</Typography>
+            <Typography variant="caption" pt={3}>{props.section.name}</Typography>
             {props.section.formations.map((formation) => (
                 <DisplayListFormation formation={formation}/>
             ))}
@@ -48,7 +47,7 @@ function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
 
     return (
         <>
-            <Card>
+            <Card elevation={16}>
                 <HeresyCardContent>
                     <FormationHeader formation={props.formation}>
                         <Box>
@@ -58,18 +57,21 @@ function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
                         </Box>
                     </FormationHeader>
 
-                    <Box mt={1}>
-                        <Typography variant="caption">Upgrades</Typography>
-                    </Box>
-                    <Typography variant="body2">
-                        <ul className="upgrade-list">
-                            {props.formation.availableUpgrades.map(upgrade => (
-                                <Tooltip title={<UpgradeTooltip upgrade={upgrade}/>} enterTouchDelay={0}>
-                                    <li key={upgrade.name}>{upgrade.name} <InfoIcon fontSize="inherit"/></li>
-                                </Tooltip>
-                            ))}
-                        </ul>
-                    </Typography>
+                    {props.formation.availableUpgrades.length > 0 &&
+                        <>
+                            <Box mt={1}>
+                                <Typography variant="caption">Upgrades</Typography>
+                            </Box>
+                            <Typography variant="body2">
+                                <ul className="upgrade-list">
+                                    {props.formation.availableUpgrades.map(upgrade => (
+                                        <Tooltip title={<UpgradeTooltip upgrade={upgrade}/>} enterTouchDelay={0}>
+                                            <li key={upgrade.name}>{upgrade.name} <InfoIcon fontSize="inherit"/></li>
+                                        </Tooltip>
+                                    ))}
+                                </ul>
+                            </Typography>
+                        </>}
                 </HeresyCardContent>
             </Card>
 

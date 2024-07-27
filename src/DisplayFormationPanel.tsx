@@ -19,7 +19,7 @@ export function DisplayFormationPanel(props: Readonly<{
     const validationErrors = props.formation.checkUpgradeValidationErrors()
 
     return (
-        <Card key={props.formation.id}>
+        <Card key={props.formation.id} elevation={16}>
             <HeresyCardContent>
                 <FormationHeader formation={props.formation}>
                     <Grid container>

@@ -32,7 +32,7 @@ function ArmyAllowanceComponent({name, available, used}: ArmyAllowanceComponentP
         <>
             {available + used > 0 &&
                 <Grid item key={name}>
-                    <Card>
+                    <Card elevation={8}>
                         <CardContent>
                             <Stack direction="column" alignItems="center">
                                 <Typography variant="caption">{name}</Typography>

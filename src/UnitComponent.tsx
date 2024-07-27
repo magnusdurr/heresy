@@ -54,7 +54,7 @@ export function UnitComponent({unit}: UnitComponentProps) {
                         {unit.dc > 0 && unit.specialRules.length > 0 ? '; ' : ''}
                         {(unit.specialRules.length > 0) && <>
                             {'Special Rules: '}
-                            <ul className="upgrade-list">
+                            <ul className="comma-list">
                                 {unit.specialRules.map(specialRule => (
                                     <SpecialRuleComponent rule={specialRule}/>
                                 ))}
