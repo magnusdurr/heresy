@@ -56,11 +56,9 @@ export function DisplayFormationPanel(props: Readonly<{
                 </FormationHeader>
 
                 {props.formation.upgrades.length > 0 &&
-                    <>
-                        <Box mt={1}>
-                            <Typography variant="caption">Upgrades</Typography>
-                        </Box>
-                        <Typography variant="body2">
+                    <Box mt={1}>
+                        <Typography variant="body2" display="inline"><i>Upgrades: </i></Typography>
+                        <Typography variant="body2" display="inline">
                             <ul className="upgrade-list-no-commas">
                                 {props.formation.upgrades.map((upgrade) => (
                                     <li key={upgrade.spec.name}>
@@ -75,7 +73,7 @@ export function DisplayFormationPanel(props: Readonly<{
                                 ))}
                             </ul>
                         </Typography>
-                    </>
+                    </Box>
                 }
 
                 {validationErrors.map((error) => (

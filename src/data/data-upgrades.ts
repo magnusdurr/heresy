@@ -3,7 +3,7 @@ import {ItemCost} from "../ts/itemCost";
 import {ItemCategory} from "../ts/itemCategory";
 import {units} from "./data-units";
 
-export const testUpgrades = {
+export const upgrades = {
     supreme: new UpgradeSpec.Builder("Supreme Commander",
         "Add a Supreme Commander in a Command Squad to the formation",
         ItemCost.free)
@@ -26,7 +26,6 @@ export const testUpgrades = {
         "Add two Dreadnoughts to the formation",
         ItemCost.fromEntries([
             {category: ItemCategory.UPGRADE, count: 1},
-            {category: ItemCategory.HEAVY_SUPPORT, count: 1},
             {category: ItemCategory.ELITE, count: 0.5}
         ]))
         .withUnitToAdd(units.legionesAstartes.dreadnought, 2)
@@ -79,7 +78,7 @@ export const testUpgrades = {
         "Add a second Warhound Titan to the formation",
         ItemCost.fromEntries([
             {category: ItemCategory.UPGRADE, count: 2},
-            {category: ItemCategory.FAST_ATTACK, count: 1},
+            {category: ItemCategory.TITANS, count: 1},
             {category: ItemCategory.HEAVY_SUPPORT, count: 1},
         ]))
         .withUnitToAdd(units.titans.warhound)
@@ -102,8 +101,7 @@ export const testUpgrades = {
             "Scout Turbo-Laser Destructor",
             "One Scout Turbo-Laser Destructor",
             ItemCost.fromEntries([
-                {category: ItemCategory.UPGRADE, count: 0.5},
-                {category: ItemCategory.HEAVY_SUPPORT, count: 1}
+                {category: ItemCategory.UPGRADE, count: 1}
             ]))
             .withUnitToAdd(units.titans.scoutTitanWeapons.turboLaserDestructor)
             .build(),
@@ -111,8 +109,7 @@ export const testUpgrades = {
             "Plasma Blastgun",
             "One Plasma Blastgun",
             ItemCost.fromEntries([
-                {category: ItemCategory.UPGRADE, count: 0.5},
-                {category: ItemCategory.HEAVY_SUPPORT, count: 1}
+                {category: ItemCategory.UPGRADE, count: 1}
             ]))
             .withUnitToAdd(units.titans.scoutTitanWeapons.plasmaBlastgun)
             .build(),
