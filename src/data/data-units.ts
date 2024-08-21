@@ -70,6 +70,29 @@ export const units = {
             .withNotes("After the drop pod lands, its Deathwind attacks all enemy units within 15cm. Each enemy formation attacked receives a Blast marker for coming under fire, and an extra Blast marker for each casualty. Then any troops carried in the drop pod must disembark within 5cm of the drop pod or within 5cm of another unit from the same formation that has already landed, so long as all units are placed within 15cm of the drop pod. Drop pod models should be removed from the board once the formation they transport has disembarked.")
             .build(),
 
+        landSpeeder: new Unit.Builder("Land Speeder", UnitType.LV)
+            .withStats(35, 4, 6, 5)
+            .withWeapon(weapons.multimelta)
+            .withWeapon(weapons.flamerHeavy)
+            .build(),
+
+        landSpeederTornado: new Unit.Builder("Land Speeder Tornado", UnitType.LV)
+            .withStats(35, 4, 6, 5)
+            .withWeapon(weapons.bolterHeavy)
+            .withWeapon(weapons.plasmaCannon)
+            .build(),
+
+        scimitarJetbike: new Unit.Builder("Scimitar Jetbike", UnitType.INF)
+            .withStats(35, 4, 5, 3)
+            .withWeapon(weapons.bolterHeavy, 2)
+            .withSpecialRules(specialRules.mounted, specialRules.bulky)
+            .build(),
+
+        outriderBike: new Unit.Builder("Outrider Bike", UnitType.INF)
+            .withStats(35, 4, 3, 6)
+            .withWeapon(weapons.plasmaGun)
+            .build(),
+
         predatorAnnihilator: new Unit.Builder("Predator Annihilator", UnitType.AV)
             .withStats(30, 4, 6, 5)
             .withWeapon(weapons.lascannonTwin)
@@ -106,6 +129,22 @@ export const units = {
             .withWeapon(weapons.omegaPlasmaArray)
             .withWeapon(weapons.lascannon, 2)
             .withSpecialRule(specialRules.reinforcedArmour)
+            .build(),
+
+        kratosBattlecannon: new Unit.Builder("Kratos Heavy Tank (Battlecannon)", UnitType.WE)
+            .withStats(20, 3, 6, 3)
+            .withDC(2)
+            .withWeapon(weapons.battleCannon)
+            .withWeapon(weapons.autocannon)
+            .withWeapon(weapons.bolterTwinHeavy, 2)
+            .build(),
+
+        kratosMelta: new Unit.Builder("Kratos Keavy Tank (Melta Blastgun)", UnitType.WE)
+            .withStats(20, 3, 6, 3)
+            .withDC(2)
+            .withWeapon(weapons.meltaBlastgun)
+            .withWeapon(weapons.autocannon)
+            .withWeapon(weapons.bolterTwinHeavy, 2)
             .build(),
 
         stormEagle: new Unit.Builder("Storm Eagle", UnitType.WE)
@@ -194,21 +233,50 @@ export const units = {
             .withStats(25, 5, 4, 5)
             .build(),
 
+        reaver: new Unit.Builder("Reaver Titan", UnitType.WE)
+            .withDC(6)
+            .withSpecialRules(specialRules.reinforcedArmour, specialRules.walker, specialRules.voidShield.withVariable("4"))
+            .withStats(20, 4, 4, 4)
+            .build(),
+
         scoutTitanWeapons: {
             vulcanMegaBolter: new Unit.Builder("Vulcan Mega-Bolter", UnitType.WEAPON)
                 .withWeapon(weapons.scoutTitan.vulcanMegaBolter)
                 .build(),
             infernoGun: new Unit.Builder("Inferno Gun", UnitType.WEAPON)
-                .withStats(25, 5, 6, 5)
                 .withWeapon(weapons.scoutTitan.infernoGun)
                 .build(),
             turboLaserDestructor: new Unit.Builder("Scout Turbo-Laser Destructor", UnitType.WEAPON)
-                .withStats(25, 5, 6, 5)
                 .withWeapon(weapons.scoutTitan.turboLaserDestructor)
                 .build(),
             plasmaBlastgun: new Unit.Builder("Plasma Blastgun", UnitType.WEAPON)
-                .withStats(25, 5, 6, 5)
                 .withWeapon(weapons.scoutTitan.plasmaBlastgun)
+                .build(),
+        },
+
+        reaverWeapons: {
+            gatlingBlaster: new Unit.Builder("Gatling Blaster", UnitType.WEAPON)
+                .withFiringArcWeapon(weapons.reaverTitan.gatlingBlaster, FiringArc.FORWARD_ARC)
+                .build(),
+
+            laserBlaster: new Unit.Builder("Laser Blaster", UnitType.WEAPON)
+                .withFiringArcWeapon(weapons.reaverTitan.laserBlaster, FiringArc.FORWARD_ARC)
+                .build(),
+
+            powerfist: new Unit.Builder("Powerfist", UnitType.WEAPON)
+                .withFiringArcWeapon(weapons.reaverTitan.powerFist, FiringArc.FORWARD_ARC)
+                .build(),
+
+            chainfist: new Unit.Builder("Chainfist", UnitType.WEAPON)
+                .withFiringArcWeapon(weapons.reaverTitan.chainfist, FiringArc.FORWARD_ARC)
+                .build(),
+
+            meltaCannon: new Unit.Builder("Melta Cannon", UnitType.WEAPON)
+                .withFiringArcWeapon(weapons.reaverTitan.titanMeltaCannon, FiringArc.FORWARD_ARC)
+                .build(),
+
+            volcanoCannon: new Unit.Builder("Volcano Cannon", UnitType.WEAPON)
+                .withFiringArcWeapon(weapons.reaverTitan.volcanoCannon, FiringArc.FORWARD_ARC)
                 .build(),
         }
     }

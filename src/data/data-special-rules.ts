@@ -27,6 +27,9 @@ export const specialRules = {
     leader: new SpecialRule("Leader", [
         "A formation that includes any *leaders* may remove one extra Blast marker for each leader whenever it regroups or successfully rallies."
     ]),
+    mounted: new SpecialRule("Mounted", [
+        "Some infantry units are noted as being mounted, and will either ride on bikes or living creatures such as horses. Mounted units count as vehicles for terrain effects, and as infantry units for all other purposes."
+    ]),
     supremeCommander: new SpecialRule("Supreme Commander", [
         "Supreme Commanders represent high-level command units. They count as *commanders* and *leaders*. In addition, each supreme commander unit in the army allows a player to re-roll one failed initiative test (of any type) once per turn."
     ]),
@@ -53,6 +56,11 @@ export const specialRules = {
     macro: new SpecialRule("Macro Weapon", [
         "Only units with reinforced armour or invulnerable saves receive a saving throw against hits from a macro-weapon."
     ], "MW"),
+    titanKiller: new VariableSpecialRule("Titan Killer", [
+        "Some units are armed with weapons that are noted as being Titan Killers (see 2.2.9). Many of these weapons are capable of taking down a war engine with a single shot. Enemy units hit by such weapons may not take a cover or armour save, even if they have reinforced armour. Note that cover to hit modifiers do apply.",
+        "In addition, Titan Killer weapons will usually have a dice roll noted in brackets on their data sheet. For example, the Volcano Cannon mounted on an Imperial Guard Shadowsword is noted as being a Titan Killer (D3) weapon. If such a weapon hits a war engine then the war engine suffers damage equal to the roll of the appropriate sort of dice. Each point of damage will reduce the war engine’s damage capacity by 1 point. Roll for critical hits for each point of damage inflicted. Titan Killer weapons that do not have a dice roll in brackets only inflict one point of damage.",
+        "When allocating Titan killer hits that may cause multiple points of damage, roll for damage immediately after allocating the hit. The War Engine counts as having been allocated a number of hits equal to the damage rolled. This is solely for purposes of allocation. Damage is applied as normal, only after all hits have been allocated."
+    ], "TK(+$)"),
     energetic: new SpecialRule("Energetic", [
         "When performing a *sustained fire* action, *energetic* weapons receive an extra +1 to hit modifier."
     ]),

@@ -22,6 +22,15 @@ export const weapons = {
         )
         .build(),
 
+    autocannon: new Weapon.Builder("Autocannon")
+        .withRange(45)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .withType(WeaponType.AT, 6)
+            .build()
+        )
+        .build(),
+
     autocannonPredator: new Weapon.Builder("Predator Autocannon")
         .withRange(45)
         .withShots(2)
@@ -66,6 +75,14 @@ export const weapons = {
         )
         .build(),
 
+    bolterTwinHeavy: new Weapon.Builder("Twin Heavy Bolter")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 3)
+            .build()
+        )
+        .build(),
+
     bolterHeavyTwinAC: new Weapon.Builder("Aircraft Twin Heavy Bolter")
         .withRange(30)
         .withMode(new WeaponMode.Builder()
@@ -99,6 +116,14 @@ export const weapons = {
             .withType(WeaponType.AT, 6)
             .build()
         )
+        .build(),
+
+    flamerHeavy: new Weapon.Builder("Heavy Flamer")
+        .withRange(15)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 4)
+            .withSpecialRule(specialRules.ignoreCover)
+            .build())
         .build(),
 
     lascannon: new Weapon.Builder("Lascannon")
@@ -154,6 +179,37 @@ export const weapons = {
         )
         .build(),
 
+    meltaBlastgun: new Weapon.Builder("Melta Blastgun")
+        .withRange(15)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 3)
+            .withType(WeaponType.AT, 2)
+            .withSpecialRule(specialRules.macro)
+            .withSpecialRule(specialRules.ignoreCover)
+            .build()
+        )
+        .withMode(new WeaponMode.Builder()
+            .withSmallArmsType()
+            .withSpecialRule(specialRules.macro)
+            .withJoinType("and")
+            .build())
+        .build(),
+
+    multimelta: new Weapon.Builder("Multi-Melta")
+        .withRange(15)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .withType(WeaponType.AT, 5)
+            .withSpecialRule(specialRules.macro)
+            .build()
+        )
+        .withMode(new WeaponMode.Builder()
+            .withSmallArmsType()
+            .withSpecialRule(specialRules.macro)
+            .withJoinType("and")
+            .build())
+        .build(),
+
     missileLauncher: new Weapon.Builder("Missile Launcher")
         .withRange(60)
         .withMode(new WeaponMode.Builder()
@@ -179,6 +235,16 @@ export const weapons = {
             .withType(WeaponType.AP, 5)
             .withType(WeaponType.AT, 5)
             .withSpecialRule(specialRules.macro)
+            .withSpecialRule(specialRules.energetic)
+            .build()
+        )
+        .build(),
+
+    plasmaCannon: new Weapon.Builder("Plasma Cannon")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .withType(WeaponType.AT, 5)
             .withSpecialRule(specialRules.energetic)
             .build()
         )
@@ -267,6 +333,67 @@ export const weapons = {
                 .withSpecialRule(specialRules.macro)
                 .withSpecialRule(specialRules.slowFiring)
                 .build())
+            .build(),
+    },
+
+    reaverTitan: {
+        gatlingBlaster: new Weapon.Builder("Gatling Blaster")
+            .withRange(60)
+            .withShots(4)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 4)
+                .build())
+            .build(),
+
+        laserBlaster: new Weapon.Builder("Laser Blaster")
+            .withRange(45)
+            .withShots(5)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 5)
+                .withType(WeaponType.AT, 3)
+                .build())
+            .build(),
+
+        volcanoCannon: new Weapon.Builder("Volcano Cannon")
+            .withRange(75)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 2)
+                .withSpecialRule(specialRules.titanKiller.withVariable("D3"))
+                .build())
+            .build(),
+
+        powerFist: new Weapon.Builder("Power Fist")
+            .withMode(new WeaponMode.Builder()
+                .withSpecialRule(specialRules.extraAttack.withVariable("2"))
+                .withSpecialRule(specialRules.titanKiller.withVariable("D3"))
+                .withAssaultType()
+                .build())
+            .build(),
+
+        chainfist: new Weapon.Builder("Titan Chainfist")
+            .withMode(new WeaponMode.Builder()
+                .withAssaultType()
+                .withSpecialRule(specialRules.extraAttack.withVariable("3"))
+                .withSpecialRule(specialRules.macro)
+                .build())
+            .build(),
+
+        titanMeltaCannon: new Weapon.Builder("Titan Melta Cannon")
+            .withRange(30)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 2)
+                .build()
+            )
+            .withMode(new WeaponMode.Builder()
+                .withSmallArmsType()
+                .withJoinType("and")
+                .withSpecialRule(specialRules.extraAttack.withVariable("1"))
+                .withSpecialRule(specialRules.titanKiller.withVariable("1"))
+                .build()
+            )
             .build(),
     }
 }

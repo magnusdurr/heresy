@@ -53,6 +53,13 @@ export const upgrades = {
         .withUnitToReplace(units.legionesAstartes.lieutenant)
         .build(),
 
+    kratosMelta: new UpgradeSpec.Builder("Kratos Melta",
+        "Replace the Battlecannons with Melta Cannons",
+        ItemCost.free)
+        .withUnitToAdd(units.legionesAstartes.kratosMelta)
+        .withUnitToReplace(units.legionesAstartes.kratosBattlecannon)
+        .build(),
+
     predatorAnnihilators: new UpgradeSpec.Builder("Annihilators",
         "Replace the Predator Destructors with Predator Annihilators",
         ItemCost.free)
@@ -72,6 +79,13 @@ export const upgrades = {
         ItemCost.fromList(ItemCategory.UPGRADE))
         .withUnitToAdd(units.legionesAstartes.thunderHawk)
         .withUnitToReplace(units.legionesAstartes.stormEagle)
+        .build(),
+
+    tornados: new UpgradeSpec.Builder("Tornados",
+        "Replace all Land Speeders with Land Speeder Tornados",
+        ItemCost.free)
+        .withUnitToAdd(units.legionesAstartes.landSpeederTornado, 3)
+        .withUnitToReplace(units.legionesAstartes.landSpeeder, 3)
         .build(),
 
     warhoundPair: new UpgradeSpec.Builder("Warhound Titan Pair",
@@ -113,6 +127,50 @@ export const upgrades = {
             ]))
             .withUnitToAdd(units.titans.scoutTitanWeapons.plasmaBlastgun)
             .build(),
+    },
+
+    reaverWeapons: {
+        gatlingBlaster: new UpgradeSpec.Builder(
+            "Gatling Blaster",
+            "One Gatling Blaster",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.reaverWeapons.gatlingBlaster)
+            .build(),
+
+        laserBlaster: new UpgradeSpec.Builder(
+            "Laser Blaster",
+            "One Laser Blaster",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.reaverWeapons.laserBlaster)
+            .build(),
+
+        chainfist: new UpgradeSpec.Builder(
+            "Chainfist",
+            "One Titan Chainfist",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.reaverWeapons.chainfist)
+            .build(),
+
+        meltaCannon: new UpgradeSpec.Builder(
+            "Melta Cannon",
+            "One Titan Melta Cannon",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.reaverWeapons.meltaCannon)
+            .build(),
+
+        powerfist: new UpgradeSpec.Builder(
+            "Powerfist",
+            "One Powerfist",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.reaverWeapons.powerfist)
+            .build(),
+
+        volcanoCannon: new UpgradeSpec.Builder(
+            "Volcano Cannon",
+            "One Volcano Cannon",
+            ItemCost.free)
+            .withUnitToAdd(units.titans.reaverWeapons.volcanoCannon)
+            .build()
     },
 
     lemanRussVanquisher: new UpgradeSpec.Builder("Vanquishers",

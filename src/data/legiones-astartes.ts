@@ -79,6 +79,15 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             )
             .inSection("Heavy Support")
             .build(),
+
+        new FormationSpec.Builder("Kratos Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.HEAVY_SUPPORT, ItemCategory.HEAVY_SUPPORT))
+            .withUnit(units.legionesAstartes.kratosBattlecannon, 2)
+            .withUpgrades(upgrades.kratosMelta)
+            .withUpgradeRestrictions(
+                new OncePerFormationRestriction(upgrades.kratosMelta)
+            )
+            .inSection("Heavy Support")
+            .build(),
     ]))
     .withArmySection(new ArmySection("Fast Attack", [
         new FormationSpec.Builder("Assault Marine Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.FAST_ATTACK))
@@ -88,6 +97,27 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .withUpgradeRestrictions(
                 new OncePerFormationRestriction(upgrades.chaplain)
             )
+            .inSection("Fast Attack")
+            .build(),
+
+        new FormationSpec.Builder("Land Speeder Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.FAST_ATTACK))
+            .withUnit(units.legionesAstartes.landSpeeder, 3)
+            .withUpgrades(upgrades.tornados)
+            .withUpgradeRestrictions(
+                new OncePerFormationRestriction(upgrades.tornados)
+            )
+            .inSection("Fast Attack")
+            .build(),
+
+        new FormationSpec.Builder("Sky-hunter Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.FAST_ATTACK))
+            .withUnit(units.legionesAstartes.lieutenant)
+            .withUnit(units.legionesAstartes.scimitarJetbike, 3)
+            .inSection("Fast Attack")
+            .build(),
+
+        new FormationSpec.Builder("Outrider Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.FAST_ATTACK))
+            .withUnit(units.legionesAstartes.lieutenant)
+            .withUnit(units.legionesAstartes.outriderBike, 4)
             .inSection("Fast Attack")
             .build(),
 
@@ -155,6 +185,31 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                 {category: ItemCategory.HEAVY_SUPPORT, count: 2},
                 {category: ItemCategory.TITANS, count: 2}
             ]))
+            .withUnit(units.titans.reaver)
+            .withUpgrades(
+                upgrades.reaverWeapons.gatlingBlaster,
+                upgrades.reaverWeapons.laserBlaster,
+                upgrades.reaverWeapons.chainfist,
+                upgrades.reaverWeapons.meltaCannon,
+                upgrades.reaverWeapons.powerfist,
+                upgrades.reaverWeapons.volcanoCannon
+            )
+            .withUpgradeRestrictions(
+                new MandatoryUpgradesRestriction(2, 2, [
+                    upgrades.reaverWeapons.gatlingBlaster,
+                    upgrades.reaverWeapons.laserBlaster,
+                    upgrades.reaverWeapons.chainfist,
+                    upgrades.reaverWeapons.meltaCannon,
+                    upgrades.reaverWeapons.powerfist,
+                    upgrades.reaverWeapons.volcanoCannon
+                ], "arm weapons"),
+                new OncePerFormationRestriction(upgrades.reaverWeapons.gatlingBlaster),
+                new OncePerFormationRestriction(upgrades.reaverWeapons.laserBlaster),
+                new OncePerFormationRestriction(upgrades.reaverWeapons.chainfist),
+                new OncePerFormationRestriction(upgrades.reaverWeapons.meltaCannon),
+                new OncePerFormationRestriction(upgrades.reaverWeapons.powerfist),
+                new OncePerFormationRestriction(upgrades.reaverWeapons.volcanoCannon),
+            )
             .inSection("Titans")
             .build(),
 
