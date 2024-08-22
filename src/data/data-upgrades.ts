@@ -43,9 +43,19 @@ export const upgrades = {
         .withUnitToAdd(units.legionesAstartes.dreadnought, 2)
         .build(),
 
+    terminators: new UpgradeSpec.Builder("Terminators",
+        "Add two Terminators to the formation",
+        ItemCost.fromEntries([
+            {category: ItemCategory.UPGRADE, count: 1},
+            {category: ItemCategory.ELITE, count: 1}
+        ]))
+        .withUnitToAdd(units.legionesAstartes.cataphractiiTerminators, 2)
+        .build(),
+
     dreadnoughtReplace: new UpgradeSpec.Builder("Dreadnoughts",
         "Replace the Rhinos with two Dreadnoughts",
         ItemCost.fromEntries([
+            {category: ItemCategory.UPGRADE, count: 1},
             {category: ItemCategory.ELITE, count: 0.5}
         ]))
         .withUnitToReplace(units.legionesAstartes.rhinoSupport, 2)

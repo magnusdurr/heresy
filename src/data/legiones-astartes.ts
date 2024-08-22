@@ -38,6 +38,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                 upgrades.chaplain,
                 upgrades.specialistPlasma,
                 upgrades.dreadnoughts,
+                upgrades.terminators,
                 upgrades.rhinos,
                 upgrades.landRaider,
                 upgrades.spartan,
@@ -46,7 +47,9 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .withUpgradeRestrictions(
                 new OneFromGroupRestriction([upgrades.rhinos, upgrades.landRaider, upgrades.spartan, upgrades.dropPod], "transport option"),
                 new OneFromGroupRestriction([upgrades.supreme, upgrades.chaplain], "character"),
-                new IncompatibleTransportRestriction([upgrades.rhinos, upgrades.landRaider, upgrades.spartan, upgrades.dreadnoughts])
+                new OneFromGroupRestriction([upgrades.dreadnoughts, upgrades.terminators], "first company upgrade"),
+                new IncompatibleTransportRestriction([upgrades.rhinos, upgrades.landRaider, upgrades.spartan, upgrades.dreadnoughts]),
+                new IncompatibleTransportRestriction([upgrades.rhinos, upgrades.landRaider, upgrades.spartan, upgrades.dropPod, upgrades.terminators])
             )
             .build()
     ]))
@@ -55,11 +58,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .withUnit(units.legionesAstartes.lieutenant, 1)
             .withUnit(units.legionesAstartes.havocs, 2)
             .withUnit(units.legionesAstartes.rhinoSupport, 2)
-            .withUpgrades(upgrades.dreadnoughtReplace, upgrades.chaplain)
-            .withUpgradeRestrictions(
-                new OncePerFormationRestriction(upgrades.dreadnoughtReplace),
-                new OncePerFormationRestriction(upgrades.chaplain)
-            )
+            .withOnlyOnceUpgrades(upgrades.dreadnoughtReplace, upgrades.chaplain)
             .inSection("Heavy Support")
             .build(),
 
@@ -146,8 +145,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .build(),
 
         new FormationSpec.Builder("Dreadnought Detachment", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.ELITE))
-            .withUnit(units.legionesAstartes.dreadnought, 3)
-            .withSingleGrant(ItemCategory.UPGRADE)
+            .withUnit(units.legionesAstartes.dreadnought, 4)
             .inSection("Elite")
             .build()
     ]))
