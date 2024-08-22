@@ -256,6 +256,12 @@ export const units = {
             .withStats(20, 4, 4, 4)
             .build(),
 
+        warlord: new Unit.Builder("Warlord Titan", UnitType.WE)
+            .withDC(8)
+            .withSpecialRules(specialRules.reinforcedArmour, specialRules.walker, specialRules.voidShield.withVariable("6"))
+            .withStats(15, 4, 4, 4)
+            .build(),
+
         reaverWeapons: {
             gatlingBlaster: new Unit.Builder("Gatling Blaster", UnitType.WEAPON)
                 .withFiringArcWeapon(weapons.reaverTitan.gatlingBlaster, FiringArc.FORWARD_ARC)

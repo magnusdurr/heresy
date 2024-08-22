@@ -122,69 +122,46 @@ export const upgrades = {
         .build(),
 
     scoutTitanWeapons: {
-        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.scoutTitan.vulcanMegaBolter),
+        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.vulcanMegaBolter, ItemCost.free),
 
-        infernoGun: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.scoutTitan.infernoGun),
+        infernoGun: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.infernoGun, ItemCost.free),
 
-        scoutTurboLaserDestructor: UpgradeSpec.weaponUpgrade(
-            ItemCost.fromEntries([
-                {category: ItemCategory.UPGRADE, count: 1}
-            ]),
-            weapons.scoutTitan.turboLaserDestructor),
+        scoutTurboLaserDestructor: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.turboLaserDestructor, ItemCost.fromEntries([
+            {category: ItemCategory.UPGRADE, count: 1}
+        ])),
 
-        plasmaBlastgun: UpgradeSpec.weaponUpgrade(
-            ItemCost.fromEntries([
-                {category: ItemCategory.UPGRADE, count: 1}
-            ]),
-            weapons.scoutTitan.plasmaBlastgun)
+        plasmaBlastgun: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.plasmaBlastgun, ItemCost.fromEntries([
+            {category: ItemCategory.UPGRADE, count: 1}
+        ]))
     },
 
     reaverWeapons: {
-        apocalypseMissileLauncher: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.apocalypseMissileLauncher),
+        apocalypseMissileLauncher: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.apocalypseMissileLauncher),
+        gatlingBlaster: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.gatlingBlaster),
+        laserBlaster: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.laserBlaster),
+        meltaCannon: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.titanMeltaCannon),
+        turboLaserDestructor: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.turboLaserDestructor),
+        volcanoCannon: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.volcanoCannon, ItemCost.fromEntries([
+            {category: ItemCategory.UPGRADE, count: 1}
+        ])),
+        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.vulcanMegaBolter),
+        warpMissile: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.warpMissile),
+        chainfist: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.chainfist),
+        powerfist: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.powerFist)
+    },
 
-        gatlingBlaster: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.gatlingBlaster),
-
-        laserBlaster: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.laserBlaster),
-
-        meltaCannon: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.titanMeltaCannon),
-
-        turboLaserDestructor: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.turboLaserDestructor),
-
-        volcanoCannon: UpgradeSpec.weaponUpgrade(
-            ItemCost.fromEntries([
-                {category: ItemCategory.UPGRADE, count: 1}
-            ]),
-            weapons.reaverTitan.volcanoCannon),
-
-        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.scoutTitan.vulcanMegaBolter),
-
-        warpMissile: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.warpMissile),
-
-        chainfist: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.chainfist),
-
-        powerfist: UpgradeSpec.weaponUpgrade(
-            ItemCost.free,
-            weapons.reaverTitan.powerFist)
+    warlordWeapons: {
+        belicosaVolcanoCannon: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.belicosaVolcanoCannon),
+        macroGatlingBlaster: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.macroGatlingBlaster),
+        moriQuakeCannon: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.moriQuakeCannon),
+        sunfuryPlasmaAnnihilator: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.sunfuryPlasmaAnnihilator),
+        titanPowerfist: UpgradeSpec.weaponUpgrade(weapons.reaverTitan.powerFist),
+        pairedApocalypseMissileLauncher: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.pairedApocalypseMissileLauncher),
+        pairedGatlingBlaster: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.pairedGatlingBlaster),
+        pairedLaserBlaster: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.pairedLaserBlaster),
+        pairedMeltaCannon: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.pairedMeltaCannon),
+        pairedTurboLaserDestructor: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.pairedTurboLaserDestructor),
+        pairedVulcanMegaBolter: UpgradeSpec.weaponUpgrade(weapons.warlordTitan.pairedVulcanMegaBolter),
     },
 
     lemanRussVanquisher: new UpgradeSpec.Builder("Vanquishers",

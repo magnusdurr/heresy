@@ -33,8 +33,8 @@ export class UpgradeSpec {
         this.weaponToAdd = weaponToAdd;
     }
 
-    static weaponUpgrade(cost: ItemCost, weapon: Weapon) {
-        return new UpgradeSpec(UpgradeType.WEAPON, weapon.name, "", cost, new Map(), new Map(), weapon);
+    static weaponUpgrade(weapon: Weapon, cost?: ItemCost) {
+        return new UpgradeSpec(UpgradeType.WEAPON, weapon.name, "", cost || ItemCost.free, new Map(), new Map(), weapon);
     }
 
     static Builder = class {

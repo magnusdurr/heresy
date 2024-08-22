@@ -225,6 +225,42 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                 {category: ItemCategory.ELITE, count: 1},
                 {category: ItemCategory.TITANS, count: 2}
             ]))
+            .withOnlyOnceUpgrades(
+                upgrades.warlordWeapons.belicosaVolcanoCannon,
+                upgrades.warlordWeapons.macroGatlingBlaster,
+                upgrades.warlordWeapons.moriQuakeCannon,
+                upgrades.warlordWeapons.sunfuryPlasmaAnnihilator,
+                upgrades.warlordWeapons.titanPowerfist,
+                upgrades.warlordWeapons.pairedApocalypseMissileLauncher,
+                upgrades.warlordWeapons.pairedGatlingBlaster,
+                upgrades.warlordWeapons.pairedLaserBlaster,
+                upgrades.warlordWeapons.pairedMeltaCannon,
+                upgrades.warlordWeapons.pairedTurboLaserDestructor,
+                upgrades.warlordWeapons.pairedVulcanMegaBolter
+            )
+            .withUpgradeRestrictions(
+                new MandatoryUpgradesRestriction(2, 2, [
+                    upgrades.warlordWeapons.belicosaVolcanoCannon,
+                    upgrades.warlordWeapons.macroGatlingBlaster,
+                    upgrades.warlordWeapons.moriQuakeCannon,
+                    upgrades.warlordWeapons.sunfuryPlasmaAnnihilator,
+                    upgrades.warlordWeapons.titanPowerfist
+                ], "arm weapons"),
+                new MandatoryUpgradesRestriction(1, 1, [
+                    upgrades.warlordWeapons.pairedApocalypseMissileLauncher,
+                    upgrades.warlordWeapons.pairedGatlingBlaster,
+                    upgrades.warlordWeapons.pairedLaserBlaster,
+                    upgrades.warlordWeapons.pairedMeltaCannon,
+                    upgrades.warlordWeapons.pairedTurboLaserDestructor,
+                    upgrades.warlordWeapons.pairedVulcanMegaBolter
+                ], "carapace weapons")
+            )
+            .withDefaultUpgrades(
+                upgrades.warlordWeapons.belicosaVolcanoCannon,
+                upgrades.warlordWeapons.macroGatlingBlaster,
+                upgrades.warlordWeapons.pairedApocalypseMissileLauncher
+            )
+            .withUnit(units.titans.warlord)
             .inSection("Titans")
             .build()
     ]))

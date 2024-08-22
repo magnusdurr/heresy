@@ -423,7 +423,105 @@ export const weapons = {
                 .withSpecialRule(specialRules.macro)
                 .build())
             .build(),
+    },
 
+    warlordTitan: {
+        belicosaVolcanoCannon: new Weapon.Builder("Belicosa Volcano Cannon")
+            .withRange(75)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 2)
+                .withSpecialRule(specialRules.titanKiller.withVariable("D3+1"))
+                .build())
+            .build(),
 
+        macroGatlingBlaster: new Weapon.Builder("Macro-gatling Blaster")
+            .withRange(75)
+            .withShots(6)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 4)
+                .build())
+            .build(),
+
+        moriQuakeCannon: new Weapon.Builder("Mori Quake Cannon")
+            .withRange(60)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.BP, 3)
+                .withSpecialRule(specialRules.macro)
+                .build())
+            .build(),
+
+        sunfuryPlasmaAnnihilator: new Weapon.Builder("Sunfury Plasma Annihilator")
+            .withRange(60)
+            .withShots(4)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 2)
+                .withSpecialRule(specialRules.macro)
+                .withSpecialRule(specialRules.slowFiring)
+                .build())
+            .build(),
+
+        pairedApocalypseMissileLauncher: new Weapon.Builder("Paired Apocalypse Missile Launchers")
+            .withRange(60)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.BP, 6)
+                .withSpecialRule(specialRules.disrupt)
+                .build())
+            .build(),
+
+        pairedGatlingBlaster: new Weapon.Builder("Paired Gatling Blasters")
+            .withRange(60)
+            .withShots(8)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 4)
+                .build())
+            .build(),
+
+        pairedLaserBlaster: new Weapon.Builder("Paired Laser Blasters")
+            .withRange(45)
+            .withShots(10)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 5)
+                .withType(WeaponType.AT, 3)
+                .build())
+            .build(),
+
+        pairedMeltaCannon: new Weapon.Builder("Paired Titan Melta Cannons")
+            .withRange(30)
+            .withShots(2)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 2)
+                .build()
+            )
+            .withMode(new WeaponMode.Builder()
+                .withSmallArmsType()
+                .withJoinType("and")
+                .withSpecialRule(specialRules.extraAttack.withVariable("2"))
+                .withSpecialRule(specialRules.titanKiller.withVariable("1"))
+                .build()
+            )
+            .build(),
+
+        pairedTurboLaserDestructor: new Weapon.Builder("Paired Turbo-Laser Destructor")
+            .withRange(60)
+            .withShots(8)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 5)
+                .withType(WeaponType.AT, 3)
+                .build())
+            .build(),
+
+        pairedVulcanMegaBolter: new Weapon.Builder("Paired Vulcan Mega-Bolters")
+            .withRange(45)
+            .withShots(8)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 3)
+                .withType(WeaponType.AT, 5)
+                .build())
+            .build(),
     }
 }
