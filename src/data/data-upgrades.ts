@@ -123,28 +123,20 @@ export const upgrades = {
 
     scoutTitanWeapons: {
         vulcanMegaBolter: UpgradeSpec.weaponUpgrade(
-            "Vulcan Mega-Bolter",
-            "One Vulcan Mega-Bolter",
             ItemCost.free,
             weapons.scoutTitan.vulcanMegaBolter),
 
         infernoGun: UpgradeSpec.weaponUpgrade(
-            "Inferno Gun",
-            "One Inferno Gun",
             ItemCost.free,
             weapons.scoutTitan.infernoGun),
 
         scoutTurboLaserDestructor: UpgradeSpec.weaponUpgrade(
-            "Scout Turbo-Laser Destructor",
-            "One Scout Turbo-Laser Destructor",
             ItemCost.fromEntries([
                 {category: ItemCategory.UPGRADE, count: 1}
             ]),
             weapons.scoutTitan.turboLaserDestructor),
 
         plasmaBlastgun: UpgradeSpec.weaponUpgrade(
-            "Plasma Blastgun",
-            "One Plasma Blastgun",
             ItemCost.fromEntries([
                 {category: ItemCategory.UPGRADE, count: 1}
             ]),
@@ -153,64 +145,44 @@ export const upgrades = {
 
     reaverWeapons: {
         apocalypseMissileLauncher: UpgradeSpec.weaponUpgrade(
-            "Apocalypse Missile Launcher",
-            "One Appocalypse Missile Launcher",
             ItemCost.free,
             weapons.reaverTitan.apocalypseMissileLauncher),
 
         gatlingBlaster: UpgradeSpec.weaponUpgrade(
-            "Gatling Blaster",
-            "One Gatling Blaster",
             ItemCost.free,
             weapons.reaverTitan.gatlingBlaster),
 
         laserBlaster: UpgradeSpec.weaponUpgrade(
-            "Laser Blaster",
-            "One Laser Blaster",
             ItemCost.free,
             weapons.reaverTitan.laserBlaster),
 
         meltaCannon: UpgradeSpec.weaponUpgrade(
-            "Melta Cannon",
-            "One Titan Melta Cannon",
             ItemCost.free,
             weapons.reaverTitan.titanMeltaCannon),
 
         turboLaserDestructor: UpgradeSpec.weaponUpgrade(
-            "Turbo-Laser Destructor",
-            "One Turbo-Laser Destructor",
             ItemCost.free,
             weapons.reaverTitan.turboLaserDestructor),
 
         volcanoCannon: UpgradeSpec.weaponUpgrade(
-            "Volcano Cannon",
-            "One Volcano Cannon",
             ItemCost.fromEntries([
                 {category: ItemCategory.UPGRADE, count: 1}
             ]),
             weapons.reaverTitan.volcanoCannon),
 
         vulcanMegaBolter: UpgradeSpec.weaponUpgrade(
-            "Vulcan Mega-Bolter",
-            "One Vulcan Mega-Bolter",
             ItemCost.free,
             weapons.scoutTitan.vulcanMegaBolter),
 
         warpMissile: UpgradeSpec.weaponUpgrade(
-            "Warp Missile",
-            "One Warp Missile",
             ItemCost.free,
             weapons.reaverTitan.warpMissile),
 
         chainfist: UpgradeSpec.weaponUpgrade(
-            "Chainfist",
-            "One Titan Chainfist",
             ItemCost.free,
             weapons.reaverTitan.chainfist),
 
         powerfist: UpgradeSpec.weaponUpgrade(
-            "Powerfist",
-            "One Powerfist",
             ItemCost.free,
             weapons.reaverTitan.powerFist)
     },

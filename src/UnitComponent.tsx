@@ -83,7 +83,7 @@ function UnitStatsComponent(props: { unit: Unit }) {
     )
 }
 
-function WeaponsList(props: { weapons: EquippedWeapon[] }) {
+export function WeaponsList(props: { weapons: EquippedWeapon[] }) {
     return (
         <Table size="small">
             <TableHead>

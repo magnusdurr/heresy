@@ -1,14 +1,28 @@
 import {ArmySpec} from "./ts/armySpec";
 import {ArmySection} from "./ts/armySection";
-import {Box, Card, Divider, Grid, IconButton, Stack, Tooltip, Typography} from "@mui/material";
+import {
+    Box,
+    Card,
+    Divider,
+    Grid,
+    IconButton,
+    Stack,
+    styled,
+    Tooltip,
+    tooltipClasses,
+    TooltipProps,
+    Typography
+} from "@mui/material";
 import {CategoryChips, CostComponent, HeresyCardContent} from "./ArmyBuilderUtils";
 import React from "react";
 import {FormationSpec} from "./ts/formationSpec";
 import InfoIcon from '@mui/icons-material/Info';
-import {UpgradeSpec} from "./ts/upgradeSpec";
+import {UpgradeSpec, UpgradeType} from "./ts/upgradeSpec";
 import {ItemCategory} from "./ts/itemCategory";
 import {DisplayUnitsDialog} from "./DisplayUnitsDialog";
 import {FormationHeader} from "./FormationHeader";
+import {WeaponsList} from "./UnitComponent";
+import {EquippedWeapon} from "./ts/weapon";
 
 export function ArmyList(props: Readonly<{ armySpec: ArmySpec }>) {
     return (
@@ -65,9 +79,9 @@ function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
                             <Typography variant="body2">
                                 <ul className="upgrade-list">
                                     {props.formation.availableUpgrades.map(upgrade => (
-                                        <Tooltip title={<UpgradeTooltip upgrade={upgrade}/>} enterTouchDelay={0}>
+                                        <HeresyToolTip title={<UpgradeTooltip upgrade={upgrade}/>} enterTouchDelay={0}>
                                             <li key={upgrade.name}>{upgrade.name} <InfoIcon fontSize="inherit"/></li>
-                                        </Tooltip>
+                                        </HeresyToolTip>
                                     ))}
                                 </ul>
                             </Typography>
@@ -82,6 +96,14 @@ function DisplayListFormation(props: Readonly<{ formation: FormationSpec }>) {
     )
 }
 
+const HeresyToolTip = styled(({className, ...props}: TooltipProps) => (
+    <Tooltip {...props} classes={{popper: className}}/>
+))({
+    [`& .${tooltipClasses.tooltip}`]: {
+        maxWidth: 500,
+    },
+});
+
 function UpgradeTooltip(props: { upgrade: UpgradeSpec }) {
     return (
         <Stack spacing={1} pb={1}>
@@ -89,10 +111,16 @@ function UpgradeTooltip(props: { upgrade: UpgradeSpec }) {
                 <Typography variant="caption">{props.upgrade.name}</Typography>
                 <CostComponent cost={props.upgrade.cost.getOrZero(ItemCategory.UPGRADE)}/>
             </Stack>
-            <Typography variant="body2">{props.upgrade.description}</Typography>
+
+            {props.upgrade.type !== UpgradeType.WEAPON ?
+                <Typography variant="body2">{props.upgrade.description}</Typography> :
+                <WeaponsList weapons={[new EquippedWeapon(props.upgrade.weaponToAdd!)]}/>
+            }
+
             <Grid container spacing={1}>
-                <CategoryChips items={props.upgrade.cost.toList().filter(it => it.category !== ItemCategory.UPGRADE)}
-                               color="primary"/>
+                <CategoryChips
+                    items={props.upgrade.cost.toList().filter(it => it.category !== ItemCategory.UPGRADE)}
+                    color="primary"/>
             </Grid>
         </Stack>
     )
