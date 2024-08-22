@@ -13,6 +13,7 @@ export class Formation {
 
     constructor(spec: FormationSpec) {
         this.spec = spec
+        this.upgrades = spec.defaultUpgrades.map(upgradeSpec => new Upgrade(upgradeSpec))
     }
 
     canApplyUpgrade(upgrade: UpgradeSpec): ValidationResult {

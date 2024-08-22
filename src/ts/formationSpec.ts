@@ -10,15 +10,17 @@ export class FormationSpec {
     cost: ItemCost
     units: Map<Unit, number>
     availableUpgrades: UpgradeSpec[]
+    defaultUpgrades: UpgradeSpec[]
     section: string // TODO: Section should be removed
     grants: ItemCost
     upgradeRestrictions: BuildRestriction<UpgradeSpec>[]
 
-    constructor(name: string, cost: ItemCost, units: Map<Unit, number>, availableUpgrades: UpgradeSpec[], section: string, grants: ItemCost, upgradeRestrictions: BuildRestriction<UpgradeSpec>[]) {
+    constructor(name: string, cost: ItemCost, units: Map<Unit, number>, availableUpgrades: UpgradeSpec[], defaultUpgrades: UpgradeSpec[], section: string, grants: ItemCost, upgradeRestrictions: BuildRestriction<UpgradeSpec>[]) {
         this.name = name;
         this.cost = cost;
         this.units = units;
         this.availableUpgrades = availableUpgrades;
+        this.defaultUpgrades = defaultUpgrades;
         this.section = section;
         this.grants = grants;
         this.upgradeRestrictions = upgradeRestrictions;
@@ -51,6 +53,7 @@ export class FormationSpec {
         private grants: ItemCost = new ItemCost(new Map())
         private section: string = "Core"
         private readonly availableUpgrades: UpgradeSpec[] = []
+        private readonly defaultUpgrades: UpgradeSpec[] = []
         private readonly upgradeRestrictions: BuildRestriction<UpgradeSpec>[] = [];
 
         constructor(name: string, cost: ItemCost) {
@@ -60,6 +63,11 @@ export class FormationSpec {
 
         withUnit(unit: Unit, count?: number) {
             this.units.set(unit, count ?? 1);
+            return this;
+        }
+
+        withDefaultUpgrades(...upgrades: UpgradeSpec[]) {
+            upgrades.forEach(upgrade => this.defaultUpgrades.push(upgrade));
             return this;
         }
 
@@ -102,7 +110,16 @@ export class FormationSpec {
         }
 
         build() {
-            return new FormationSpec(this.name, this.cost, this.units, this.availableUpgrades, this.section, this.grants, this.upgradeRestrictions);
+            return new FormationSpec(
+                this.name,
+                this.cost,
+                this.units,
+                this.availableUpgrades,
+                this.defaultUpgrades,
+                this.section,
+                this.grants,
+                this.upgradeRestrictions
+            );
         }
     }
 }

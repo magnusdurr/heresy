@@ -171,6 +171,10 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                 ], "weapon upgrades")
             )
             .inSection("Titans")
+            .withDefaultUpgrades(
+                upgrades.scoutTitanWeapons.vulcanMegaBolter,
+                upgrades.scoutTitanWeapons.plasmaBlastgun
+            )
             .build(),
 
         new FormationSpec.Builder(
