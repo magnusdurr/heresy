@@ -146,6 +146,10 @@ export class WeaponAttackType {
     }
 
     displayString() {
-        return this.type + (this.toHit > 1 ? this.toHit + '+' : '')
+        if (this.type === WeaponType.BP) {
+            return this.toHit + this.type
+        } else {
+            return this.type + (this.toHit > 1 ? this.toHit + '+' : '')
+        }
     }
 }
