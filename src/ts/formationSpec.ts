@@ -1,4 +1,4 @@
-import {BuildRestriction} from "./restrictions";
+import {BuildRestriction, OncePerFormationRestriction} from "./restrictions";
 import {ItemCost, ItemCostEntry} from "./itemCost";
 import {Unit} from "./unit";
 import {UpgradeSpec} from "./upgradeSpec";
@@ -65,6 +65,14 @@ export class FormationSpec {
 
         withUpgrades(...upgrades: UpgradeSpec[]) {
             upgrades.forEach(upgrade => this.availableUpgrades.push(upgrade));
+            return this;
+        }
+
+        withOnlyOnceUpgrades(...upgrades: UpgradeSpec[]) {
+            upgrades.forEach(upgrade => {
+                this.upgradeRestrictions.push(new OncePerFormationRestriction(upgrade));
+                this.availableUpgrades.push(upgrade);
+            });
             return this;
         }
 

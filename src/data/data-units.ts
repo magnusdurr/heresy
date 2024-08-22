@@ -70,6 +70,17 @@ export const units = {
             .withNotes("After the drop pod lands, its Deathwind attacks all enemy units within 15cm. Each enemy formation attacked receives a Blast marker for coming under fire, and an extra Blast marker for each casualty. Then any troops carried in the drop pod must disembark within 5cm of the drop pod or within 5cm of another unit from the same formation that has already landed, so long as all units are placed within 15cm of the drop pod. Drop pod models should be removed from the board once the formation they transport has disembarked.")
             .build(),
 
+        landRaider: new Unit.Builder("Land Raider", UnitType.LV)
+            .withStats(25, 4, 6, 3)
+            .withWeapon(weapons.lascannonTwin, 2)
+            .withWeapon(weapons.bolterTwinHeavy)
+            .withSpecialRules(
+                specialRules.transport.withVariable("2"),
+                specialRules.thickRearArmour,
+                specialRules.reinforcedArmour
+            )
+            .build(),
+
         landSpeeder: new Unit.Builder("Land Speeder", UnitType.LV)
             .withStats(35, 4, 6, 5)
             .withWeapon(weapons.multimelta)
@@ -80,12 +91,6 @@ export const units = {
             .withStats(35, 4, 6, 5)
             .withWeapon(weapons.bolterHeavy)
             .withWeapon(weapons.plasmaCannon)
-            .build(),
-
-        scimitarJetbike: new Unit.Builder("Scimitar Jetbike", UnitType.INF)
-            .withStats(35, 4, 5, 3)
-            .withWeapon(weapons.bolterHeavy, 2)
-            .withSpecialRules(specialRules.mounted, specialRules.bulky)
             .build(),
 
         outriderBike: new Unit.Builder("Outrider Bike", UnitType.INF)
@@ -129,6 +134,18 @@ export const units = {
             .withWeapon(weapons.omegaPlasmaArray)
             .withWeapon(weapons.lascannon, 2)
             .withSpecialRule(specialRules.reinforcedArmour)
+            .build(),
+
+        scimitarJetbike: new Unit.Builder("Scimitar Jetbike", UnitType.INF)
+            .withStats(35, 4, 5, 3)
+            .withWeapon(weapons.bolterHeavy, 2)
+            .withSpecialRules(specialRules.mounted, specialRules.bulky)
+            .build(),
+
+        spartan: new Unit.Builder("Spartan Assault Tank", UnitType.WE)
+            .withStats(20, 4, 6, 3)
+            .withWeapon(weapons.lascannonQuad, 2)
+            .withSpecialRules(specialRules.walker, specialRules.reinforcedArmour, specialRules.transport.withVariable("4"))
             .build(),
 
         kratosBattlecannon: new Unit.Builder("Kratos Heavy Tank (Battlecannon)", UnitType.WE)

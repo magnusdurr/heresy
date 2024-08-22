@@ -1,6 +1,7 @@
 import {ItemCost} from "../ts/itemCost";
 import {units} from "./data-units";
 import {
+    IncompatibleTransportRestriction,
     MandatoryUpgradesRestriction,
     OncePerArmyRestriction,
     OncePerFormationRestriction,
@@ -32,19 +33,20 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                 {category: ItemCategory.TITANS, count: 1},
                 {category: ItemCategory.ALLIES, count: 1}
             )
-            .withUpgrades(
+            .withOnlyOnceUpgrades(
                 upgrades.supreme,
                 upgrades.chaplain,
                 upgrades.specialistPlasma,
-                upgrades.rhinos,
                 upgrades.dreadnoughts,
+                upgrades.rhinos,
+                upgrades.landRaider,
+                upgrades.spartan,
                 upgrades.dropPod
             )
             .withUpgradeRestrictions(
-                new OncePerFormationRestriction(upgrades.specialistPlasma),
-                new OncePerFormationRestriction(upgrades.dropPod),
-                new OneFromGroupRestriction([upgrades.rhinos, upgrades.dreadnoughts]),
-                new OneFromGroupRestriction([upgrades.supreme, upgrades.chaplain])
+                new OneFromGroupRestriction([upgrades.rhinos, upgrades.landRaider, upgrades.spartan, upgrades.dropPod], "transport option"),
+                new OneFromGroupRestriction([upgrades.supreme, upgrades.chaplain], "character"),
+                new IncompatibleTransportRestriction([upgrades.rhinos, upgrades.landRaider, upgrades.spartan, upgrades.dreadnoughts])
             )
             .build()
     ]))
@@ -155,7 +157,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
         )
             .withUnit(units.titans.warhound)
             .withSingleGrant(ItemCategory.UPGRADE)
-            .withUpgrades(
+            .withOnlyOnceUpgrades(
                 upgrades.warhoundPair,
                 upgrades.scoutTitanWeapons.vulcanMegaBolter,
                 upgrades.scoutTitanWeapons.infernoGun,
@@ -168,12 +170,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                     upgrades.scoutTitanWeapons.infernoGun,
                     upgrades.scoutTitanWeapons.plasmaBlastgun,
                     upgrades.scoutTitanWeapons.scoutTurboLaserDestructor
-                ], "weapon upgrades"),
-                new OncePerFormationRestriction(upgrades.warhoundPair),
-                new OncePerFormationRestriction(upgrades.scoutTitanWeapons.vulcanMegaBolter,),
-                new OncePerFormationRestriction(upgrades.scoutTitanWeapons.infernoGun,),
-                new OncePerFormationRestriction(upgrades.scoutTitanWeapons.plasmaBlastgun,),
-                new OncePerFormationRestriction(upgrades.scoutTitanWeapons.scoutTurboLaserDestructor),
+                ], "weapon upgrades")
             )
             .inSection("Titans")
             .build(),
@@ -186,7 +183,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                 {category: ItemCategory.TITANS, count: 2}
             ]))
             .withUnit(units.titans.reaver)
-            .withUpgrades(
+            .withOnlyOnceUpgrades(
                 upgrades.reaverWeapons.gatlingBlaster,
                 upgrades.reaverWeapons.laserBlaster,
                 upgrades.reaverWeapons.chainfist,
@@ -202,13 +199,7 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
                     upgrades.reaverWeapons.meltaCannon,
                     upgrades.reaverWeapons.powerfist,
                     upgrades.reaverWeapons.volcanoCannon
-                ], "arm weapons"),
-                new OncePerFormationRestriction(upgrades.reaverWeapons.gatlingBlaster),
-                new OncePerFormationRestriction(upgrades.reaverWeapons.laserBlaster),
-                new OncePerFormationRestriction(upgrades.reaverWeapons.chainfist),
-                new OncePerFormationRestriction(upgrades.reaverWeapons.meltaCannon),
-                new OncePerFormationRestriction(upgrades.reaverWeapons.powerfist),
-                new OncePerFormationRestriction(upgrades.reaverWeapons.volcanoCannon),
+                ], "arm weapons")
             )
             .inSection("Titans")
             .build(),

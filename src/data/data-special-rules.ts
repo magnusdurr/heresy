@@ -36,6 +36,9 @@ export const specialRules = {
     reinforcedArmour: new SpecialRule("Reinforced Armour", [
         "Units with reinforced armour are protected by armour many times thicker than that found on most armoured vehicles and have extremely robust internal construction too. Because of this they still take their saving throw when hit by macro-weapons. In addition, they may re-roll a failed save against any non-macro-weapon hit, including those inflicted during an assault."
     ]),
+    thickRearArmour: new SpecialRule("Thick Rear Armour", [
+        "Some armoured units are noted as having thick rear armour. These vehicles have equally thick armour all round, and so ignore the -1 save modifier when they are caught in a crossfire."
+    ]),
     transport: new VariableSpecialRule("Transport", [
         "Units with the *Transport* special rule can transport (x) number of INF units without *Bulky* or *Mounted*."
     ], "Transport($)"),

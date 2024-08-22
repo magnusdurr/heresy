@@ -98,6 +98,24 @@ export class OneFromGroupRestriction implements BuildRestriction<UpgradeSpec> {
     }
 }
 
+export class IncompatibleTransportRestriction implements BuildRestriction<UpgradeSpec> {
+    private upgradesInGroup: UpgradeSpec[];
+
+    constructor(upgrades: UpgradeSpec[]) {
+        this.upgradesInGroup = upgrades;
+    }
+
+    isLegal(upgrades: UpgradeSpec[]): ValidationResult {
+        if (upgrades.filter(u => this.upgradesInGroup.includes(u)).length > 1) {
+            return ValidationResult.failure(
+                `Incompatible transport options`
+            )
+        } else {
+            return ValidationResult.success
+        }
+    }
+}
+
 export class MandatoryUpgradesRestriction implements BuildRestriction<UpgradeSpec> {
     private readonly min: number
     private readonly max: number

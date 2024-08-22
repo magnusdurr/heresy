@@ -22,6 +22,18 @@ export const upgrades = {
         .withUnitToAdd(units.legionesAstartes.rhino, 1)
         .build(),
 
+    landRaider: new UpgradeSpec.Builder("Land Raiders",
+        "Add two Land Raiders to the formation, all units in the formation must fit in the Land Raiders.",
+        ItemCost.fromList(ItemCategory.UPGRADE, ItemCategory.HEAVY_SUPPORT))
+        .withUnitToAdd(units.legionesAstartes.landRaider, 2)
+        .build(),
+
+    spartan: new UpgradeSpec.Builder("Spartan Assault Tank",
+        "Add one Spartan Assault Tank to the formation, all units in the formation must fit in the Spartan.",
+        ItemCost.fromList(ItemCategory.UPGRADE, ItemCategory.HEAVY_SUPPORT))
+        .withUnitToAdd(units.legionesAstartes.spartan, 1)
+        .build(),
+
     dreadnoughts: new UpgradeSpec.Builder("Dreadnoughts",
         "Add two Dreadnoughts to the formation",
         ItemCost.fromEntries([
