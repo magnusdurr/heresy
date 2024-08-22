@@ -320,6 +320,7 @@ export const weapons = {
             .build(),
         turboLaserDestructor: new Weapon.Builder("Scout Turbo-Laser Destructor")
             .withRange(45)
+            .withShots(4)
             .withMode(new WeaponMode.Builder()
                 .withType(WeaponType.AP, 5)
                 .withType(WeaponType.AT, 3)
@@ -327,6 +328,7 @@ export const weapons = {
             .build(),
         plasmaBlastgun: new Weapon.Builder("Plasma Blastgun")
             .withRange(45)
+            .withShots(2)
             .withMode(new WeaponMode.Builder()
                 .withType(WeaponType.AP, 4)
                 .withType(WeaponType.AT, 2)
@@ -337,6 +339,14 @@ export const weapons = {
     },
 
     reaverTitan: {
+        apocalypseMissileLauncher: new Weapon.Builder("Apocalypse Missile Launcher")
+            .withRange(60)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.BP, 3)
+                .withSpecialRule(specialRules.disrupt)
+                .build())
+            .build(),
+
         gatlingBlaster: new Weapon.Builder("Gatling Blaster")
             .withRange(60)
             .withShots(4)
@@ -355,11 +365,45 @@ export const weapons = {
                 .build())
             .build(),
 
+        titanMeltaCannon: new Weapon.Builder("Titan Melta Cannon")
+            .withRange(30)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 4)
+                .withType(WeaponType.AT, 2)
+                .build()
+            )
+            .withMode(new WeaponMode.Builder()
+                .withSmallArmsType()
+                .withJoinType("and")
+                .withSpecialRule(specialRules.extraAttack.withVariable("1"))
+                .withSpecialRule(specialRules.titanKiller.withVariable("1"))
+                .build()
+            )
+            .build(),
+
+        turboLaserDestructor: new Weapon.Builder("Turbo-Laser Destructor")
+            .withRange(60)
+            .withShots(4)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 5)
+                .withType(WeaponType.AT, 3)
+                .build())
+            .build(),
+
         volcanoCannon: new Weapon.Builder("Volcano Cannon")
             .withRange(75)
             .withMode(new WeaponMode.Builder()
                 .withType(WeaponType.AP, 4)
                 .withType(WeaponType.AT, 2)
+                .withSpecialRule(specialRules.titanKiller.withVariable("D3"))
+                .build())
+            .build(),
+
+        warpMissile: new Weapon.Builder("Warp Missile")
+            .withRange(120)
+            .withMode(new WeaponMode.Builder()
+                .withType(WeaponType.AP, 5)
+                .withType(WeaponType.AT, 3)
                 .withSpecialRule(specialRules.titanKiller.withVariable("D3"))
                 .build())
             .build(),
@@ -380,20 +424,6 @@ export const weapons = {
                 .build())
             .build(),
 
-        titanMeltaCannon: new Weapon.Builder("Titan Melta Cannon")
-            .withRange(30)
-            .withMode(new WeaponMode.Builder()
-                .withType(WeaponType.AP, 4)
-                .withType(WeaponType.AT, 2)
-                .build()
-            )
-            .withMode(new WeaponMode.Builder()
-                .withSmallArmsType()
-                .withJoinType("and")
-                .withSpecialRule(specialRules.extraAttack.withVariable("1"))
-                .withSpecialRule(specialRules.titanKiller.withVariable("1"))
-                .build()
-            )
-            .build(),
+
     }
 }

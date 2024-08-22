@@ -55,15 +55,9 @@ export const specialRules = {
     ]),
 
     // Weapon rules
-
-    macro: new SpecialRule("Macro Weapon", [
-        "Only units with reinforced armour or invulnerable saves receive a saving throw against hits from a macro-weapon."
-    ], "MW"),
-    titanKiller: new VariableSpecialRule("Titan Killer", [
-        "Some units are armed with weapons that are noted as being Titan Killers (see 2.2.9). Many of these weapons are capable of taking down a war engine with a single shot. Enemy units hit by such weapons may not take a cover or armour save, even if they have reinforced armour. Note that cover to hit modifiers do apply.",
-        "In addition, Titan Killer weapons will usually have a dice roll noted in brackets on their data sheet. For example, the Volcano Cannon mounted on an Imperial Guard Shadowsword is noted as being a Titan Killer (D3) weapon. If such a weapon hits a war engine then the war engine suffers damage equal to the roll of the appropriate sort of dice. Each point of damage will reduce the war engine’s damage capacity by 1 point. Roll for critical hits for each point of damage inflicted. Titan Killer weapons that do not have a dice roll in brackets only inflict one point of damage.",
-        "When allocating Titan killer hits that may cause multiple points of damage, roll for damage immediately after allocating the hit. The War Engine counts as having been allocated a number of hits equal to the damage rolled. This is solely for purposes of allocation. Damage is applied as normal, only after all hits have been allocated."
-    ], "TK(+$)"),
+    disrupt: new SpecialRule("Disrupt", [
+        "Certain weapons are designed to disrupt enemy formations as much as kill enemy troops. To represent this weapons noted as having the disrupt ability inflict a Blast marker on an enemy formation for each hit they inflict instead of for each kill they inflict. Note that the hits inflicted by disruptor weapons are saved for normally. Any units that fail their save are removed as casualties but do not cause a second Blast marker to be placed on the target formation."
+    ]),
     energetic: new SpecialRule("Energetic", [
         "When performing a *sustained fire* action, *energetic* weapons receive an extra +1 to hit modifier."
     ]),
@@ -73,7 +67,15 @@ export const specialRules = {
     ignoreCover: new SpecialRule("Ignore Cover", [
         "Some weapons are noted as being able to *ignore cover*. These weapons are designed to negate the effects of cover, either by blasting it apart or simply bypassing it altogether. These weapons ignore cover to hit modifiers, and negate infantry cover saves."
     ], "IC"),
+    macro: new SpecialRule("Macro Weapon", [
+        "Only units with reinforced armour or invulnerable saves receive a saving throw against hits from a macro-weapon."
+    ], "MW"),
     slowFiring: new VariableSpecialRule("Slow Firing", [
         "Some weapons are noted as being *slow firing*. These weapons must take one turn to reload after they have fired. This means that if they fire on one turn they may not fire during the next. We have found that the best way of remembering this is simply to turn the unit around to face away from the enemy when it fires, and then turn it back again when the formation is activated again next turn, but you can use any method you prefer."
     ], "Slw"),
+    titanKiller: new VariableSpecialRule("Titan Killer", [
+        "Some units are armed with weapons that are noted as being Titan Killers (see 2.2.9). Many of these weapons are capable of taking down a war engine with a single shot. Enemy units hit by such weapons may not take a cover or armour save, even if they have reinforced armour. Note that cover to hit modifiers do apply.",
+        "In addition, Titan Killer weapons will usually have a dice roll noted in brackets on their data sheet. For example, the Volcano Cannon mounted on an Imperial Guard Shadowsword is noted as being a Titan Killer (D3) weapon. If such a weapon hits a war engine then the war engine suffers damage equal to the roll of the appropriate sort of dice. Each point of damage will reduce the war engine’s damage capacity by 1 point. Roll for critical hits for each point of damage inflicted. Titan Killer weapons that do not have a dice roll in brackets only inflict one point of damage.",
+        "When allocating Titan killer hits that may cause multiple points of damage, roll for damage immediately after allocating the hit. The War Engine counts as having been allocated a number of hits equal to the damage rolled. This is solely for purposes of allocation. Damage is applied as normal, only after all hits have been allocated."
+    ], "TK(+$)"),
 }

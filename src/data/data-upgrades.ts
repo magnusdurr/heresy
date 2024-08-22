@@ -2,6 +2,7 @@ import {UpgradeSpec} from "../ts/upgradeSpec";
 import {ItemCost} from "../ts/itemCost";
 import {ItemCategory} from "../ts/itemCategory";
 import {units} from "./data-units";
+import {weapons} from "./data-weapons";
 
 export const upgrades = {
     supreme: new UpgradeSpec.Builder("Supreme Commander",
@@ -121,78 +122,97 @@ export const upgrades = {
         .build(),
 
     scoutTitanWeapons: {
-        vulcanMegaBolter: new UpgradeSpec.Builder(
+        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(
             "Vulcan Mega-Bolter",
             "One Vulcan Mega-Bolter",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.scoutTitanWeapons.vulcanMegaBolter)
-            .build(),
-        infernoGun: new UpgradeSpec.Builder(
+            ItemCost.free,
+            weapons.scoutTitan.vulcanMegaBolter),
+
+        infernoGun: UpgradeSpec.weaponUpgrade(
             "Inferno Gun",
             "One Inferno Gun",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.scoutTitanWeapons.infernoGun)
-            .build(),
-        scoutTurboLaserDestructor: new UpgradeSpec.Builder(
+            ItemCost.free,
+            weapons.scoutTitan.infernoGun),
+
+        scoutTurboLaserDestructor: UpgradeSpec.weaponUpgrade(
             "Scout Turbo-Laser Destructor",
             "One Scout Turbo-Laser Destructor",
             ItemCost.fromEntries([
                 {category: ItemCategory.UPGRADE, count: 1}
-            ]))
-            .withUnitToAdd(units.titans.scoutTitanWeapons.turboLaserDestructor)
-            .build(),
-        plasmaBlastgun: new UpgradeSpec.Builder(
+            ]),
+            weapons.scoutTitan.turboLaserDestructor),
+
+        plasmaBlastgun: UpgradeSpec.weaponUpgrade(
             "Plasma Blastgun",
             "One Plasma Blastgun",
             ItemCost.fromEntries([
                 {category: ItemCategory.UPGRADE, count: 1}
-            ]))
-            .withUnitToAdd(units.titans.scoutTitanWeapons.plasmaBlastgun)
-            .build(),
+            ]),
+            weapons.scoutTitan.plasmaBlastgun)
     },
 
     reaverWeapons: {
-        gatlingBlaster: new UpgradeSpec.Builder(
+        apocalypseMissileLauncher: UpgradeSpec.weaponUpgrade(
+            "Apocalypse Missile Launcher",
+            "One Appocalypse Missile Launcher",
+            ItemCost.free,
+            weapons.reaverTitan.apocalypseMissileLauncher),
+
+        gatlingBlaster: UpgradeSpec.weaponUpgrade(
             "Gatling Blaster",
             "One Gatling Blaster",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.reaverWeapons.gatlingBlaster)
-            .build(),
+            ItemCost.free,
+            weapons.reaverTitan.gatlingBlaster),
 
-        laserBlaster: new UpgradeSpec.Builder(
+        laserBlaster: UpgradeSpec.weaponUpgrade(
             "Laser Blaster",
             "One Laser Blaster",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.reaverWeapons.laserBlaster)
-            .build(),
+            ItemCost.free,
+            weapons.reaverTitan.laserBlaster),
 
-        chainfist: new UpgradeSpec.Builder(
-            "Chainfist",
-            "One Titan Chainfist",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.reaverWeapons.chainfist)
-            .build(),
-
-        meltaCannon: new UpgradeSpec.Builder(
+        meltaCannon: UpgradeSpec.weaponUpgrade(
             "Melta Cannon",
             "One Titan Melta Cannon",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.reaverWeapons.meltaCannon)
-            .build(),
+            ItemCost.free,
+            weapons.reaverTitan.titanMeltaCannon),
 
-        powerfist: new UpgradeSpec.Builder(
-            "Powerfist",
-            "One Powerfist",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.reaverWeapons.powerfist)
-            .build(),
+        turboLaserDestructor: UpgradeSpec.weaponUpgrade(
+            "Turbo-Laser Destructor",
+            "One Turbo-Laser Destructor",
+            ItemCost.free,
+            weapons.reaverTitan.turboLaserDestructor),
 
-        volcanoCannon: new UpgradeSpec.Builder(
+        volcanoCannon: UpgradeSpec.weaponUpgrade(
             "Volcano Cannon",
             "One Volcano Cannon",
-            ItemCost.free)
-            .withUnitToAdd(units.titans.reaverWeapons.volcanoCannon)
-            .build()
+            ItemCost.fromEntries([
+                {category: ItemCategory.UPGRADE, count: 1}
+            ]),
+            weapons.reaverTitan.volcanoCannon),
+
+        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(
+            "Vulcan Mega-Bolter",
+            "One Vulcan Mega-Bolter",
+            ItemCost.free,
+            weapons.scoutTitan.vulcanMegaBolter),
+
+        warpMissile: UpgradeSpec.weaponUpgrade(
+            "Warp Missile",
+            "One Warp Missile",
+            ItemCost.free,
+            weapons.reaverTitan.warpMissile),
+
+        chainfist: UpgradeSpec.weaponUpgrade(
+            "Chainfist",
+            "One Titan Chainfist",
+            ItemCost.free,
+            weapons.reaverTitan.chainfist),
+
+        powerfist: UpgradeSpec.weaponUpgrade(
+            "Powerfist",
+            "One Powerfist",
+            ItemCost.free,
+            weapons.reaverTitan.powerFist)
     },
 
     lemanRussVanquisher: new UpgradeSpec.Builder("Vanquishers",

@@ -186,24 +186,35 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             ]))
             .withUnit(units.titans.reaver)
             .withOnlyOnceUpgrades(
+                upgrades.reaverWeapons.apocalypseMissileLauncher,
                 upgrades.reaverWeapons.gatlingBlaster,
                 upgrades.reaverWeapons.laserBlaster,
-                upgrades.reaverWeapons.chainfist,
                 upgrades.reaverWeapons.meltaCannon,
-                upgrades.reaverWeapons.powerfist,
-                upgrades.reaverWeapons.volcanoCannon
+                upgrades.reaverWeapons.turboLaserDestructor,
+                upgrades.reaverWeapons.volcanoCannon,
+                upgrades.reaverWeapons.vulcanMegaBolter,
+                upgrades.reaverWeapons.warpMissile,
+                upgrades.reaverWeapons.chainfist,
+                upgrades.reaverWeapons.powerfist
             )
             .withUpgradeRestrictions(
                 new MandatoryUpgradesRestriction(2, 2, [
                     upgrades.reaverWeapons.gatlingBlaster,
                     upgrades.reaverWeapons.laserBlaster,
-                    upgrades.reaverWeapons.chainfist,
                     upgrades.reaverWeapons.meltaCannon,
-                    upgrades.reaverWeapons.powerfist,
-                    upgrades.reaverWeapons.volcanoCannon
-                ], "arm weapons")
+                    upgrades.reaverWeapons.volcanoCannon,
+                    upgrades.reaverWeapons.chainfist,
+                    upgrades.reaverWeapons.powerfist
+                ], "arm weapons"),
+                new MandatoryUpgradesRestriction(1, 1, [
+                    upgrades.reaverWeapons.apocalypseMissileLauncher,
+                    upgrades.reaverWeapons.turboLaserDestructor,
+                    upgrades.reaverWeapons.vulcanMegaBolter,
+                    upgrades.reaverWeapons.warpMissile
+                ], "carapace weapons")
             )
             .inSection("Titans")
+            .withDefaultUpgrades(upgrades.reaverWeapons.chainfist, upgrades.reaverWeapons.gatlingBlaster, upgrades.reaverWeapons.apocalypseMissileLauncher)
             .build(),
 
         new FormationSpec.Builder(

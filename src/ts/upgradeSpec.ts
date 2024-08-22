@@ -1,19 +1,40 @@
 import {Unit} from "./unit";
 import {ItemCost} from "./itemCost";
+import {Weapon} from "./weapon";
+
+export enum UpgradeType {
+    FORMATION, WEAPON
+}
 
 export class UpgradeSpec {
-    name: string
-    description: string
-    cost: ItemCost
-    unitsToReplace: Map<Unit, number> // unit id -> number of units
-    unitsToAdd: Map<Unit, number> // unit id -> number of units
+    readonly type: UpgradeType
+    readonly name: string
+    readonly description: string
+    readonly cost: ItemCost
+    readonly unitsToReplace: Map<Unit, number> // unit id -> number of units
+    readonly unitsToAdd: Map<Unit, number> // unit id -> number of units
+    readonly weaponToAdd?: Weapon
 
-    constructor(name: string, description: string, cost: ItemCost, unitsToReplace: Map<Unit, number>, unitsToAdd: Map<Unit, number>) {
+    constructor(
+        type: UpgradeType,
+        name: string,
+        description: string,
+        cost: ItemCost,
+        unitsToReplace: Map<Unit, number>,
+        unitsToAdd: Map<Unit, number>,
+        weaponToAdd?: Weapon
+    ) {
+        this.type = type;
         this.name = name;
         this.description = description;
         this.cost = cost;
         this.unitsToReplace = unitsToReplace;
         this.unitsToAdd = unitsToAdd;
+        this.weaponToAdd = weaponToAdd;
+    }
+
+    static weaponUpgrade(name: string, description: string, cost: ItemCost, weapon: Weapon) {
+        return new UpgradeSpec(UpgradeType.WEAPON, name, description, cost, new Map(), new Map(), weapon);
     }
 
     static Builder = class {
@@ -40,7 +61,7 @@ export class UpgradeSpec {
         }
 
         build() {
-            return new UpgradeSpec(this.name, this.description, this.cost, this.unitsToReplace, this.unitsToAdd);
+            return new UpgradeSpec(UpgradeType.FORMATION, this.name, this.description, this.cost, this.unitsToReplace, this.unitsToAdd);
         }
     }
 }

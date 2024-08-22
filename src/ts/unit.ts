@@ -39,6 +39,22 @@ export class Unit {
         this.criticalHitEffect = criticalHitEffect;
     }
 
+    deepClone(): Unit {
+        return new Unit(
+            this.name,
+            this.unitType,
+            this.armour,
+            this.move,
+            this.cc,
+            this.ff,
+            Array.from(this.weapons),
+            Array.from(this.specialRules),
+            this.dc,
+            this.notes,
+            this.criticalHitEffect
+        );
+    }
+
     static Builder = class {
         private readonly name: string
         private readonly unitType: UnitType
@@ -94,6 +110,11 @@ export class Unit {
 
         withEquippedWeapon(weapon: EquippedWeapon) {
             this.weapons.push(weapon);
+            return this;
+        }
+
+        withEquippedWeapons(weapons: EquippedWeapon[]) {
+            weapons.forEach(weapon => this.weapons.push(weapon));
             return this;
         }
 

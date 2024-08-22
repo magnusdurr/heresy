@@ -5,6 +5,7 @@ import {UnitComponent} from "./UnitComponent";
 import {Formation} from "./ts/formation";
 import {HeresyDialog} from "./HeresyDialog";
 import {FormationSpec} from "./ts/formationSpec";
+import {Unit, UnitType} from "./ts/unit";
 
 
 export function DisplayUnitsDialog(props: {
@@ -16,6 +17,7 @@ export function DisplayUnitsDialog(props: {
     const name = props.formation instanceof Formation ? props.formation.spec.name : props.formation.name;
     const unitsInFormation = props.formation instanceof Formation ? props.formation.unitsInFormation() : props.formation.unitCount()
     const upgradeUnits = props.formation instanceof FormationSpec ? props.formation.possibleUpgradeUnits() : undefined;
+    const upgradeWeapons = props.formation instanceof FormationSpec ? props.formation.possibleUpgradeWeapons() : undefined;
 
     return (
         <HeresyDialog title={name}
@@ -29,14 +31,26 @@ export function DisplayUnitsDialog(props: {
                 <UnitComponent key={formationIndex} unit={entry.unit}/>
             ))}
 
-            {upgradeUnits && upgradeUnits.length > 0 &&
+            {((upgradeUnits && upgradeUnits.length > 0) || (upgradeWeapons && upgradeWeapons.length > 0)) &&
                 <>
                     <Typography variant="caption">Available upgrades</Typography>
-                    {upgradeUnits.map((entry, formationIndex) => (
-                        <UnitComponent key={formationIndex} unit={entry.unit}/>
-                    ))}
+                    {upgradeUnits && upgradeUnits.length > 0 &&
+                        <>
+                            {upgradeUnits.map((entry, formationIndex) => (
+                                <UnitComponent key={formationIndex} unit={entry.unit}/>
+                            ))}
+                        </>
+                    }
+
+                    {upgradeWeapons && upgradeWeapons.length > 0 &&
+                        <UnitComponent key="weaponUpgrades" unit={
+                            new Unit.Builder("Upgrade weapons", UnitType.WEAPON)
+                                .withEquippedWeapons(upgradeWeapons)
+                                .build()}/>
+                    }
                 </>
             }
         </HeresyDialog>
-    );
+    )
+        ;
 }

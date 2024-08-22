@@ -256,21 +256,6 @@ export const units = {
             .withStats(20, 4, 4, 4)
             .build(),
 
-        scoutTitanWeapons: {
-            vulcanMegaBolter: new Unit.Builder("Vulcan Mega-Bolter", UnitType.WEAPON)
-                .withWeapon(weapons.scoutTitan.vulcanMegaBolter)
-                .build(),
-            infernoGun: new Unit.Builder("Inferno Gun", UnitType.WEAPON)
-                .withWeapon(weapons.scoutTitan.infernoGun)
-                .build(),
-            turboLaserDestructor: new Unit.Builder("Scout Turbo-Laser Destructor", UnitType.WEAPON)
-                .withWeapon(weapons.scoutTitan.turboLaserDestructor)
-                .build(),
-            plasmaBlastgun: new Unit.Builder("Plasma Blastgun", UnitType.WEAPON)
-                .withWeapon(weapons.scoutTitan.plasmaBlastgun)
-                .build(),
-        },
-
         reaverWeapons: {
             gatlingBlaster: new Unit.Builder("Gatling Blaster", UnitType.WEAPON)
                 .withFiringArcWeapon(weapons.reaverTitan.gatlingBlaster, FiringArc.FORWARD_ARC)

@@ -1,9 +1,10 @@
 import {BuildRestriction, OncePerFormationRestriction} from "./restrictions";
 import {ItemCost, ItemCostEntry} from "./itemCost";
 import {Unit} from "./unit";
-import {UpgradeSpec} from "./upgradeSpec";
+import {UpgradeSpec, UpgradeType} from "./upgradeSpec";
 import {ItemCategory} from "./itemCategory";
 import {UnitCount} from "./formation";
+import {EquippedWeapon} from "./weapon";
 
 export class FormationSpec {
     name: string
@@ -36,6 +37,12 @@ export class FormationSpec {
         })
 
         return this.mapToUnitCount(result).filter(unitCount => unitCount.count > 0)
+    }
+
+    possibleUpgradeWeapons(): EquippedWeapon[] {
+        return this.availableUpgrades
+            .filter(upgrade => upgrade.type === UpgradeType.WEAPON)
+            .map(upgrade => new EquippedWeapon(upgrade.weaponToAdd!));
     }
 
     mapToUnitCount(values: Map<Unit, number>): UnitCount[] {
