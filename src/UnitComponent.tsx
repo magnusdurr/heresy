@@ -98,19 +98,26 @@ function WeaponsList(props: { weapons: EquippedWeapon[] }) {
             </TableHead>
             <TableBody>
                 {props.weapons.map(weapon => (
-                    <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                    <>
                         {weapon.weapon.modes.map(mode => (
-                            <>
-                                <TableCell className="dense-cell">
-                                    <Typography variant="body2">
-                                        {weapon.count > 1 && weapon.count + 'x '}
-                                        {weapon.weapon.name}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell className="dense-cell">
-                                    <Typography
-                                        variant="body2">{weapon.weapon.range === 0 ? 'N/A' : `${weapon.weapon.range}cm`}</Typography>
-                                </TableCell>
+                            <TableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                                {mode.joinType !== undefined &&
+                                    <TableCell colSpan={2} className="dense-cell" align="right">
+                                        <Typography variant="body2"><i>{mode.joinType}</i></Typography>
+                                    </TableCell>}
+
+                                {mode.joinType === undefined && <>
+                                    <TableCell className="dense-cell">
+                                        <Typography variant="body2">
+                                            {weapon.count > 1 && weapon.count + 'x '}
+                                            {weapon.weapon.name}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell className="dense-cell">
+                                        <Typography
+                                            variant="body2">{weapon.weapon.range === 0 ? 'N/A' : `${weapon.weapon.range}cm`}</Typography>
+                                    </TableCell>
+                                </>}
                                 <TableCell className="dense-cell">
                                     <Typography variant="body2">
                                         {mode.firepower(weapon.weapon.shots)}&nbsp;&nbsp;
@@ -123,9 +130,9 @@ function WeaponsList(props: { weapons: EquippedWeapon[] }) {
                                         </ul>
                                     </Typography>
                                 </TableCell>
-                            </>
+                            </TableRow>
                         ))}
-                    </TableRow>
+                    </>
                 ))}
             </TableBody>
         </Table>
