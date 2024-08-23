@@ -20,6 +20,11 @@ export const specialRules = {
     invulnerableSave: new SpecialRule("Invulnerable Save", [
         "Certain units or characters receive a special *invulnerable* save. These units either have protective devices or supernatural vitality that will allow them to survive an attack that would kill another creature. To represent this, units with an invulnerable save receive a second save of 6+ if they fail their first save for any reason. They may take this second save against any form of attack, even attacks that would normally not allow a save to be taken. No modifiers ever apply to the second save."
     ]),
+    ionShield: new VariableSpecialRule("Ion Shield", [
+        "Knights make use of Ion Shields to deflect shooting and firefight attacks. This allows them to make a saving throw on the number within brackets when they are hit by ranged fire instead of using their armour value.",
+        "No modifiers ever apply to this saving throw and it is unaffected by Macro-Weapon, Lance and Titan Killer hits (each point of damage from a Titan Killer hit must be saved separately. Is affected normally by hits with the Disrupt special rule). If the unit has Reinforced Armour as well then it is allowed to re-roll a failed save using its armour value unless the hit was a Macro-Weapon, Lance or Titan killer.",
+        "Ion Shields may only be used against shooting unless the unit is in a Crossfire, and against FF unless the hit is caused by a unit in support. They may not be used against CC attacks. If relevant, roll CC and FF dice separately when attacking units equipped with Ion Shields."
+    ], "Ion Shield($)"),
     jumpPack: new SpecialRule("Jump Pack", [
         "Some units are noted as having jump packs. These units are equipped with special devices that allow them to fly for short distances, usually in a series of long hops.",
         "Units equipped with jump packs may ignore dangerous or impassable terrain as they move (they jump over it). They may not land on impassable terrain, and if they land in dangerous terrain they must take a dangerous terrain test. Units equipped with jump packs may also move over other friendly units as they move, but may not land on them. Units with jump packs are affected by enemy units and zones of control normally, and cannot jump over enemy formations."
@@ -29,6 +34,9 @@ export const specialRules = {
     ]),
     mounted: new SpecialRule("Mounted", [
         "Some infantry units are noted as being mounted, and will either ride on bikes or living creatures such as horses. Mounted units count as vehicles for terrain effects, and as infantry units for all other purposes."
+    ]),
+    skirmishers: new SpecialRule("Skirmishers", [
+        "10 cm coherency. Same rules as Scout for determining which formations that may garrison."
     ]),
     supremeCommander: new SpecialRule("Supreme Commander", [
         "Supreme Commanders represent high-level command units. They count as *commanders* and *leaders*. In addition, each supreme commander unit in the army allows a player to re-roll one failed initiative test (of any type) once per turn."
@@ -77,5 +85,5 @@ export const specialRules = {
         "Some units are armed with weapons that are noted as being Titan Killers (see 2.2.9). Many of these weapons are capable of taking down a war engine with a single shot. Enemy units hit by such weapons may not take a cover or armour save, even if they have reinforced armour. Note that cover to hit modifiers do apply.",
         "In addition, Titan Killer weapons will usually have a dice roll noted in brackets on their data sheet. For example, the Volcano Cannon mounted on an Imperial Guard Shadowsword is noted as being a Titan Killer (D3) weapon. If such a weapon hits a war engine then the war engine suffers damage equal to the roll of the appropriate sort of dice. Each point of damage will reduce the war engine’s damage capacity by 1 point. Roll for critical hits for each point of damage inflicted. Titan Killer weapons that do not have a dice roll in brackets only inflict one point of damage.",
         "When allocating Titan killer hits that may cause multiple points of damage, roll for damage immediately after allocating the hit. The War Engine counts as having been allocated a number of hits equal to the damage rolled. This is solely for purposes of allocation. Damage is applied as normal, only after all hits have been allocated."
-    ], "TK(+$)"),
+    ], "TK($)"),
 }

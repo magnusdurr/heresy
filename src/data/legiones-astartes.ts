@@ -6,7 +6,8 @@ import {
     OncePerArmyRestriction,
     OncePerFormationRestriction,
     OneFromGroupRestriction,
-    SingleAllyTypeRestriction
+    SingleAllyTypeRestriction,
+    TimesPerFormationRestriction
 } from "../ts/restrictions";
 import {ArmySection} from "../ts/armySection";
 import {FormationSpec} from "../ts/formationSpec";
@@ -290,18 +291,32 @@ export const legionesAstartesArmySpec = new ArmySpec.Builder("Legiones Astartes"
             .build()
     ]))
     .withArmySection(new ArmySection("Allies - Knight World", [
-        new FormationSpec.Builder("Questoris Knights", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.ALLIES))
+        new FormationSpec.Builder("Questoris Knights", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ELITE))
+            .withUnit(units.knightWorld.questoris.paladin, 2)
+            .withUpgrades(
+                upgrades.knightQuestoris.crusader,
+                upgrades.knightQuestoris.errant,
+                upgrades.knightQuestoris.gallant,
+                upgrades.knightQuestoris.warden
+            )
+            .withUpgradeRestrictions(
+                new OneFromGroupRestriction([
+                        upgrades.knightQuestoris.crusader,
+                        upgrades.knightQuestoris.errant,
+                        upgrades.knightQuestoris.gallant,
+                        upgrades.knightQuestoris.warden],
+                    "knight type")
+            )
             .inSection("Allies - Knight World")
-            .withSingleGrant(ItemCategory.ALLIES_KN_SUPPORT)
             .build(),
 
         new FormationSpec.Builder("Armiger Knights", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.ALLIES))
             .inSection("Allies - Knight World")
-            .withSingleGrant(ItemCategory.UPGRADE)
-            .build(),
-
-        new FormationSpec.Builder("Acastus Knights", ItemCost.fromList(ItemCategory.FORMATION, ItemCategory.ALLIES, ItemCategory.ALLIES_KN_SUPPORT))
-            .inSection("Allies - Knight World")
+            .withUnit(units.knightWorld.armiger.helverine, 3)
+            .withUpgrades(upgrades.armigerWarglaive)
+            .withUpgradeRestrictions(
+                new TimesPerFormationRestriction(upgrades.armigerWarglaive, 3)
+            )
             .build()
     ]))
     .build()

@@ -122,14 +122,11 @@ export const upgrades = {
         .build(),
 
     scoutTitanWeapons: {
-        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.vulcanMegaBolter, ItemCost.free),
-
-        infernoGun: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.infernoGun, ItemCost.free),
-
+        vulcanMegaBolter: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.vulcanMegaBolter),
+        infernoGun: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.infernoGun),
         scoutTurboLaserDestructor: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.turboLaserDestructor, ItemCost.fromEntries([
             {category: ItemCategory.UPGRADE, count: 1}
         ])),
-
         plasmaBlastgun: UpgradeSpec.weaponUpgrade(weapons.scoutTitan.plasmaBlastgun, ItemCost.fromEntries([
             {category: ItemCategory.UPGRADE, count: 1}
         ]))
@@ -176,5 +173,32 @@ export const upgrades = {
         ItemCost.free)
         .withUnitToAdd(units.solarAuxilia.malcadoreVanquisher, 2)
         .withUnitToReplace(units.solarAuxilia.malcadore, 2)
+        .build(),
+
+    knightQuestoris: {
+        errant: new UpgradeSpec.Builder("Knight-Errants", "Replace the Paladins with Errants", ItemCost.free)
+            .withUnitToReplace(units.knightWorld.questoris.paladin, 2)
+            .withUnitToAdd(units.knightWorld.questoris.errant, 2)
+            .build(),
+
+        gallant: new UpgradeSpec.Builder("Knight-Gallant", "Replace the Paladins with Gallants", ItemCost.free)
+            .withUnitToReplace(units.knightWorld.questoris.paladin, 2)
+            .withUnitToAdd(units.knightWorld.questoris.gallant, 2)
+            .build(),
+
+        crusader: new UpgradeSpec.Builder("Knight-Crusader", "Replace the Paladins with Crusaders", ItemCost.free)
+            .withUnitToReplace(units.knightWorld.questoris.paladin, 2)
+            .withUnitToAdd(units.knightWorld.questoris.crusader, 2)
+            .build(),
+
+        warden: new UpgradeSpec.Builder("Knight-Warden", "Replace the Paladins with Wardens", ItemCost.free)
+            .withUnitToReplace(units.knightWorld.questoris.paladin, 2)
+            .withUnitToAdd(units.knightWorld.questoris.warden, 2)
+            .build(),
+    },
+
+    armigerWarglaive: new UpgradeSpec.Builder("Warglaives", "Replace one Helverine with a Warglaive", ItemCost.free)
+        .withUnitToReplace(units.knightWorld.armiger.helverine, 1)
+        .withUnitToAdd(units.knightWorld.armiger.warglaive, 1)
         .build()
 }

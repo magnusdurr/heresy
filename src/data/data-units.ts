@@ -243,6 +243,111 @@ export const units = {
             .withWeapon(weapons.lascannon, 3)
             .build(),
     },
+    knightWorld: {
+        questoris: {
+            paladin: new Unit.Builder("Questoris Knight-Paladin", UnitType.WE)
+                .withStats(20, 5, 3, 4)
+                .withDC(2)
+                .withWeapon(weapons.battleCannonRapidFire)
+                .withWeapon(weapons.chainswordReaper)
+                .withWeapon(weapons.stubberHeavy)
+                .withSpecialRules(
+                    specialRules.blitz,
+                    specialRules.ionShield.withVariable("4"),
+                    specialRules.thickRearArmour,
+                    specialRules.reinforcedArmour,
+                    specialRules.walker
+                )
+                .build(),
+
+            errant: new Unit.Builder("Questoris Knight-Errant", UnitType.WE)
+                .withStats(20, 5, 3, 4)
+                .withDC(2)
+                .withWeapon(weapons.thermalCannon)
+                .withWeapon(weapons.chainswordReaper)
+                .withWeapon(weapons.stubberHeavy)
+                .withSpecialRules(
+                    specialRules.blitz,
+                    specialRules.ionShield.withVariable("4"),
+                    specialRules.thickRearArmour,
+                    specialRules.reinforcedArmour,
+                    specialRules.walker
+                )
+                .build(),
+
+            gallant: new Unit.Builder("Questoris Knight-Gallant", UnitType.WE)
+                .withStats(25, 5, 2, 6)
+                .withDC(2)
+                .withWeapon(weapons.thunderstrikeGauntlet)
+                .withWeapon(weapons.chainswordReaper)
+                .withWeapon(weapons.meltagun)
+                .withSpecialRules(
+                    specialRules.blitz,
+                    specialRules.ionShield.withVariable("4"),
+                    specialRules.thickRearArmour,
+                    specialRules.reinforcedArmour,
+                    specialRules.walker
+                )
+                .build(),
+
+            crusader: new Unit.Builder("Questoris Knight-Crusader", UnitType.WE)
+                .withStats(20, 5, 5, 4)
+                .withDC(2)
+                .withWeapon(weapons.thermalCannon)
+                .withWeapon(weapons.gatlingCannonAvenger)
+                .withWeapon(weapons.stubberHeavy)
+                .withSpecialRules(
+                    specialRules.blitz,
+                    specialRules.ionShield.withVariable("4"),
+                    specialRules.thickRearArmour,
+                    specialRules.reinforcedArmour,
+                    specialRules.walker
+                )
+                .build(),
+
+            warden: new Unit.Builder("Questoris Knight-Warden", UnitType.WE)
+                .withStats(20, 5, 3, 4)
+                .withDC(2)
+                .withWeapon(weapons.gatlingCannonAvenger)
+                .withWeapon(weapons.chainswordReaper)
+                .withWeapon(weapons.stubberHeavy)
+                .withSpecialRules(
+                    specialRules.blitz,
+                    specialRules.ionShield.withVariable("4"),
+                    specialRules.thickRearArmour,
+                    specialRules.reinforcedArmour,
+                    specialRules.walker
+                )
+                .build()
+        },
+
+        armiger: {
+            warglaive: new Unit.Builder("Armiger Warglaive", UnitType.WE)
+                .withStats(25, 4, 4, 4)
+                .withDC(1)
+                .withWeapon(weapons.thermalSpear)
+                .withWeapon(weapons.chaincleaverReaper)
+                .withSpecialRules(
+                    specialRules.blitz,
+                    specialRules.ionShield.withVariable("5"),
+                    specialRules.skirmishers,
+                    specialRules.walker
+                )
+                .build(),
+
+            helverine: new Unit.Builder("Armiger Helverine", UnitType.WE)
+                .withStats(25, 4, 4, 4)
+                .withDC(1)
+                .withWeapon(weapons.autocannon, 2)
+                .withSpecialRules(
+                    specialRules.blitz,
+                    specialRules.ionShield.withVariable("5"),
+                    specialRules.skirmishers,
+                    specialRules.walker
+                )
+                .build()
+        }
+    },
     titans: {
         warhound: new Unit.Builder("Warhound Titan", UnitType.WE)
             .withDC(3)

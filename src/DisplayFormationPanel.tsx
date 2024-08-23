@@ -55,7 +55,7 @@ export function DisplayFormationPanel(props: Readonly<{
                     </Grid>
                 </FormationHeader>
 
-                {props.formation.upgrades.length > 0 &&
+                {props.formation.upgrades.length > 0 && //TODO: Merge when same upgrade is taken more than once...
                     <Box mt={1}>
                         <Typography variant="body2" display="inline"><i>Upgrades: </i></Typography>
                         <Typography variant="body2" display="inline">

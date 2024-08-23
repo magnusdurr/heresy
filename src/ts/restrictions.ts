@@ -46,33 +46,41 @@ export class SingleAllyTypeRestriction implements BuildRestriction<FormationSpec
     }
 }
 
-export class OncePerThingRestriction implements BuildRestriction<UpgradeSpec> {
+export class LimitPerThingRestriction implements BuildRestriction<UpgradeSpec> {
     private upgrade: UpgradeSpec;
     private thing: string;
+    private limit: number;
 
-    constructor(upgrade: UpgradeSpec, thing: string) {
+    constructor(upgrade: UpgradeSpec, thing: string, limit: number) {
         this.upgrade = upgrade;
         this.thing = thing;
+        this.limit = limit;
     }
 
     isLegal(upgrades: UpgradeSpec[]): ValidationResult {
-        if (upgrades.filter(u => u === this.upgrade).length > 1) {
-            return ValidationResult.failure(`${this.upgrade.name} can only be taken once per ${this.thing}`)
+        if (upgrades.filter(u => u === this.upgrade).length > this.limit) {
+            return ValidationResult.failure(`Max ${this.limit} ${this.upgrade.name} per ${this.thing}`)
         } else {
             return ValidationResult.success
         }
     }
 }
 
-export class OncePerArmyRestriction extends OncePerThingRestriction {
+export class OncePerArmyRestriction extends LimitPerThingRestriction {
     constructor(upgrade: UpgradeSpec) {
-        super(upgrade, "army");
+        super(upgrade, "army", 1);
     }
 }
 
-export class OncePerFormationRestriction extends OncePerThingRestriction {
+export class OncePerFormationRestriction extends LimitPerThingRestriction {
     constructor(upgrade: UpgradeSpec) {
-        super(upgrade, "formation");
+        super(upgrade, "formation", 1);
+    }
+}
+
+export class TimesPerFormationRestriction extends LimitPerThingRestriction {
+    constructor(upgrade: UpgradeSpec, limit: number) {
+        super(upgrade, "formation", limit);
     }
 }
 

@@ -50,6 +50,16 @@ export const weapons = {
         )
         .build(),
 
+    battleCannonRapidFire: new Weapon.Builder("Rapid Fire Battle Cannon")
+        .withRange(60)
+        .withShots(2)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 4)
+            .withType(WeaponType.AT, 4)
+            .build()
+        )
+        .build(),
+
     bolter: new Weapon.Builder("Bolter")
         .withRange(30)
         .withMode(new WeaponMode.Builder()
@@ -109,6 +119,25 @@ export const weapons = {
         )
         .build(),
 
+    chainswordReaper: new Weapon.Builder("Reaper Chainsword")
+        .withMode(
+            new WeaponMode.Builder()
+                .withAssaultType()
+                .withSpecialRule(specialRules.extraAttack.withVariable("1"))
+                .withSpecialRule(specialRules.macro)
+                .build()
+        )
+        .build(),
+
+    chaincleaverReaper: new Weapon.Builder("Reaper Chain-Cleaver")
+        .withMode(
+            new WeaponMode.Builder()
+                .withAssaultType()
+                .withSpecialRule(specialRules.macro)
+                .build()
+        )
+        .build(),
+
     deathwind: new Weapon.Builder("Deathwind")
         .withRange(15)
         .withMode(new WeaponMode.Builder()
@@ -123,6 +152,15 @@ export const weapons = {
         .withMode(new WeaponMode.Builder()
             .withType(WeaponType.AP, 4)
             .withSpecialRule(specialRules.ignoreCover)
+            .build())
+        .build(),
+
+    gatlingCannonAvenger: new Weapon.Builder("Avenger Gatling Cannon")
+        .withRange(30)
+        .withShots(6)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .withType(WeaponType.AT, 6)
             .build())
         .build(),
 
@@ -284,6 +322,53 @@ export const weapons = {
             .build())
         .build(),
 
+    stubberHeavy: new Weapon.Builder("Heavy Stubber")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 6)
+            .build()
+        )
+        .build(),
+
+    thermalCannon: new Weapon.Builder("Thermal Cannon")
+        .withRange(30)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 4)
+            .withType(WeaponType.AT, 3)
+            .withSpecialRule(specialRules.macro)
+            .build()
+        )
+        .withMode(new WeaponMode.Builder()
+            .withSmallArmsType()
+            .withSpecialRule(specialRules.macro)
+            .withJoinType("and")
+            .build())
+        .build(),
+
+    thermalSpear: new Weapon.Builder("Thermal Spear")
+        .withRange(15)
+        .withMode(new WeaponMode.Builder()
+            .withType(WeaponType.AP, 5)
+            .withType(WeaponType.AT, 5)
+            .withSpecialRule(specialRules.macro)
+            .build()
+        )
+        .withMode(new WeaponMode.Builder()
+            .withSmallArmsType()
+            .withSpecialRule(specialRules.macro)
+            .withSpecialRule(specialRules.extraAttack.withVariable("1"))
+            .withJoinType("and")
+            .build())
+        .build(),
+
+    thunderstrikeGauntlet: new Weapon.Builder("Thunderstrike Gauntlet")
+        .withMode(new WeaponMode.Builder()
+            .withAssaultType()
+            .withSpecialRule(specialRules.titanKiller.withVariable("D3"))
+            .withSpecialRule(specialRules.extraAttack.withVariable("1"))
+            .build())
+        .build(),
+
     vanquisherCannon: new Weapon.Builder("Vanquisher Cannon")
         .withRange(90)
         .withMode(new WeaponMode.Builder()
@@ -300,6 +385,10 @@ export const weapons = {
             .build())
         .withRange(15)
         .build(),
+
+    // Knight-World Weapons
+
+
 
     // TITAN WEAPONS
     scoutTitan: {
@@ -370,6 +459,7 @@ export const weapons = {
             .withMode(new WeaponMode.Builder()
                 .withType(WeaponType.AP, 4)
                 .withType(WeaponType.AT, 2)
+                .withSpecialRule(specialRules.titanKiller.withVariable("D3"))
                 .build()
             )
             .withMode(new WeaponMode.Builder()
@@ -495,6 +585,7 @@ export const weapons = {
             .withMode(new WeaponMode.Builder()
                 .withType(WeaponType.AP, 4)
                 .withType(WeaponType.AT, 2)
+                .withSpecialRule(specialRules.titanKiller.withVariable("D3"))
                 .build()
             )
             .withMode(new WeaponMode.Builder()
