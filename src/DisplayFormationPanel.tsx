@@ -1,6 +1,6 @@
 import {Formation} from "./ts/formation";
 import {Box, Card, IconButton, Tooltip, Typography} from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 import {FormationHeader} from "./FormationHeader";
 import InfoIcon from "@mui/icons-material/Info";
 import DeleteIcon from "@mui/icons-material/Delete";

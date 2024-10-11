@@ -1,6 +1,6 @@
 import {FormationSpec} from "./ts/formationSpec";
 import {Stack, Typography} from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 import {CategoryChips, CostComponent, FormationLabel} from "./ArmyBuilderUtils";
 import {ItemCategory} from "./ts/itemCategory";
 import React, {Children} from "react";
@@ -20,28 +20,28 @@ export function FormationHeader({formation, children}: React.PropsWithChildren<F
         <>
             {childCount > 0 ?
                 <Grid container spacing={1}>
-                    <Grid justifyContent="end" display="flex" sm={2} xs={3} order={{sm: 3, xs: 2}}>
+                    <Grid justifyContent="end" display="flex" size={{sm:2, xs:3}} order={{sm: 3, xs: 2}}>
                         {children}
                     </Grid>
-                    <Grid sm={5} xs={9} order={{xs: 1}}>
+                    <Grid size={{sm:5, xs:9}} order={{xs: 1}}>
                         <Stack direction="row" spacing={2}>
                             <CostComponent cost={cost.getOrZero(ItemCategory.FORMATION)}/>
                             <FormationLabel formation={formation}/>
                         </Stack>
                     </Grid>
-                    <Grid sm={5} xs={12} order={{sm: 2, xs: 3}}>
+                    <Grid size={{sm:5, xs:12}} order={{sm: 2, xs: 3}}>
                         <CostAndGrantCategories grants={formationSpec.grants?.toList() ?? []} cost={cost.toList()}/>
                     </Grid>
                 </Grid>
                 :
                 <Grid container spacing={1}>
-                    <Grid sm={6} xs={12}>
+                    <Grid size={{sm:6, xs:12}}>
                         <Stack direction="row" spacing={2}>
                             <CostComponent cost={cost.getOrZero(ItemCategory.FORMATION)}/>
                             <FormationLabel formation={formation}/>
                         </Stack>
                     </Grid>
-                    <Grid sm={6} xs={12}>
+                    <Grid size={{sm:6, xs:12}}>
                         <CostAndGrantCategories grants={formationSpec.grants?.toList() ?? []} cost={cost.toList()}/>
                     </Grid>
                 </Grid>
